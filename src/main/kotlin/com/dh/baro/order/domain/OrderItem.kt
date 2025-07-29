@@ -3,6 +3,7 @@ package com.dh.baro.order.domain
 import com.dh.baro.core.AbstractTime
 import com.dh.baro.product.domain.Product
 import jakarta.persistence.*
+import java.math.BigDecimal
 
 @Entity
 @Table(name = "order_items")
@@ -23,5 +24,5 @@ class OrderItem(
     val quantity: Int,
 
     @Column(name = "price_at_purchase", nullable = false)
-    val priceAtPurchase: Int
+    val priceAtPurchase: BigDecimal,
 ) : AbstractTime()
