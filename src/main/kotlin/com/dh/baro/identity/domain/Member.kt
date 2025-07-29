@@ -1,7 +1,6 @@
 package com.dh.baro.identity.domain
 
 import com.dh.baro.core.AbstractTime
-import com.dh.baro.core.converter.MemberRoleConverter
 import jakarta.persistence.*
 
 @Entity
@@ -20,7 +19,7 @@ class Member(
     @Column(name = "phone_number", unique = true)
     var phoneNumber: String? = null,
 
-    @Convert(converter = MemberRoleConverter::class)
+    @Enumerated(EnumType.STRING)
     @Column(name = "member_role", nullable = false, length = 20)
     var role: MemberRole = MemberRole.BUYER,
 

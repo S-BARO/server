@@ -1,7 +1,6 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.AbstractTime
-import com.dh.baro.core.converter.OrderStatusConverter
 import com.dh.baro.identity.domain.Member
 import jakarta.persistence.*
 
@@ -22,8 +21,8 @@ class Order(
     @Column(name = "shipping_address", nullable = false, length = 500)
     var shippingAddress: String,
 
-    @Convert(converter = OrderStatusConverter::class)
-    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
     var status: OrderStatus = OrderStatus.ORDERED,
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
