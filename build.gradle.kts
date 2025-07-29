@@ -1,6 +1,7 @@
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
+	kotlin("plugin.jpa") version "1.9.25"
 	id("org.springframework.boot") version "3.5.4"
 	id("io.spring.dependency-management") version "1.1.7"
 }
@@ -21,20 +22,27 @@ repositories {
 dependencies {
 	// spring
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+	implementation("org.springframework.boot:spring-boot-starter-aop")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.retry:spring-retry")
-	implementation("org.springframework:spring-aspects")
-	implementation("io.micrometer:micrometer-registry-prometheus")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	// swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+
+	// monitoring
+	implementation("io.micrometer:micrometer-registry-prometheus")
+
+	// jetbrains
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
 	// P6Spy (Spring Boot 3.x 대응 버전)
 	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
-
-	// JPA
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
 	// Querydsl
 	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
@@ -43,14 +51,9 @@ dependencies {
 	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
 	// DB
-	runtimeOnly("com.mysql:mysql-connector-j")
-	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-
-	// Test
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("com.h2database:h2")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation ("com.github.f4b6a3:tsid-creator:5.2.5")
+	implementation ("mysql:mysql-connector-java:8.0.33")
+	testRuntimeOnly ("com.h2database:h2")
 }
 
 kotlin {
