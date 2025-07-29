@@ -14,7 +14,7 @@ import java.time.Instant
 abstract class AbstractTime(
     @CreatedDate
     @Column(name = "created_at")
-    var createdAt: Instant = instant(),
+    var createdAt: Instant,
 
     @LastModifiedDate
     @Column(name = "modified_at")
