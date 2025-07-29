@@ -11,9 +11,9 @@ import jakarta.persistence.*
     uniqueConstraints = [UniqueConstraint(columnNames = ["member_id", "product_id"])]
 )
 class CartItem(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_item_id")
-    val id: Long = 0,
+    @Id
+    @Column(name = "id")
+    val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

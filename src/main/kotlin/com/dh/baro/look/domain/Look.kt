@@ -8,9 +8,9 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "looks")
 class Look(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "look_id")
-    val id: Long = 0,
+    @Id
+    @Column(name = "id")
+    val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")

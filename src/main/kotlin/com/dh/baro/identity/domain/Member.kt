@@ -8,8 +8,8 @@ import jakarta.persistence.*
 @Table(name = "members")
 class Member(
     @Id
-    @Column(name = "member_id")
-    val id: Long = 0,
+    @Column(name = "id")
+    val id: Long,
 
     @Column(name = "member_name", nullable = false)
     var name: String,

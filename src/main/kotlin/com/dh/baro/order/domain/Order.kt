@@ -9,8 +9,8 @@ import jakarta.persistence.*
 @Table(name = "orders")
 class Order(
     @Id
-    @Column(name = "order_id")
-    val id: Long = 0,
+    @Column(name = "id")
+    val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -23,7 +23,7 @@ class Order(
     var shippingAddress: String,
 
     @Convert(converter = OrderStatusConverter::class)
-    @Column(name = "status", nullable = false, length = 20)
+    @Column(name = "status", nullable = false)
     var status: OrderStatus = OrderStatus.ORDERED,
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)

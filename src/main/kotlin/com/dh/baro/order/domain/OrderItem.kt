@@ -8,8 +8,8 @@ import jakarta.persistence.*
 @Table(name = "order_items")
 class OrderItem(
     @Id
-    @Column(name = "order_item_id")
-    val id: Long = 0,
+    @Column(name = "id")
+    val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)

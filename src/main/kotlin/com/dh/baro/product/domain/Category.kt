@@ -7,7 +7,7 @@ import jakarta.persistence.*
 class Category(
     @Id
     @Column(name = "category_id")
-    val id: Int = 0,
+    val id: Long,
 
     @Column(name = "category_name", unique = true, nullable = false, length = 50)
     val name: String

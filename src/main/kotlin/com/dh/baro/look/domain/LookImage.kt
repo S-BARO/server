@@ -6,9 +6,9 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "look_images")
 class LookImage(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "look_image_id")
-    val id: Long = 0,
+    @Id
+    @Column(name = "id")
+    val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "look_id", nullable = false)

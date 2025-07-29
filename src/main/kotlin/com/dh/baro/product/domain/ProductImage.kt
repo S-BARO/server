@@ -7,8 +7,8 @@ import jakarta.persistence.*
 @Table(name = "product_images")
 class ProductImage(
     @Id
-    @Column(name = "product_image_id")
-    val id: Long = 0,
+    @Column(name = "id")
+    val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)

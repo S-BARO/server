@@ -10,8 +10,8 @@ import jakarta.persistence.*
 )
 class SocialAccount(
     @Id
-    @Column(name = "social_account_id")
-    val id: Long = 0,
+    @Column(name = "id")
+    val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

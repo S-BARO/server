@@ -8,7 +8,7 @@ import jakarta.persistence.*
 class Product(
     @Id
     @Column(name = "product_id")
-    val id: Long = 0,
+    val id: Long,
 
     @Column(name = "product_name", nullable = false)
     var name: String,
