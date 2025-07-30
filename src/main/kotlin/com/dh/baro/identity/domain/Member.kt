@@ -1,8 +1,11 @@
 package com.dh.baro.identity.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.IdGenerator
+import com.dh.baro.core.annotation.AggregateRoot
 import jakarta.persistence.*
 
+@AggregateRoot
 @Entity
 @Table(name = "members")
 class Member(
@@ -11,22 +14,34 @@ class Member(
     val id: Long,
 
     @Column(name = "member_name", nullable = false)
-    var name: String,
+    private var name: String,
 
-    @Column(name = "email", unique = true)
-    var email: String? = null,
+    @Column(name = "email", nullable = false, unique = true)
+    private var email: String,
 
     @Column(name = "phone_number", unique = true)
-    var phoneNumber: String? = null,
+    private var phoneNumber: String? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_role", nullable = false, length = 20)
-    var role: MemberRole = MemberRole.BUYER,
+    val role: MemberRole = MemberRole.BUYER,
 
-    @OneToMany(mappedBy = "member", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val socialAccounts: MutableList<SocialAccount> = mutableListOf(),
+    @OneToMany(
+        mappedBy = "member",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+    )
+    private val socialAccounts: MutableList<SocialAccount> = mutableListOf(),
+) : AbstractTime() {
 
-    @Version
-    @Column(name = "row_version")
-    val version: Long? = null
-) : AbstractTime()
+    companion object {
+        fun newMember(name: String, email: String): Member {
+            return Member(
+                id = IdGenerator.generate(),
+                name = name,
+                email = email,
+            )
+        }
+    }
+}
