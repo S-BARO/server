@@ -21,10 +21,7 @@ class AuthController(
         request: HttpServletRequest
     ): LoginResponse {
         val result = authFacade.login(provider, accessToken)
-        request.session.apply {
-            setAttribute(MEMBER_ID, result.memberId)
-        }
-
+        request.session.apply { setAttribute(MEMBER_ID, result.memberId) }
         return LoginResponse(result.isNew)
     }
 

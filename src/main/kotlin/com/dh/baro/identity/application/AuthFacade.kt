@@ -8,15 +8,15 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthFacade(
-    private val clientFactory: OauthClientFactory,
+    private val oauthApiFactory: OauthApiFactory,
     private val memberService: MemberService,
 ) {
 
     @Transactional
     fun login(provider: AuthProvider, accessToken: String): AuthResult {
-        val client = clientFactory.getClient(provider)
-        val userInfo = client.fetchUser(accessToken)
-        val (member, isNew) = memberService.findOrRegister(provider, userInfo)
-        return AuthResult(member.id, isNew)
+        val oauthApi = oauthApiFactory.getClient(provider)
+        val socialUserInfo = oauthApi.fetchUser(accessToken)
+        val response = memberService.findOrRegister(provider, socialUserInfo)
+        return AuthResult(response.member.id, response.isNew)
     }
 }

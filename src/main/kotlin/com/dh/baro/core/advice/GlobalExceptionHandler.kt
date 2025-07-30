@@ -16,17 +16,10 @@ class GlobalExceptionHandler {
 
     private val logger = LoggerFactory.getLogger(this::class.simpleName)
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingRequestHeaderException::class)
-    fun handleMissingRequestHeaderException(exception: MissingRequestHeaderException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity.badRequest().body(ErrorResponse.from(exception))
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(IllegalStateException::class)
-    fun handleIllegalStateException(exception: IllegalStateException): ErrorResponse {
-        logger.error(exception.message, exception)
-        return ErrorResponse.from(exception)
-    }
+    fun handleMissingRequestHeaderException(exception: MissingRequestHeaderException): ErrorResponse =
+        ErrorResponse.from(exception)
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException::class)
@@ -35,16 +28,22 @@ class GlobalExceptionHandler {
         return ErrorResponse.from(exception)
     }
 
+    @ExceptionHandler(NoResourceFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleNoResourceFoundException(noResourceFoundException: NoResourceFoundException): ErrorResponse =
+        ErrorResponse(ErrorMessage.NO_RESOURCE_FOUND.message)
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(IllegalStateException::class)
+    fun handleIllegalStateException(exception: IllegalStateException): ErrorResponse {
+        logger.error(exception.message, exception)
+        return ErrorResponse.from(exception)
+    }
+
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleAllUnHandledException(exception: Exception): ErrorResponse {
         logger.error(exception.message, exception)
         return ErrorResponse(ErrorMessage.UNHANDLED_EXCEPTION.message)
-    }
-
-    @ExceptionHandler(NoResourceFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleNoResourceFoundException(noResourceFoundException: NoResourceFoundException): ErrorResponse {
-        return ErrorResponse(ErrorMessage.NOT_FOUND.message)
     }
 }
