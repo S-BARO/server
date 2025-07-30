@@ -19,9 +19,9 @@ class MemberService(
         provider: AuthProvider,
         socialUserInfo: OauthApi.SocialUserInfo
     ): RegistrationResult {
-        socialAccountRepository.findByProviderAndProviderId(provider, socialUserInfo.providerId).orElse(null)
+        socialAccountRepository.findByProviderAndProviderId(provider, socialUserInfo.providerId)
             ?.let { existingAccount ->
-                return RegistrationResult(existingAccount.member, isNew = false)
+                return RegistrationResult(existingAccount.member.id, isNew = false)
             }
 
         val member = Member.newMember(socialUserInfo.nickname, socialUserInfo.email)
@@ -29,6 +29,6 @@ class MemberService(
         SocialAccount.of(member, provider, socialUserInfo.providerId)
             .let { socialAccount -> socialAccountRepository.save(socialAccount) }
 
-        return RegistrationResult(member, isNew = true)
+        return RegistrationResult(member.id, isNew = true)
     }
 }
