@@ -1,6 +1,7 @@
 package com.dh.baro.identity.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
 @Entity
@@ -23,4 +24,16 @@ class SocialAccount(
 
     @Column(name = "provider_id", nullable = false, length = 200)
     val providerId: String
-) : AbstractTime()
+) : AbstractTime() {
+
+    companion object {
+        fun of(member: Member, provider: AuthProvider, providerId: String): SocialAccount {
+            return SocialAccount(
+                id = IdGenerator.generate(),
+                member = member,
+                provider = provider,
+                providerId = providerId,
+            )
+        }
+    }
+}
