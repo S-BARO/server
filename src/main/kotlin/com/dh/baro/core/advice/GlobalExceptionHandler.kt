@@ -2,9 +2,10 @@ package com.dh.baro.core.advice
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.ErrorResponse
+import com.dh.baro.core.exception.ForbiddenException
+import com.dh.baro.core.exception.UnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -25,6 +26,20 @@ class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(exception: IllegalArgumentException): ErrorResponse {
         logger.info(exception.message, exception)
+        return ErrorResponse.from(exception)
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenException::class)
+    fun handleUnauthorizedException(exception: ForbiddenException): ErrorResponse {
+        logger.warn("[Forbidden] : ${exception.message}", exception)
+        return ErrorResponse.from(exception)
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException::class)
+    fun handleUnauthorizedException(exception: UnauthorizedException): ErrorResponse {
+        logger.warn("[Unauthorized] : ${exception.message}", exception)
         return ErrorResponse.from(exception)
     }
 
