@@ -31,7 +31,7 @@ class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException::class)
-    fun handleUnauthorizedException(exception: ForbiddenException): ErrorResponse {
+    fun handleForbiddenException(exception: ForbiddenException): ErrorResponse {
         logger.warn("[Forbidden] : ${exception.message}", exception)
         return ErrorResponse.from(exception)
     }
