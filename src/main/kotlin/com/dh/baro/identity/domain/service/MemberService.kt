@@ -21,7 +21,7 @@ class MemberService(
     ): RegistrationResult {
         socialAccountRepository.findByProviderAndProviderId(provider, socialUserInfo.providerId)
             ?.let { existingAccount ->
-                return RegistrationResult(existingAccount.member.id, isNew = false)
+                return RegistrationResult(existingAccount.member.id, existingAccount.member.role.name, isNew = false)
             }
 
         val member = Member.newMember(socialUserInfo.nickname, socialUserInfo.email)
@@ -29,6 +29,6 @@ class MemberService(
         SocialAccount.of(member, provider, socialUserInfo.providerId)
             .let { socialAccount -> socialAccountRepository.save(socialAccount) }
 
-        return RegistrationResult(member.id, isNew = true)
+        return RegistrationResult(member.id, member.role.name, isNew = true)
     }
 }

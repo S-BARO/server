@@ -1,8 +1,9 @@
 package com.dh.baro.identity.presentation
 
+import com.dh.baro.core.auth.SessionKeys.MEMBER_ID
+import com.dh.baro.core.auth.SessionKeys.MEMBER_ROLE
 import com.dh.baro.identity.application.AuthFacade
 import com.dh.baro.identity.application.dto.LoginResponse
-import com.dh.baro.identity.domain.AuthProvider
 import com.dh.baro.identity.presentation.dto.OauthLoginRequest
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
@@ -21,11 +22,17 @@ class AuthController(
         request: HttpServletRequest
     ): LoginResponse {
         val result = authFacade.login(oauthLoginRequest.provider, oauthLoginRequest.accessToken)
-        request.session.apply { setAttribute(MEMBER_ID, result.memberId) }
+        request.session.apply {
+            setAttribute(MEMBER_ID, result.memberId)
+            setAttribute(MEMBER_ROLE, result.memberRole)
+        }
+
         return LoginResponse(result.isNew)
     }
 
-    companion object SessionKeys {
-        const val MEMBER_ID = "MEMBER_ID"
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/logout")
+    fun logout(request: HttpServletRequest) {
+        request.session.invalidate()
     }
 }
