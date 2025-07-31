@@ -1,12 +1,12 @@
 package com.dh.baro.core.auth
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.core.exception.ForbiddenException
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import java.nio.file.AccessDeniedException
 
 @Aspect
 @Component
@@ -21,7 +21,7 @@ class AuthenticationAspect(
         if (auth.roles.isNotEmpty()) {
             val role = sessionManager.getCurrentMemberRole()
             if (role !in auth.roles) {
-                throw AccessDeniedException(ErrorMessage.FORBIDDEN.message)
+                throw ForbiddenException(ErrorMessage.FORBIDDEN.message)
             }
         }
 
