@@ -2,6 +2,11 @@ server:
   port: 8080
   servlet:
     contextPath:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        same-site: strict
 
 spring:
   jackson:
@@ -23,6 +28,11 @@ spring:
       port: ${REDIS_PORT}
       timeout: 1s
       password: ${REDIS_PASSWORD}
+
+  session:
+    timeout: 30m
+    redis:
+      flush-mode: on-save
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
