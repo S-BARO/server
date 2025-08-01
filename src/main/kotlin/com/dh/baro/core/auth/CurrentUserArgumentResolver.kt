@@ -21,7 +21,5 @@ class CurrentUserArgumentResolver(
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
-    ): Any {
-        return sessionManager.getCurrentMemberId()
-    }
+    ): Any = sessionManager.getCurrentUserId()
 }

@@ -1,7 +1,7 @@
 package com.dh.baro.identity.presentation
 
-import com.dh.baro.core.auth.SessionKeys.MEMBER_ID
-import com.dh.baro.core.auth.SessionKeys.MEMBER_ROLE
+import com.dh.baro.core.auth.SessionKeys.USER_ID
+import com.dh.baro.core.auth.SessionKeys.USER_ROLE
 import com.dh.baro.identity.application.AuthFacade
 import com.dh.baro.identity.application.dto.LoginResponse
 import com.dh.baro.identity.presentation.dto.OauthLoginRequest
@@ -23,8 +23,8 @@ class AuthController(
     ): LoginResponse {
         val result = authFacade.login(oauthLoginRequest.provider, oauthLoginRequest.accessToken)
         request.session.apply {
-            setAttribute(MEMBER_ID, result.memberId)
-            setAttribute(MEMBER_ROLE, result.memberRole)
+            setAttribute(USER_ID, result.userId)
+            setAttribute(USER_ROLE, result.userRole)
         }
 
         return LoginResponse(result.isNew)

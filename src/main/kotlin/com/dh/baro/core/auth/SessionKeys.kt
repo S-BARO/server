@@ -1,6 +1,6 @@
 package com.dh.baro.core.auth
 
 object SessionKeys {
-    const val MEMBER_ID = "MEMBER_ID"
-    const val MEMBER_ROLE = "MEMBER_ROLE"
+    const val USER_ID = "USER_ID"
+    const val USER_ROLE = "USER_ROLE"
 }

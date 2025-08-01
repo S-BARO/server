@@ -2,6 +2,7 @@ package com.dh.baro.product.domain
 
 import com.dh.baro.core.AbstractTime
 import jakarta.persistence.*
+import java.math.BigDecimal
 
 @Entity
 @Table(name = "products")
@@ -13,8 +14,8 @@ class Product(
     @Column(name = "product_name", nullable = false)
     var name: String,
 
-    @Column(name = "price", nullable = false)
-    var price: Int,
+    @Column(name = "price", nullable = false, precision = 10, scale = 0)
+    var price: BigDecimal,
 
     @Column(name = "quantity", nullable = false)
     var quantity: Int = 0,
@@ -26,7 +27,12 @@ class Product(
     @Column(name = "likes_count", nullable = false)
     var likesCount: Int = 0,
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "product",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+    )
     val images: MutableList<ProductImage> = mutableListOf(),
 
     @ManyToMany
@@ -37,4 +43,8 @@ class Product(
     )
     val categories: MutableSet<Category> = mutableSetOf()
 
-) : AbstractTime()
+) : AbstractTime() {
+
+    fun getThumbnailUrl(): String? =
+        images.firstOrNull { it.isThumbnail }?.imageUrl
+}
