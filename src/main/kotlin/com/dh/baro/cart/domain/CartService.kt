@@ -31,7 +31,7 @@ class CartService(
         val product = productRepository.findByIdOrNull(productId)
             ?: throw IllegalArgumentException(ErrorMessage.PRODUCT_NOT_FOUND.format(productId))
 
-        return cartItemRepository.save(CartItem.newCartItem(user, product))
+        return cartItemRepository.save(CartItem.newCartItem(user, product, quantity))
     }
 
     private fun validateCartLimit(userId: Long) {

@@ -37,11 +37,12 @@ class CartItem(
     }
 
     companion object {
-        fun newCartItem(user: User, product: Product): CartItem {
+        fun newCartItem(user: User, product: Product, quantity: Int): CartItem {
             return CartItem(
                 id = IdGenerator.generate(),
                 user = user,
                 product = product,
+                quantity = quantity,
             )
         }
     }

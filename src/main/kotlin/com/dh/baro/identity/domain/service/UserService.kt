@@ -22,11 +22,15 @@ class UserService(
         socialAccountRepository.findByProviderAndProviderId(provider, socialUserInfo.providerId)
             ?.run { return RegistrationResult(user.id, user.role, false) }
 
-        val user = User.newMember(socialUserInfo.nickname, socialUserInfo.email)
-            .let { newMember -> userRepository.save(newMember) }
+        val user = User.newUser(socialUserInfo.nickname, socialUserInfo.email)
+            .let { newUser -> userRepository.save(newUser) }
         SocialAccount.of(user, provider, socialUserInfo.providerId)
             .let { socialAccount -> socialAccountRepository.save(socialAccount) }
 
-        return RegistrationResult(user.id, user.role, isNew = true)
+        return RegistrationResult(
+            userId = user.id,
+            userRole = user.role,
+            isNew = true,
+        )
     }
 }

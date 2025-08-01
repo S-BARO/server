@@ -14,7 +14,7 @@ class Product(
     @Column(name = "product_name", nullable = false)
     var name: String,
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price", nullable = false, precision = 10, scale = 0)
     var price: BigDecimal,
 
     @Column(name = "quantity", nullable = false)

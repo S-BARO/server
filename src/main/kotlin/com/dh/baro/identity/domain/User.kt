@@ -36,7 +36,7 @@ class User(
 ) : AbstractTime() {
 
     companion object {
-        fun newMember(name: String, email: String): User {
+        fun newUser(name: String, email: String): User {
             return User(
                 id = IdGenerator.generate(),
                 name = name,
