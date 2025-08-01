@@ -6,8 +6,8 @@ import java.io.Serializable
 
 @Embeddable
 data class ProductLikeId(
-    @Column(name = "member_id")
-    val memberId: Long,
+    @Column(name = "user_id")
+    val userId: Long,
 
     @Column(name = "product_id")
     val productId: Long

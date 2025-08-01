@@ -17,7 +17,7 @@ class LookLike(
     @EmbeddedId
     val id: LookReactionId,
 
-    @MapsId("memberId")
+    @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     val user: User,
