@@ -16,7 +16,7 @@ class AuthenticationAspect(
 
     @Around("@within(auth) || @annotation(auth)")
     @Transactional(readOnly = true)
-    fun checkAuthentication(joinPoint: ProceedingJoinPoint, auth: Authenticated): Any? {
+    fun checkAuthentication(joinPoint: ProceedingJoinPoint, auth: RequireAuth): Any? {
         sessionManager.getCurrentUserId()
         if (auth.roles.isNotEmpty()) {
             val role = sessionManager.getCurrentUserRole()

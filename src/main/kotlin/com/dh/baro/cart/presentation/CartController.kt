@@ -4,17 +4,18 @@ import com.dh.baro.cart.application.CartFacade
 import com.dh.baro.cart.presentation.dto.AddItemRequest
 import com.dh.baro.cart.presentation.dto.CartResponse
 import com.dh.baro.cart.presentation.dto.UpdateQuantityRequest
-import com.dh.baro.core.auth.Authenticated
+import com.dh.baro.core.auth.RequireAuth
 import com.dh.baro.core.auth.CurrentUser
+import com.dh.baro.identity.domain.UserRole
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/cart")
-@Authenticated
+@RequireAuth(UserRole.BUYER)
 class CartController(
-    private val cartFacade: CartFacade
+    private val cartFacade: CartFacade,
 ) {
 
     @GetMapping
