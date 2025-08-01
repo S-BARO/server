@@ -1,7 +1,7 @@
 package com.dh.baro.look.domain
 
 import com.dh.baro.core.AbstractTime
-import com.dh.baro.identity.domain.Member
+import com.dh.baro.identity.domain.User
 import com.dh.baro.product.domain.Product
 import jakarta.persistence.*
 
@@ -14,7 +14,7 @@ class Look(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
-    val creator: Member? = null,
+    val creator: User? = null,
 
     @Column(name = "title", nullable = false)
     var title: String,

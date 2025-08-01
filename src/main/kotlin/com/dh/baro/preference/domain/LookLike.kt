@@ -1,7 +1,7 @@
 package com.dh.baro.preference.domain
 
 import com.dh.baro.core.AbstractTime
-import com.dh.baro.identity.domain.Member
+import com.dh.baro.identity.domain.User
 import com.dh.baro.look.domain.Look
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
@@ -19,8 +19,8 @@ class LookLike(
 
     @MapsId("memberId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", insertable = false, updatable = false)
-    val member: Member,
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    val user: User,
 
     @MapsId("lookId")
     @ManyToOne(fetch = FetchType.LAZY)

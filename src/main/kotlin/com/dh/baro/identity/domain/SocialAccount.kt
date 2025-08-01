@@ -15,8 +15,8 @@ class SocialAccount(
     val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    val member: Member,
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false, length = 30)
@@ -27,10 +27,10 @@ class SocialAccount(
 ) : AbstractTime() {
 
     companion object {
-        fun of(member: Member, provider: AuthProvider, providerId: String): SocialAccount {
+        fun of(user: User, provider: AuthProvider, providerId: String): SocialAccount {
             return SocialAccount(
                 id = IdGenerator.generate(),
-                member = member,
+                user = user,
                 provider = provider,
                 providerId = providerId,
             )

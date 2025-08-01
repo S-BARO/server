@@ -7,13 +7,13 @@ import jakarta.persistence.*
 
 @AggregateRoot
 @Entity
-@Table(name = "members")
-class Member(
+@Table(name = "users")
+class User(
     @Id
     @Column(name = "id")
     val id: Long,
 
-    @Column(name = "member_name", nullable = false)
+    @Column(name = "user_name", nullable = false)
     private var name: String,
 
     @Column(name = "email", nullable = false, unique = true)
@@ -23,11 +23,11 @@ class Member(
     private var phoneNumber: String? = null,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "member_role", nullable = false, length = 20)
-    val role: MemberRole = MemberRole.BUYER,
+    @Column(name = "user_role", nullable = false, length = 20)
+    val role: UserRole = UserRole.BUYER,
 
     @OneToMany(
-        mappedBy = "member",
+        mappedBy = "user",
         fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
@@ -36,8 +36,8 @@ class Member(
 ) : AbstractTime() {
 
     companion object {
-        fun newMember(name: String, email: String): Member {
-            return Member(
+        fun newMember(name: String, email: String): User {
+            return User(
                 id = IdGenerator.generate(),
                 name = name,
                 email = email,

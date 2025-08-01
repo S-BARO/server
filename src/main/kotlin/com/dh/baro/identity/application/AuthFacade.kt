@@ -2,19 +2,19 @@ package com.dh.baro.identity.application
 
 import com.dh.baro.identity.application.dto.AuthResult
 import com.dh.baro.identity.domain.*
-import com.dh.baro.identity.domain.service.MemberService
+import com.dh.baro.identity.domain.service.UserService
 import org.springframework.stereotype.Service
 
 @Service
 class AuthFacade(
     private val oauthApiFactory: OauthApiFactory,
-    private val memberService: MemberService,
+    private val userService: UserService,
 ) {
 
     fun login(provider: AuthProvider, accessToken: String): AuthResult {
         val oauthApi = oauthApiFactory.getClient(provider)
         val socialUserInfo = oauthApi.fetchUser(accessToken)
-        val response = memberService.findOrRegister(provider, socialUserInfo)
-        return AuthResult(response.memberId, response.memberRole, response.isNew)
+        val response = userService.findOrRegister(provider, socialUserInfo)
+        return AuthResult(response.userId, response.userRole, response.isNew)
     }
 }

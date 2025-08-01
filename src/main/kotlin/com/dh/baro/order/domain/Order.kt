@@ -1,7 +1,7 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.AbstractTime
-import com.dh.baro.identity.domain.Member
+import com.dh.baro.identity.domain.User
 import jakarta.persistence.*
 
 @Entity
@@ -12,8 +12,8 @@ class Order(
     val id: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    val member: Member,
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User,
 
     @Column(name = "total_price", nullable = false)
     var totalPrice: Int,

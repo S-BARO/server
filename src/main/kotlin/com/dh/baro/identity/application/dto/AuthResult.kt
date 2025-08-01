@@ -1,9 +1,9 @@
 package com.dh.baro.identity.application.dto
 
-import com.dh.baro.identity.domain.MemberRole
+import com.dh.baro.identity.domain.UserRole
 
 data class AuthResult(
-    val memberId: Long,
-    val memberRole: MemberRole,
+    val userId: Long,
+    val userRole: UserRole,
     val isNew: Boolean,
 )
