@@ -27,6 +27,9 @@ class Product(
     @Column(name = "likes_count", nullable = false)
     var likesCount: Int = 0,
 
+    @Column(name = "thumbnail_url", nullable = false, length = 300)
+    var thumbnailUrl: String,
+
     @OneToMany(
         mappedBy = "product",
         fetch = FetchType.LAZY,
@@ -35,16 +38,12 @@ class Product(
     )
     val images: MutableList<ProductImage> = mutableListOf(),
 
-    @ManyToMany
-    @JoinTable(
-        name = "product_categories",
-        joinColumns = [JoinColumn(name = "product_id")],
-        inverseJoinColumns = [JoinColumn(name = "category_id")]
+    @OneToMany(
+        mappedBy = "product",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
     )
-    val categories: MutableSet<Category> = mutableSetOf()
+    val productCategories: MutableList<ProductCategory> = mutableListOf()
 
-) : AbstractTime() {
-
-    fun getThumbnailUrl(): String? =
-        images.firstOrNull { it.isThumbnail }?.imageUrl
-}
+) : AbstractTime()

@@ -22,7 +22,7 @@ data class CartResponse(
             itemId = id,
             productId = product.id,
             productName = product.name,
-            productImageUrl = product.getThumbnailUrl(),
+            productThumbnailUrl = product.thumbnailUrl,
             price = product.price,
             quantity = quantity,
             subtotal = product.price
