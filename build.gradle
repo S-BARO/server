@@ -9,6 +9,12 @@ plugins {
 group = "${group}"
 version = "${version}"
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(jvmTarget)
+    }
+}
+
 repositories {
     mavenCentral()
 }
