@@ -15,8 +15,8 @@ class AuthController(
     private val authFacade: AuthFacade
 ) {
 
-    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/login/oauth")
+    @ResponseStatus(HttpStatus.OK)
     fun loginWithOauth(
         @RequestBody oauthLoginRequest: OauthLoginRequest,
         request: HttpServletRequest
@@ -30,8 +30,8 @@ class AuthController(
         return LoginResponse(result.isNew)
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun logout(request: HttpServletRequest) {
         request.session.invalidate()
     }
