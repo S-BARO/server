@@ -1,5 +1,6 @@
 package com.dh.baro.product.domain
 
+import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
 @Entity
@@ -15,5 +16,15 @@ class ProductCategory(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    val category: Category
-)
+    val category: Category,
+) {
+
+    companion object {
+        fun of(product: Product, category: Category): ProductCategory =
+            ProductCategory(
+                id = IdGenerator.generate(),
+                product = product,
+                category = category,
+            )
+    }
+}
