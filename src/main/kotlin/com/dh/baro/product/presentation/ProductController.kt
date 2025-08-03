@@ -1,14 +1,26 @@
 package com.dh.baro.product.presentation
 
+import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.domain.ProductQueryService
+import com.dh.baro.product.presentation.dto.ProductCreateRequest
+import com.dh.baro.product.presentation.dto.ProductDetail
+import com.dh.baro.product.presentation.dto.ProductListItem
+import com.dh.baro.product.presentation.dto.ProductResponse
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/products")
 class ProductController(
-    private val productQueryService: ProductQueryService
+    private val productFacade: ProductFacade,
+    private val productQueryService: ProductQueryService,
 ) {
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductResponse =
+        ProductResponse.from(productFacade.createProduct(request))
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
