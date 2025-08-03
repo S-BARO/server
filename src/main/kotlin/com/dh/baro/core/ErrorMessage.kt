@@ -16,6 +16,10 @@ enum class ErrorMessage(val message: String) {
     // Product
     PRODUCT_NOT_FOUND("상품을 찾을 수 없습니다: %d"),
 
+    // Category
+    CATEGORY_ALREADY_EXISTS("카테고리(id = %d)는 이미 존재합니다."),
+    CATEGORY_NOT_FOUND("카테고리를 찾을 수 없습니다: %d"),
+
     //Cart
     CART_ITEM_NOT_FOUND("장바구니 항목을 찾을 수 없습니다: %d"),
     CART_ITEM_LIMIT_EXCEEDED("장바구니에는 최대 20개의 상품만 담을 수 있습니다."),
