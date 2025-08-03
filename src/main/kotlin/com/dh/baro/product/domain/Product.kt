@@ -12,7 +12,7 @@ class Product(
     @Column(name = "id")
     val id: Long,
 
-    @Column(name = "product_name", nullable = false)
+    @Column(name = "product_name", nullable = false, length = 100)
     var name: String,
 
     @Column(name = "price", nullable = false, precision = 10, scale = 0)
