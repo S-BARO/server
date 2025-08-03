@@ -1,4 +1,4 @@
-package com.dh.baro.product.presentation
+package com.dh.baro.product.presentation.dto
 
 import com.dh.baro.product.domain.Product
 import java.math.BigDecimal
