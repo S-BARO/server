@@ -1,6 +1,7 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -8,7 +9,7 @@ import java.math.BigDecimal
 @Table(name = "products")
 class Product(
     @Id
-    @Column(name = "product_id")
+    @Column(name = "id")
     val id: Long,
 
     @Column(name = "product_name", nullable = false)
@@ -44,6 +45,34 @@ class Product(
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    val productCategories: MutableList<ProductCategory> = mutableListOf()
+    val productCategories: MutableList<ProductCategory> = mutableListOf(),
 
-) : AbstractTime()
+) : AbstractTime() {
+
+    fun addCategory(category: Category) {
+        if (productCategories.any { it.category == category }) return
+
+        val pc = ProductCategory.of(this, category)
+        productCategories.add(pc)
+    }
+
+    companion object {
+        fun newProduct(
+            name: String,
+            price: BigDecimal,
+            quantity: Int,
+            thumbnailUrl: String,
+            description: String? = null,
+            likesCount: Int = 0,
+        ): Product =
+            Product(
+                id = IdGenerator.generate(),
+                name = name,
+                price = price,
+                quantity = quantity,
+                description = description,
+                likesCount = likesCount,
+                thumbnailUrl = thumbnailUrl,
+            )
+    }
+}
