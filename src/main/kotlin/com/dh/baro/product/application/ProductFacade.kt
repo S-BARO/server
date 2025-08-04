@@ -13,7 +13,7 @@ class ProductFacade(
 ) {
 
     fun createProduct(request: ProductCreateRequest): Product {
-        val categories = categoryService.checkCategoryIdsExist(request.categoryIds)
+        val categories = categoryService.getCategoriesByIds(request.categoryIds)
         val cmd = ProductCreateCommand.toCommand(request)
         return productService.createProduct(cmd, categories)
     }

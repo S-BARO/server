@@ -18,7 +18,7 @@ class CategoryService(
         return categoryRepository.save(Category(id, name))
     }
 
-    fun checkCategoryIdsExist(ids: List<Long>): List<Category> {
+    fun getCategoriesByIds(ids: List<Long>): List<Category> {
         val categories = categoryRepository.findAllById(ids).toList()
         if (categories.size != ids.size)
             throw IllegalArgumentException(ErrorMessage.CATEGORY_NOT_FOUND.format(ids))
