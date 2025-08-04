@@ -1,6 +1,8 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.core.SliceResponse
+import com.dh.baro.product.presentation.dto.ProductListItem
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
@@ -11,6 +13,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.data.domain.Slice
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -139,6 +142,78 @@ internal class ProductQueryServiceTest(
                 val detail = shouldNotThrowAny { productQueryService.getProductDetail(p1.id) }
                 detail.images.isNotEmpty() shouldBe true
                 detail.productCategories.first().category.id shouldBe top.id
+            }
+        }
+    }
+
+    describe("Slice 기능") {
+        context("인기 상품 slice 조회 (hasNext = true)") {
+            val requestSize = 1
+            lateinit var slice: Slice<Product>
+
+            beforeTest {
+                slice = productQueryService.getPopularProducts(
+                    categoryId = null,
+                    cursorLikes = null,
+                    cursorId = null,
+                    size = requestSize,
+                )
+            }
+
+            it("content 크기는 요청 size 와 동일하다") {
+                slice.content.size shouldBe requestSize
+            }
+
+            it("hasNext 는 true 이다") {
+                slice.hasNext() shouldBe true
+            }
+        }
+
+        context("인기 상품 slice 조회 (hasNext = false)") {
+            val firstPageSize = 2
+            lateinit var nextSlice: Slice<Product>
+
+            beforeTest {
+                val firstSlice = productQueryService.getPopularProducts(null, null, null, firstPageSize)
+                val lastItem = firstSlice.content.last()
+                nextSlice = productQueryService.getPopularProducts(
+                    categoryId = null,
+                    cursorLikes = lastItem.likesCount,
+                    cursorId = lastItem.id,
+                    size = firstPageSize,
+                )
+            }
+
+            it("다음 페이지에 남은 데이터(p2)만 반환하고 hasNext 는 false") {
+                val expectedId = p2.id
+                nextSlice.content.map { it.id } shouldContainExactly listOf(expectedId)
+                nextSlice.hasNext() shouldBe false
+            }
+        }
+
+        context("SliceResponse 변환") {
+            lateinit var response: SliceResponse<ProductListItem>
+
+            beforeTest {
+                val slice = productQueryService.getNewestProducts(
+                    categoryId = null,
+                    cursorId = null,
+                    size = 1,
+                )
+                response = SliceResponse.from(
+                    slice = slice,
+                    mapper = ProductListItem::from,
+                    cursorExtractor = { it.id },
+                )
+            }
+
+            it("content 매핑 + hasNext 필드가 올바르다") {
+                response.content.first().id shouldBe p2.id
+                response.hasNext shouldBe true
+            }
+
+            it("nextCursor 는 마지막 요소의 id 값이다") {
+                response.nextCursor shouldBe p2.id
             }
         }
     }
