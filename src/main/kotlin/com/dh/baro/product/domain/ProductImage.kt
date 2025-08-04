@@ -19,7 +19,4 @@ class ProductImage(
 
     @Column(name = "display_order", nullable = false)
     val displayOrder: Int,
-
-    @Column(name = "is_thumbnail", nullable = false)
-    val isThumbnail: Boolean = false
 ) : AbstractTime()

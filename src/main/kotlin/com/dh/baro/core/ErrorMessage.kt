@@ -15,6 +15,11 @@ enum class ErrorMessage(val message: String) {
 
     // Product
     PRODUCT_NOT_FOUND("상품을 찾을 수 없습니다: %d"),
+    INVALID_POPULAR_PRODUCT_CURSOR("cursorLikes와 cursorId는 함께 지정하거나 함께 생략해야 합니다."),
+
+    // Category
+    CATEGORY_ALREADY_EXISTS("카테고리(id = %d)는 이미 존재합니다."),
+    CATEGORY_NOT_FOUND("카테고리를 찾을 수 없습니다: %s"),
 
     //Cart
     CART_ITEM_NOT_FOUND("장바구니 항목을 찾을 수 없습니다: %d"),
