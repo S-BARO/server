@@ -3,6 +3,8 @@ package com.dh.baro.product.presentation
 import com.dh.baro.core.Cursor
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.SliceResponse
+import com.dh.baro.core.auth.RequireAuth
+import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.domain.ProductQueryService
 import com.dh.baro.product.presentation.dto.*
@@ -19,6 +21,7 @@ class ProductController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @RequireAuth(UserRole.STORE_OWNER)
     fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductResponse =
         ProductResponse.from(productFacade.createProduct(request))
 

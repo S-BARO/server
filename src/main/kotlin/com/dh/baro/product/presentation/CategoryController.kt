@@ -1,5 +1,7 @@
 package com.dh.baro.product.presentation
 
+import com.dh.baro.core.auth.RequireAuth
+import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.CategoryFacade
 import com.dh.baro.product.presentation.dto.CategoryCreateRequest
 import com.dh.baro.product.presentation.dto.CategoryResponse
@@ -15,6 +17,7 @@ class CategoryController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @RequireAuth(UserRole.ADMIN)
     fun createCategory(@Valid @RequestBody request: CategoryCreateRequest): CategoryResponse {
         val created = categoryFacade.createCategory(request)
         return CategoryResponse.from(created)
