@@ -3,6 +3,7 @@ package com.dh.baro.product.domain
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.instant
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
@@ -19,7 +20,7 @@ class ProductQueryService(
         cursorLikes: Int?,
         cursorId: Long?,
         size: Int,
-    ): List<Product> {
+    ): Slice<Product> {
         val pageable = PageRequest.of(0, size)
         return productRepository.findPopularProductsByCursor(
             categoryId = categoryId,
@@ -33,13 +34,15 @@ class ProductQueryService(
         categoryId: Long?,
         cursorId: Long?,
         size: Int
-    ): List<Product> =
-        productRepository.findNewestProductsByCursor(
+    ): Slice<Product> {
+        val pageable = PageRequest.of(0, size)
+        return productRepository.findNewestProductsByCursor(
             cutoff = calculateCutoff(),
             categoryId = categoryId,
             cursorId = cursorId,
-            size = size,
+            pageable = pageable,
         )
+    }
 
     private fun calculateCutoff(): Instant =
         instant().minus(NEW_PERIOD_DAYS, ChronoUnit.DAYS)
