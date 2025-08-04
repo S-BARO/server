@@ -6,6 +6,7 @@ import com.dh.baro.identity.application.AuthFacade
 import com.dh.baro.identity.application.dto.LoginResponse
 import com.dh.baro.identity.presentation.dto.OauthLoginRequest
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -18,7 +19,7 @@ class AuthController(
     @PostMapping("/login/oauth")
     @ResponseStatus(HttpStatus.OK)
     fun loginWithOauth(
-        @RequestBody oauthLoginRequest: OauthLoginRequest,
+        @Valid @RequestBody oauthLoginRequest: OauthLoginRequest,
         request: HttpServletRequest
     ): LoginResponse {
         val result = authFacade.login(oauthLoginRequest.provider, oauthLoginRequest.accessToken)

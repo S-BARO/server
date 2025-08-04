@@ -42,7 +42,7 @@ fun productFixture(
         field.isAccessible = true
         field.set(
             product,
-            Instant.now().minus(createdAtAgoDays, ChronoUnit.DAYS)
+            Instant.now().minus(createdAtAgoDays, ChronoUnit.DAYS),
         )
     }
     return product

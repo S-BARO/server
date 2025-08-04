@@ -4,6 +4,7 @@ import com.dh.baro.core.ErrorMessage
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
@@ -45,7 +46,7 @@ internal class CategoryServiceTest(
         }
     }
 
-    describe("checkCategoryIdsExist 메서드는") {
+    describe("getCategoriesByIds 메서드는") {
 
         lateinit var ids: List<Long>
 
@@ -56,15 +57,20 @@ internal class CategoryServiceTest(
             ids = listOf(1L, 2L, 3L)
         }
 
-        it("모든 ID가 존재하면 Category 리스트를 반환") {
+        it("모든 ID가 존재하면 Category 리스트를 반환한다") {
             val result = shouldNotThrowAny { categoryService.getCategoriesByIds(ids) }
             result.map { it.id }.shouldContainExactly(ids)
         }
 
-        it("일부 ID가 없으면 IllegalArgumentException") {
+        it("일부 ID가 없으면 IllegalArgumentException를 발생시킨다") {
             shouldThrow<IllegalArgumentException> {
                 categoryService.getCategoriesByIds(listOf(1L, 99L))
             }.message shouldBe ErrorMessage.CATEGORY_NOT_FOUND.format(listOf(1L, 99L))
+        }
+
+        it("빈 리스트를 입력하면 빈 리스트를 반환한다") {
+            val result = categoryService.getCategoriesByIds(emptyList())
+            result.shouldBeEmpty()
         }
     }
 })

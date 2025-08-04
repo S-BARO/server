@@ -50,7 +50,7 @@ class Product(
 ) : AbstractTime() {
 
     fun addCategory(category: Category) {
-        if (productCategories.any { it.category == category }) return
+        if (productCategories.any { it.category.id == category.id }) return
 
         val pc = ProductCategory.of(this, category)
         productCategories.add(pc)
