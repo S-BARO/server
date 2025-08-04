@@ -37,7 +37,7 @@ class Product(
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
     )
-    val images: MutableList<ProductImage> = mutableListOf(),
+    val images: MutableSet<ProductImage> = mutableSetOf(),
 
     @OneToMany(
         mappedBy = "product",
@@ -45,7 +45,7 @@ class Product(
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    val productCategories: MutableList<ProductCategory> = mutableListOf(),
+    val productCategories: MutableSet<ProductCategory> = mutableSetOf(),
 
 ) : AbstractTime() {
 
