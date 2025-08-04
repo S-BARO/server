@@ -1,6 +1,7 @@
 package com.dh.baro.product.domain
 
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -23,7 +24,7 @@ interface ProductRepository : JpaRepository<Product, Long> {
         @Param("cursorLikes") cursorLikes: Int?,
         @Param("cursorId") cursorId: Long?,
         pageable: Pageable,
-    ): List<Product>
+    ): Slice<Product>
 
     @Query("""
         select p from Product p
@@ -38,8 +39,8 @@ interface ProductRepository : JpaRepository<Product, Long> {
         @Param("cutoff") cutoff: Instant,
         @Param("categoryId") categoryId: Long?,
         @Param("cursorId") cursorId: Long?,
-        @Param("size") size: Int,
-    ): List<Product>
+        pageable: Pageable,
+    ): Slice<Product>
 
     @Query("""
         select p from Product p
