@@ -1,12 +1,11 @@
 package com.dh.baro.product.presentation
 
+import com.dh.baro.core.Cursor
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.core.SliceResponse
 import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.domain.ProductQueryService
-import com.dh.baro.product.presentation.dto.ProductCreateRequest
-import com.dh.baro.product.presentation.dto.ProductDetail
-import com.dh.baro.product.presentation.dto.ProductListItem
-import com.dh.baro.product.presentation.dto.ProductResponse
+import com.dh.baro.product.presentation.dto.*
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -27,15 +26,19 @@ class ProductController(
     @ResponseStatus(HttpStatus.OK)
     fun getPopularProducts(
         @RequestParam(required = false) categoryId: Long?,
-        @RequestParam(required = false) cursorLikes: Int?,
         @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(required = false) cursorLikes: Int?,
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
-    ): List<ProductListItem> {
-        if ((cursorLikes == null) xor (cursorId == null))
+    ): SliceResponse<ProductListItem> {
+        if ((cursorId == null) xor (cursorLikes == null))
             throw IllegalArgumentException(ErrorMessage.INVALID_POPULAR_PRODUCT_CURSOR.message)
 
-        return productQueryService.getPopularProducts(categoryId, cursorLikes, cursorId, size)
-            .map(ProductListItem::from)
+        val slice = productQueryService.getPopularProducts(categoryId, cursorLikes, cursorId, size)
+        return SliceResponse.from(
+            slice = slice,
+            mapper = ProductListItem::from,
+            cursorExtractor = { PopularCursor(it.id, it.likesCount) },
+        )
     }
 
     @GetMapping("/newest")
@@ -44,9 +47,14 @@ class ProductController(
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
-    ): List<ProductListItem> =
-        productQueryService.getNewestProducts(categoryId, cursorId, size)
-            .map(ProductListItem::from)
+    ): SliceResponse<ProductListItem> {
+        val slice = productQueryService.getNewestProducts(categoryId, cursorId, size)
+        return SliceResponse.from(
+            slice = slice,
+            mapper = ProductListItem::from,
+            cursorExtractor = { Cursor(it.id) },
+        )
+    }
 
     @GetMapping("/{productId}")
     fun getProductDetail(@PathVariable productId: Long): ProductDetail =
