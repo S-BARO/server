@@ -1,6 +1,7 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 import java.math.BigDecimal
@@ -54,6 +55,13 @@ class Product(
 
         val pc = ProductCategory.of(this, category)
         productCategories.add(pc)
+    }
+
+    fun deductStockForOrder(orderQuantity: Int) {
+        require(quantity >= orderQuantity)
+            ErrorMessage.OUT_OF_STOCK.format(id)
+
+        quantity -= orderQuantity
     }
 
     companion object {
