@@ -1,0 +1,51 @@
+package com.dh.baro.order.presentation
+
+import com.dh.baro.core.Cursor
+import com.dh.baro.core.SliceResponse
+import com.dh.baro.core.auth.CurrentUser
+import com.dh.baro.order.application.OrderFacade
+import com.dh.baro.order.domain.OrderService
+import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping("/orders")
+class OrderController(
+    private val orderFacade: OrderFacade,
+    private val orderService: OrderService,
+) {
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createOrder(
+        @CurrentUser userId: Long,
+        @Valid @RequestBody request: OrderCreateRequest,
+    ): OrderDetailResponse {
+        val order = orderFacade.createOrder(userId, request)
+        return OrderDetailResponse.from(order)
+    }
+
+    @GetMapping("/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getOrderDetail(
+        @CurrentUser userId: Long,
+        @PathVariable orderId: Long,
+    ): OrderDetailResponse =
+        OrderDetailResponse.from(orderService.getOrderDetail(userId, orderId))
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun getOrdersByCursor(
+        @CurrentUser userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = "10") size: Int,
+    ): SliceResponse<OrderListItem> {
+        val slice = orderFacade.getOrdersByCursor(userId, cursorId, size)
+        return SliceResponse.from(
+            slice = slice,
+            mapper = OrderListItem::from,
+            cursorExtractor = { Cursor(it.id) }
+        )
+    }
+}
