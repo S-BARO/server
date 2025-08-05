@@ -1,6 +1,7 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.IdGenerator
 import com.dh.baro.product.domain.Product
 import jakarta.persistence.*
 import java.math.BigDecimal
@@ -25,4 +26,23 @@ class OrderItem(
 
     @Column(name = "price_at_purchase", nullable = false)
     val priceAtPurchase: BigDecimal,
-) : AbstractTime()
+) : AbstractTime() {
+
+    fun subTotal(): BigDecimal =
+        priceAtPurchase.multiply(quantity.toBigDecimal())
+
+    companion object {
+        fun newOrderItem(
+            order: Order,
+            product: Product,
+            quantity: Int
+        ): OrderItem =
+            OrderItem(
+                id = IdGenerator.generate(),
+                order = order,
+                product = product,
+                quantity = quantity,
+                priceAtPurchase = product.price,
+            )
+    }
+}
