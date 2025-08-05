@@ -3,16 +3,15 @@ package com.dh.baro.product.domain
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import kotlin.random.Random
 
-fun categoryFixture(id: Long, name: String = "CAT_$id") =
+fun categoryFixture(id: Long, name: String) =
     Category(id = id, name = name)
 
 fun productFixture(
     id: Long,
     name: String,
     category: Category,
-    likes: Int = Random.nextInt(0, 500),
+    likes: Int = 0,
     createdAtAgoDays: Long = 0L // 0=지금, 31=한달 전
 ): Product {
     val product = Product(
