@@ -1,8 +1,10 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.AbstractTime
-import com.dh.baro.identity.domain.User
+import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 @Entity
 @Table(name = "orders")
@@ -11,12 +13,11 @@ class Order(
     @Column(name = "id")
     val id: Long,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
+    @Column(name = "user_id", nullable = false)
+    val userId: Long,
 
     @Column(name = "total_price", nullable = false)
-    var totalPrice: Int,
+    var totalPrice: BigDecimal,
 
     @Column(name = "shipping_address", nullable = false, length = 500)
     var shippingAddress: String,
@@ -26,5 +27,30 @@ class Order(
     var status: OrderStatus = OrderStatus.ORDERED,
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val items: MutableList<OrderItem> = mutableListOf()
-) : AbstractTime()
+    val items: MutableSet<OrderItem> = mutableSetOf()
+) : AbstractTime() {
+
+    fun addItem(item: OrderItem) =
+        items.add(item)
+
+    fun updateTotalPrice() {
+        totalPrice = items
+            .map { it.subTotal() }
+            .reduceOrNull(BigDecimal::add) ?: BigDecimal.ZERO
+            .setScale(0, RoundingMode.HALF_UP)
+    }
+
+    companion object {
+        fun newOrder(
+            userId: Long,
+            shippingAddress: String
+        ): Order =
+            Order(
+                id = IdGenerator.generate(),
+                userId = userId,
+                totalPrice = BigDecimal.ZERO,
+                shippingAddress = shippingAddress,
+                status = OrderStatus.ORDERED,
+            )
+    }
+}

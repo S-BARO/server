@@ -16,14 +16,18 @@ enum class ErrorMessage(val message: String) {
     // Product
     PRODUCT_NOT_FOUND("상품을 찾을 수 없습니다: %d"),
     INVALID_POPULAR_PRODUCT_CURSOR("cursorLikes와 cursorId는 함께 지정하거나 함께 생략해야 합니다."),
+    OUT_OF_STOCK("재고가 모두 소진되었습니다: %d"),
 
     // Category
     CATEGORY_ALREADY_EXISTS("카테고리(id = %d)는 이미 존재합니다."),
     CATEGORY_NOT_FOUND("카테고리를 찾을 수 없습니다: %s"),
 
-    //Cart
+    // Cart
     CART_ITEM_NOT_FOUND("장바구니 항목을 찾을 수 없습니다: %d"),
     CART_ITEM_LIMIT_EXCEEDED("장바구니에는 최대 20개의 상품만 담을 수 있습니다."),
+
+    // Order
+    ORDER_NOT_FOUND("주문을 찾을 수 없습니다: %d"),
     ;
 
     fun format(vararg args: Any): String =

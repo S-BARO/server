@@ -1,18 +1,25 @@
 package com.dh.baro.identity.domain.service
 
+import com.dh.baro.core.ErrorMessage
 import com.dh.baro.identity.application.OauthApi
 import com.dh.baro.identity.domain.*
 import com.dh.baro.identity.domain.dto.RegistrationResult
 import com.dh.baro.identity.domain.repository.UserRepository
 import com.dh.baro.identity.domain.repository.SocialAccountRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(readOnly = true)
 class UserService(
     private val userRepository: UserRepository,
     private val socialAccountRepository: SocialAccountRepository,
 ) {
+
+    fun getUserById(userId: Long): User =
+        userRepository.findByIdOrNull(userId)
+            ?: throw IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.format(userId))
 
     @Transactional
     fun findOrRegister(
