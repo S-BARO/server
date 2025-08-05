@@ -3,8 +3,6 @@ package com.dh.baro.order.domain
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.order.application.OrderCreateCommand
 import com.dh.baro.product.domain.ProductRepository
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -48,22 +46,5 @@ class OrderService(
             quantity = item.quantity,
         )
         order.addItem(orderItem)
-    }
-
-    fun getOrderDetail(userId: Long, orderId: Long): Order =
-        orderRepository.findOrderById(orderId)
-            ?: throw IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(orderId))
-
-    fun getOrdersByCursor(
-        userId: Long,
-        cursorId: Long?,
-        size: Int,
-    ): Slice<Order> {
-        val pageable = PageRequest.of(0, size)
-        return orderRepository.findByUserIdAndCursorId(
-            userId = userId,
-            cursorId = cursorId,
-            pageable = pageable,
-        )
     }
 }

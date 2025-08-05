@@ -4,7 +4,6 @@ import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.order.domain.Order
 import com.dh.baro.order.domain.OrderService
 import com.dh.baro.order.presentation.OrderCreateRequest
-import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,11 +17,4 @@ class OrderFacade(
         val cmd = OrderCreateCommand.toCommand(userId, request)
         return orderService.createOrder(cmd)
     }
-
-    fun getOrdersByCursor(
-        userId: Long,
-        cursorId: Long?,
-        size: Int,
-    ): Slice<Order> =
-        orderService.getOrdersByCursor(userId, cursorId, size)
 }

@@ -23,5 +23,5 @@ interface OrderRepository : JpaRepository<Order, Long> {
     ): Slice<Order>
 
     @EntityGraph(attributePaths = ["items", "items.product"])
-    fun findOrderById(orderId: Long): Order?
+    fun findOrderByUserIdAndId(userId: Long, orderId: Long): Order?
 }

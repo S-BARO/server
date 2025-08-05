@@ -1,4 +1,4 @@
-package com.dh.baro.order.domain
+package com.dh.baro.order
 
 import com.dh.baro.product.domain.*
 import java.math.BigDecimal
