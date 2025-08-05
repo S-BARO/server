@@ -17,7 +17,7 @@ class UserService(
     private val socialAccountRepository: SocialAccountRepository,
 ) {
 
-    fun findById(userId: Long): User =
+    fun getUserById(userId: Long): User =
         userRepository.findByIdOrNull(userId)
             ?: throw IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.format(userId))
 

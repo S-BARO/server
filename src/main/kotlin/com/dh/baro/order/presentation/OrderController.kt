@@ -18,11 +18,11 @@ class OrderController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createOrder(
+    fun placeOrder(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: OrderCreateRequest,
     ): OrderDetailResponse {
-        val order = orderFacade.createOrder(userId, request)
+        val order = orderFacade.placeOrder(userId, request)
         return OrderDetailResponse.from(order)
     }
 

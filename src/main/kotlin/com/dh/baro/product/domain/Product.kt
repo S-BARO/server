@@ -58,8 +58,9 @@ class Product(
     }
 
     fun deductStockForOrder(orderQuantity: Int) {
-        require(quantity >= orderQuantity)
+        require(quantity >= orderQuantity) {
             ErrorMessage.OUT_OF_STOCK.format(id)
+        }
 
         quantity -= orderQuantity
     }
