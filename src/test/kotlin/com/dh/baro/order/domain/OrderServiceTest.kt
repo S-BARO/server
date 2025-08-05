@@ -65,7 +65,7 @@ internal class OrderServiceTest(
 
             beforeTest {
                 val cmd = OrderCreateCommand(
-                    userId = defaultUserId,
+                    userId = USER_ID,
                     shippingAddress = "Seoul",
                     items = listOf(
                         OrderCreateCommand.Item(p1.id, 2),
@@ -101,7 +101,7 @@ internal class OrderServiceTest(
 
             it("IllegalArgumentException를 던지고 롤백한다") {
                 val cmd = OrderCreateCommand(
-                    userId = defaultUserId,
+                    userId = USER_ID,
                     shippingAddress = "Seoul",
                     items = listOf(OrderCreateCommand.Item(p1.id, 99))
                 )
@@ -119,7 +119,7 @@ internal class OrderServiceTest(
         context("존재하지 않는 상품 ID가 포함되면") {
             val missingId = 999L
             val cmd = OrderCreateCommand(
-                userId = defaultUserId,
+                userId = USER_ID,
                 shippingAddress = "Seoul",
                 items = listOf(OrderCreateCommand.Item(missingId, 1))
             )
@@ -133,7 +133,7 @@ internal class OrderServiceTest(
 
         context("동일 상품이 두 번 전달되면") {
             val cmd = OrderCreateCommand(
-                userId = defaultUserId,
+                userId = USER_ID,
                 shippingAddress = "Seoul",
                 items = listOf(
                     OrderCreateCommand.Item(p1.id, 1),
@@ -151,7 +151,7 @@ internal class OrderServiceTest(
 
         context("재고가 0인 상품이 포함되면") {
             val cmd = OrderCreateCommand(
-                defaultUserId, "addr",
+                USER_ID, "addr",
                 listOf(OrderCreateCommand.Item(p3.id, 1))
             )
 
@@ -169,13 +169,13 @@ internal class OrderServiceTest(
             lateinit var savedOrder: Order
             beforeTest {
                 val cmd = OrderCreateCommand(
-                    defaultUserId, "Seoul", listOf(OrderCreateCommand.Item(productFixture1.id, 1))
+                    USER_ID, "Seoul", listOf(OrderCreateCommand.Item(productFixture1.id, 1))
                 )
                 savedOrder = orderService.createOrder(cmd)
             }
 
             it("주문 상세 + 항목 + 상품을 fetch 한다") {
-                val detail = shouldNotThrowAny { orderService.getOrderDetail(defaultUserId, savedOrder.id) }
+                val detail = shouldNotThrowAny { orderService.getOrderDetail(USER_ID, savedOrder.id) }
                 detail.items.first().product.shouldNotBeNull()
             }
         }
@@ -185,7 +185,7 @@ internal class OrderServiceTest(
 
             it("IllegalArgumentException를 던진다") {
                 shouldThrow<IllegalArgumentException> {
-                    orderService.getOrderDetail(defaultUserId, missingOrderId)
+                    orderService.getOrderDetail(USER_ID, missingOrderId)
                 }.message shouldBe ErrorMessage.ORDER_NOT_FOUND.format(missingOrderId)
             }
         }
@@ -198,20 +198,20 @@ internal class OrderServiceTest(
 
         beforeEach {
             o1 = orderService.createOrder(
-                OrderCreateCommand(defaultUserId, "addr", listOf(OrderCreateCommand.Item(p1.id, 1)))
+                OrderCreateCommand(USER_ID, "addr", listOf(OrderCreateCommand.Item(p1.id, 1)))
             )
             o2 = orderService.createOrder(
-                OrderCreateCommand(defaultUserId, "addr", listOf(OrderCreateCommand.Item(p2.id, 1)))
+                OrderCreateCommand(USER_ID, "addr", listOf(OrderCreateCommand.Item(p2.id, 1)))
             )
             o3 = orderService.createOrder(
-                OrderCreateCommand(defaultUserId, "addr", listOf(OrderCreateCommand.Item(p1.id, 1)))
+                OrderCreateCommand(USER_ID, "addr", listOf(OrderCreateCommand.Item(p1.id, 1)))
             )
         }
 
         context("첫 페이지를 size=2 로 요청하면") {
             lateinit var slice: Slice<Order>
 
-            beforeTest { slice = orderService.getOrdersByCursor(defaultUserId, null, 2) }
+            beforeTest { slice = orderService.getOrdersByCursor(USER_ID, null, 2) }
 
             it("요청 개수만큼 content 를 반환한다") {
                 slice.content shouldHaveSize 2 // o3, o2
@@ -229,7 +229,7 @@ internal class OrderServiceTest(
         context("cursorId(o2) 이후 페이지를 요청하면") {
             lateinit var slice: Slice<Order>
 
-            beforeTest { slice = orderService.getOrdersByCursor(defaultUserId, o2.id, 5) }
+            beforeTest { slice = orderService.getOrdersByCursor(USER_ID, o2.id, 5) }
 
             it("cursor 아래의 주문(o1)만 반환하고 hasNext=false") {
                 slice.content.map { it.id } shouldContainExactly listOf(o1.id)
@@ -250,7 +250,7 @@ internal class OrderServiceTest(
 }) {
 
     private companion object {
-        private const val defaultUserId = 1L
+        private const val USER_ID = 1L
         private val categoryFixture = categoryFixture(1, "TOP")
         private val productFixture1 = productFixture(11, "A", categoryFixture, price = BigDecimal("1000"), quantity = 5)
         private val productFixture2 = productFixture(12, "B", categoryFixture, price = BigDecimal("2000"), quantity = 3)
