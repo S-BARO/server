@@ -13,9 +13,9 @@ class OrderFacade(
     private val userService: UserService,
 ) {
 
-    fun createOrder(userId: Long, request: OrderCreateRequest): Order {
-        val user = userService.findById(userId)
-        val cmd = OrderCreateCommand.toCommand(user, request)
+    fun placeOrder(userId: Long, request: OrderCreateRequest): Order {
+        userService.getUserById(userId)
+        val cmd = OrderCreateCommand.toCommand(userId, request)
         return orderService.createOrder(cmd)
     }
 

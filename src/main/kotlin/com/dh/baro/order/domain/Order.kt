@@ -2,7 +2,6 @@ package com.dh.baro.order.domain
 
 import com.dh.baro.core.AbstractTime
 import com.dh.baro.core.IdGenerator
-import com.dh.baro.identity.domain.User
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -14,9 +13,8 @@ class Order(
     @Column(name = "id")
     val id: Long,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
+    @Column(name = "user_id", nullable = false)
+    val userId: Long,
 
     @Column(name = "total_price", nullable = false)
     var totalPrice: BigDecimal,
@@ -44,12 +42,12 @@ class Order(
 
     companion object {
         fun newOrder(
-            user: User,
+            userId: Long,
             shippingAddress: String
         ): Order =
             Order(
                 id = IdGenerator.generate(),
-                user = user,
+                userId = userId,
                 totalPrice = BigDecimal.ZERO,
                 shippingAddress = shippingAddress,
                 status = OrderStatus.ORDERED,

@@ -12,12 +12,12 @@ interface OrderRepository : JpaRepository<Order, Long> {
     @Query("""
         select o
         from Order o
-        where o.user.id = :userId
+        where o.userId = :userId
           and (:cursorId is null or o.id < :cursorId)
         order by o.id desc
     """)
     fun findByUserIdAndCursorId(
-        @Param("userId")  userId: Long,
+        @Param("userId") userId: Long,
         @Param("cursorId") cursorId: Long?,
         pageable: Pageable,
     ): Slice<Order>

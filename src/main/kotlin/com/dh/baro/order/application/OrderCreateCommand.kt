@@ -1,10 +1,9 @@
 package com.dh.baro.order.application
 
-import com.dh.baro.identity.domain.User
 import com.dh.baro.order.presentation.OrderCreateRequest
 
 data class OrderCreateCommand(
-    val user: User,
+    val userId: Long,
     val shippingAddress: String,
     val items: List<Item>,
 ) {
@@ -21,9 +20,9 @@ data class OrderCreateCommand(
     }
 
     companion object {
-        fun toCommand(user: User, request: OrderCreateRequest): OrderCreateCommand {
+        fun toCommand(userId: Long, request: OrderCreateRequest): OrderCreateCommand {
             return OrderCreateCommand(
-                user = user,
+                userId = userId,
                 shippingAddress = request.shippingAddress,
                 items = request.orderItems.map { Item.of(it) },
             )
