@@ -49,6 +49,7 @@ oauth2:
   client:
     registration:
       kakao:
+        url: ${KAKAO_AUTH_URL}
         client_id: ${KAKAO_CLIENT_ID} # REST API
 
 management:
