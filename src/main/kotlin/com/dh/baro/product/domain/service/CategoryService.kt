@@ -1,6 +1,8 @@
-package com.dh.baro.product.domain
+package com.dh.baro.product.domain.service
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.product.domain.Category
+import com.dh.baro.product.domain.repository.CategoryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

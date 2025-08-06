@@ -2,7 +2,7 @@ package com.dh.baro.order.domain
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.order.application.OrderCreateCommand
-import com.dh.baro.product.domain.ProductRepository
+import com.dh.baro.product.domain.repository.ProductRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

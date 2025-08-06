@@ -8,11 +8,15 @@ data class KakaoUserInfoResponse(
     val id: Long,
     @JsonProperty("kakao_account")
     val kakaoAccount: KakaoAccount,
-    val properties: Properties,
 ) {
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class KakaoAccount(val email: String)
+    data class KakaoAccount(
+        val email: String,
+        val profile: Profile,
+    )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class Properties(val nickname: String)
+    data class Profile(
+        val nickname: String,
+    )
 }

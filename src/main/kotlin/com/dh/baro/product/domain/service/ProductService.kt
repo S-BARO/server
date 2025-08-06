@@ -1,6 +1,9 @@
-package com.dh.baro.product.domain
+package com.dh.baro.product.domain.service
 
 import com.dh.baro.product.application.ProductCreateCommand
+import com.dh.baro.product.domain.Category
+import com.dh.baro.product.domain.Product
+import com.dh.baro.product.domain.repository.ProductRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

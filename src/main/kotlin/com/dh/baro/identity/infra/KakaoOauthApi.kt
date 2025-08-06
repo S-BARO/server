@@ -31,7 +31,7 @@ class KakaoOauthApi(
         return OauthApi.SocialUserInfo(
             providerId = response.id.toString(),
             email = response.kakaoAccount.email,
-            nickname = response.properties.nickname,
+            nickname = response.kakaoAccount.profile.nickname,
         )
     }
 }

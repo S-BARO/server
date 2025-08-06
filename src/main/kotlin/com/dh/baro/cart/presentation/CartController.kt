@@ -4,7 +4,8 @@ import com.dh.baro.cart.application.CartFacade
 import com.dh.baro.cart.presentation.dto.AddItemRequest
 import com.dh.baro.cart.presentation.dto.CartResponse
 import com.dh.baro.cart.presentation.dto.UpdateQuantityRequest
-import com.dh.baro.core.auth.RequireAuth
+import com.dh.baro.cart.presentation.swagger.CartSwagger
+import com.dh.baro.core.auth.CheckAuth
 import com.dh.baro.core.auth.CurrentUser
 import com.dh.baro.identity.domain.UserRole
 import jakarta.validation.Valid
@@ -13,26 +14,26 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/cart")
-@RequireAuth(UserRole.BUYER)
+@CheckAuth(UserRole.BUYER)
 class CartController(
     private val cartFacade: CartFacade,
-) {
+) : CartSwagger {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getCart(@CurrentUser userId: Long): CartResponse =
+    override fun getCart(@CurrentUser userId: Long): CartResponse =
         CartResponse.from(cartFacade.getCartItems(userId))
 
     @PostMapping("/items")
     @ResponseStatus(HttpStatus.CREATED)
-    fun addItem(
+    override fun addItem(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: AddItemRequest,
     ) = cartFacade.addItem(userId, request)
 
     @PatchMapping("/items/{itemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun updateQuantity(
+    override fun updateQuantity(
         @CurrentUser userId: Long,
         @PathVariable itemId: Long,
         @Valid @RequestBody request: UpdateQuantityRequest,
@@ -40,7 +41,7 @@ class CartController(
     
     @DeleteMapping("/items/{itemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun removeItem(
+    override fun removeItem(
         @CurrentUser userId: Long,
         @PathVariable itemId: Long,
     ) = cartFacade.removeItem(userId, itemId)
