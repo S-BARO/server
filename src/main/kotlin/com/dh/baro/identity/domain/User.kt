@@ -35,6 +35,12 @@ class User(
     private val socialAccounts: MutableList<SocialAccount> = mutableListOf(),
 ) : AbstractTime() {
 
+    fun getName() = name
+
+    fun getEmail() = email
+
+    fun getPhoneNumber() = phoneNumber
+
     companion object {
         fun newUser(name: String, email: String): User {
             return User(
