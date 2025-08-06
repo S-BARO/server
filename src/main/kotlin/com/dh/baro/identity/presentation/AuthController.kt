@@ -4,6 +4,7 @@ import com.dh.baro.core.auth.SessionKeys.USER_ID
 import com.dh.baro.core.auth.SessionKeys.USER_ROLE
 import com.dh.baro.identity.application.AuthFacade
 import com.dh.baro.identity.application.dto.LoginResponse
+import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.identity.presentation.dto.OauthLoginRequest
 import com.dh.baro.identity.presentation.swagger.AuthSwagger
 import jakarta.servlet.http.HttpServletRequest
@@ -36,5 +37,14 @@ class AuthController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun logout(request: HttpServletRequest) {
         request.session.invalidate()
+    }
+
+    @PostMapping("/login/test")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun issueAdminSession(request: HttpServletRequest) {
+        request.session.apply {
+            setAttribute(USER_ID, 1L)
+            setAttribute(USER_ROLE, UserRole.ADMIN)
+        }
     }
 }
