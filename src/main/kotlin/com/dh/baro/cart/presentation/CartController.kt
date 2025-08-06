@@ -5,7 +5,7 @@ import com.dh.baro.cart.presentation.dto.AddItemRequest
 import com.dh.baro.cart.presentation.dto.CartResponse
 import com.dh.baro.cart.presentation.dto.UpdateQuantityRequest
 import com.dh.baro.cart.presentation.swagger.CartSwagger
-import com.dh.baro.core.auth.RequireAuth
+import com.dh.baro.core.auth.CheckAuth
 import com.dh.baro.core.auth.CurrentUser
 import com.dh.baro.identity.domain.UserRole
 import jakarta.validation.Valid
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/cart")
-@RequireAuth(UserRole.BUYER)
+@CheckAuth(UserRole.BUYER)
 class CartController(
     private val cartFacade: CartFacade,
 ) : CartSwagger {
