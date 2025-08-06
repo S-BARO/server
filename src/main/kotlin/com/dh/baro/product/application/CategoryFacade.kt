@@ -1,7 +1,7 @@
 package com.dh.baro.product.application
 
 import com.dh.baro.product.domain.Category
-import com.dh.baro.product.domain.CategoryService
+import com.dh.baro.product.domain.service.CategoryService
 import com.dh.baro.product.presentation.dto.CategoryCreateRequest
 import org.springframework.stereotype.Service
 

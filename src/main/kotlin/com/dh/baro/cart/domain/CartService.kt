@@ -2,7 +2,7 @@ package com.dh.baro.cart.domain
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.identity.domain.repository.UserRepository
-import com.dh.baro.product.domain.ProductRepository
+import com.dh.baro.product.domain.repository.ProductRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

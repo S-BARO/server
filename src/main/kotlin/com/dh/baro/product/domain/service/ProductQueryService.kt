@@ -1,7 +1,9 @@
-package com.dh.baro.product.domain
+package com.dh.baro.product.domain.service
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.instant
+import com.dh.baro.product.domain.Product
+import com.dh.baro.product.domain.repository.ProductRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service

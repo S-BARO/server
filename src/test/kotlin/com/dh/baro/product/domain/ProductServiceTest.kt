@@ -1,6 +1,9 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.product.application.ProductCreateCommand
+import com.dh.baro.product.domain.repository.CategoryRepository
+import com.dh.baro.product.domain.repository.ProductRepository
+import com.dh.baro.product.domain.service.ProductService
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder

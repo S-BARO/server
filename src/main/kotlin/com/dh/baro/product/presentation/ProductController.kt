@@ -6,7 +6,7 @@ import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.auth.RequireAuth
 import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.ProductFacade
-import com.dh.baro.product.domain.ProductQueryService
+import com.dh.baro.product.domain.service.ProductQueryService
 import com.dh.baro.product.presentation.dto.*
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus

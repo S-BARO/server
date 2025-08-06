@@ -1,5 +1,6 @@
-package com.dh.baro.product.domain
+package com.dh.baro.product.domain.repository
 
+import com.dh.baro.product.domain.Product
 import jakarta.persistence.LockModeType
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice

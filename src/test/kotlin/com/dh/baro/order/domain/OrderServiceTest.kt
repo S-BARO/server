@@ -5,9 +5,9 @@ import com.dh.baro.order.application.OrderCreateCommand
 import com.dh.baro.order.categoryFixture
 import com.dh.baro.order.productFixture
 import com.dh.baro.product.domain.Product
-import com.dh.baro.product.domain.ProductRepository
+import com.dh.baro.product.domain.repository.ProductRepository
 import com.dh.baro.product.domain.Category
-import com.dh.baro.product.domain.CategoryRepository
+import com.dh.baro.product.domain.repository.CategoryRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec

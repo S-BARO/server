@@ -1,6 +1,8 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.product.domain.repository.CategoryRepository
+import com.dh.baro.product.domain.service.CategoryService
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
