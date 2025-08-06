@@ -41,7 +41,7 @@ class AuthController(
 
     @PostMapping("/login/test")
     @ResponseStatus(HttpStatus.CREATED)
-    fun issueAdminSession(request: HttpServletRequest) {
+    override fun issueAdminSession(request: HttpServletRequest) {
         request.session.apply {
             setAttribute(USER_ID, 1L)
             setAttribute(USER_ROLE, UserRole.ADMIN)

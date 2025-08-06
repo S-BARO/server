@@ -108,4 +108,20 @@ interface AuthSwagger {
     fun logout(
         @Parameter(hidden = true) request: HttpServletRequest
     )
+
+    @Operation(
+        summary = "ADMIN 세션 발급 (테스트 전용)",
+        description = "세션에 **USER_ID=1**, **USER_ROLE=ADMIN** 값을 저장하고 쿠키로 발급합니다.",
+        responses = [
+            ApiResponse(
+                responseCode = "201",
+                description = "세션 발급 성공 (쿠키 포함)",
+                content = [Content(mediaType = APPLICATION_JSON_VALUE)]
+            )
+        ]
+    )
+    @PostMapping("/login/test")
+    fun issueAdminSession(
+        @Parameter(hidden = true) request: HttpServletRequest,
+    )
 }
