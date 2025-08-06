@@ -5,6 +5,7 @@ import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.auth.CurrentUser
 import com.dh.baro.order.application.OrderFacade
 import com.dh.baro.order.application.OrderQueryFacade
+import com.dh.baro.order.presentation.swagger.OrderSwagger
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.*
 class OrderController(
     private val orderQueryFacade: OrderQueryFacade,
     private val orderFacade: OrderFacade,
-) {
+) : OrderSwagger {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun placeOrder(
+    override fun placeOrder(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: OrderCreateRequest,
     ): OrderDetailResponse {
@@ -28,7 +29,7 @@ class OrderController(
 
     @GetMapping("/{orderId}")
     @ResponseStatus(HttpStatus.OK)
-    fun getOrderDetail(
+    override fun getOrderDetail(
         @CurrentUser userId: Long,
         @PathVariable orderId: Long,
     ): OrderDetailResponse =
@@ -36,7 +37,7 @@ class OrderController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getOrdersByCursor(
+    override fun getOrdersByCursor(
         @CurrentUser userId: Long,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "10") size: Int,

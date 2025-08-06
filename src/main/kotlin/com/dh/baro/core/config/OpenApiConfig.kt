@@ -29,7 +29,7 @@ class OpenApiConfig(private val environment: Environment) {
             )
             .info(
                 Info()
-                    .title("Baro(바로) API Documentation")
+                    .title("바로(BARO) API 명세서")
                     .description("Team DH's Baro service API specification.")
                     .version("1.0")
             )

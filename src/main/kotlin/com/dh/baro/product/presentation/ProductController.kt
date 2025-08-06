@@ -8,6 +8,7 @@ import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.domain.service.ProductQueryService
 import com.dh.baro.product.presentation.dto.*
+import com.dh.baro.product.presentation.swagger.ProductSwagger
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -17,17 +18,17 @@ import org.springframework.web.bind.annotation.*
 class ProductController(
     private val productFacade: ProductFacade,
     private val productQueryService: ProductQueryService,
-) {
+) : ProductSwagger {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @RequireAuth(UserRole.STORE_OWNER)
-    fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductResponse =
+    override fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductResponse =
         ProductResponse.from(productFacade.createProduct(request))
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
-    fun getPopularProducts(
+    override fun getPopularProducts(
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false) cursorLikes: Int?,
@@ -46,7 +47,7 @@ class ProductController(
 
     @GetMapping("/newest")
     @ResponseStatus(HttpStatus.OK)
-    fun getNewestProducts(
+    override fun getNewestProducts(
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
@@ -60,7 +61,7 @@ class ProductController(
     }
 
     @GetMapping("/{productId}")
-    fun getProductDetail(@PathVariable productId: Long): ProductDetail =
+    override fun getProductDetail(@PathVariable productId: Long): ProductDetail =
         ProductDetail.from(productQueryService.getProductDetail(productId))
 
     companion object {
