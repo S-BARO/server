@@ -16,6 +16,20 @@ import java.time.temporal.ChronoUnit
 class ProductQueryService(
     private val productRepository: ProductRepository,
 ) {
+    fun checkProductsExists(productIds: List<Long>) {
+        val products = productRepository.findAllById(productIds).toList()
+
+        require(products.size == productIds.size) {
+            ErrorMessage.PRODUCT_NOT_FOUND.format(productIds)
+        }
+    }
+
+    fun getProductDetail(productId: Long): Product =
+        productRepository.findDetailProductById(productId)
+            ?: throw IllegalArgumentException(ErrorMessage.PRODUCT_NOT_FOUND.format(productId))
+
+    fun getAllByIds(ids: Collection<Long>): List<Product> =
+        if (ids.isEmpty()) emptyList() else productRepository.findAllById(ids)
 
     fun getPopularProducts(
         categoryId: Long?,
@@ -23,12 +37,11 @@ class ProductQueryService(
         cursorId: Long?,
         size: Int,
     ): Slice<Product> {
-        val pageable = PageRequest.of(0, size)
         return productRepository.findPopularProductsByCursor(
             categoryId = categoryId,
             cursorLikes = cursorLikes,
             cursorId = cursorId,
-            pageable = pageable,
+            pageable = PageRequest.of(0, size),
         )
     }
 
@@ -37,21 +50,16 @@ class ProductQueryService(
         cursorId: Long?,
         size: Int
     ): Slice<Product> {
-        val pageable = PageRequest.of(0, size)
         return productRepository.findNewestProductsByCursor(
             cutoff = calculateCutoff(),
             categoryId = categoryId,
             cursorId = cursorId,
-            pageable = pageable,
+            pageable = PageRequest.of(0, size),
         )
     }
 
     private fun calculateCutoff(): Instant =
         instant().minus(NEW_PERIOD_DAYS, ChronoUnit.DAYS)
-
-    fun getProductDetail(productId: Long): Product =
-        productRepository.findDetailProductById(productId)
-            ?: throw IllegalArgumentException(ErrorMessage.PRODUCT_NOT_FOUND.format(productId))
 
     companion object {
         private const val NEW_PERIOD_DAYS = 30L
