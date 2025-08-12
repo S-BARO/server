@@ -17,16 +17,16 @@ internal class WebConfig(
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
-            .allowedOrigins("*")
-            .allowedHeaders("**")
+            .allowedOriginPatterns("*")
             .allowedMethods(*ALLOWED_METHOD_NAMES)
+            .allowedHeaders("*")
+            .allowCredentials(true)
             .maxAge(3600)
     }
 
     companion object {
         private val ALLOWED_METHOD_NAMES = arrayOf(
-            "GET", "HEAD", "POST", "PUT", "DELETE", "TRACE",
-            "OPTIONS", "PATCH"
+            "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS",
         )
     }
 }
