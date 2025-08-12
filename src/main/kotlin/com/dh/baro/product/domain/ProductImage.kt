@@ -1,6 +1,7 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
 @Entity
@@ -19,4 +20,19 @@ class ProductImage(
 
     @Column(name = "display_order", nullable = false)
     val displayOrder: Int,
-) : AbstractTime()
+) : AbstractTime() {
+
+    companion object {
+        fun of(
+            product: Product,
+            imageUrl: String,
+            displayOrder: Int
+        ) = ProductImage(
+            id = IdGenerator.generate(),
+            product = product,
+            imageUrl = imageUrl,
+            displayOrder = displayOrder,
+        )
+    }
+}
+

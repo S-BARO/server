@@ -14,7 +14,7 @@ enum class ErrorMessage(val message: String) {
     KAKAO_USER_FETCH_FAILED("카카오 사용자 정보 조회 실패: %s"),
 
     // Product
-    PRODUCT_NOT_FOUND("상품을 찾을 수 없습니다: %d"),
+    PRODUCT_NOT_FOUND("상품을 찾을 수 없습니다: %s"),
     INVALID_POPULAR_PRODUCT_CURSOR("cursorLikes와 cursorId는 함께 지정하거나 함께 생략해야 합니다."),
     OUT_OF_STOCK("재고가 모두 소진되었습니다: %d"),
 
@@ -28,6 +28,9 @@ enum class ErrorMessage(val message: String) {
 
     // Order
     ORDER_NOT_FOUND("주문을 찾을 수 없습니다: %d"),
+
+    // Look
+    LOOK_NOT_FOUND("룩을 찾을 수 없습니다: %d"),
     ;
 
     fun format(vararg args: Any): String =

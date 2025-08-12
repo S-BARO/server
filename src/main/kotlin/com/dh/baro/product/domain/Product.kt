@@ -1,11 +1,13 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.AggregateRoot
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 import java.math.BigDecimal
 
+@AggregateRoot
 @Entity
 @Table(name = "products")
 class Product(
@@ -14,23 +16,23 @@ class Product(
     val id: Long,
 
     @Column(name = "product_name", nullable = false, length = 100)
-    var name: String,
+    private var name: String,
 
     @Column(name = "price", nullable = false, precision = 10, scale = 0)
-    var price: BigDecimal,
+    private var price: BigDecimal,
 
     @Column(name = "quantity", nullable = false)
-    var quantity: Int = 0,
+    private var quantity: Int = 0,
 
     @Lob
     @Column(name = "description")
-    var description: String? = null,
+    private var description: String? = null,
 
     @Column(name = "likes_count", nullable = false)
-    var likesCount: Int = 0,
+    private var likesCount: Int = 0,
 
     @Column(name = "thumbnail_url", nullable = false, length = 300)
-    var thumbnailUrl: String,
+    private var thumbnailUrl: String,
 
     @OneToMany(
         mappedBy = "product",
@@ -38,7 +40,7 @@ class Product(
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
     )
-    val images: MutableSet<ProductImage> = mutableSetOf(),
+    private val images: MutableSet<ProductImage> = mutableSetOf(),
 
     @OneToMany(
         mappedBy = "product",
@@ -46,15 +48,54 @@ class Product(
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    val productCategories: MutableSet<ProductCategory> = mutableSetOf(),
+    private val productCategories: MutableSet<ProductCategory> = mutableSetOf(),
 
-) : AbstractTime() {
+    ) : AbstractTime() {
+
+    fun getName(): String = name
+
+    fun getPrice(): BigDecimal = price
+
+    fun getQuantity(): Int = quantity
+
+    fun getDescription(): String? = description
+
+    fun getLikesCount(): Int = likesCount
+
+    fun getThumbnailUrl(): String = thumbnailUrl
+
+    fun getImages(): List<ProductImage> = images.sortedBy { it.displayOrder }
+
+    fun getProductCategories(): List<ProductCategory> = productCategories.toList()
+
+    fun addImages(imageUrls: List<String>) {
+        val start = images.size
+        imageUrls.forEachIndexed { idx, url ->
+            addImage(
+                imageUrl = url,
+                displayOrder = start + idx + 1,
+            )
+        }
+    }
+
+    private fun addImage(imageUrl: String, displayOrder: Int) =
+        images.add(
+            ProductImage.of(
+                product = this,
+                imageUrl = imageUrl,
+                displayOrder = displayOrder,
+            )
+        )
+
+    fun addCategories(categories: Collection<Category>) {
+        categories.forEach { addCategory(it) }
+    }
 
     fun addCategory(category: Category) {
         if (productCategories.any { it.category.id == category.id }) return
 
-        val pc = ProductCategory.of(this, category)
-        productCategories.add(pc)
+        val productCategory = ProductCategory.of(this, category)
+        productCategories.add(productCategory)
     }
 
     fun deductStockForOrder(orderQuantity: Int) {

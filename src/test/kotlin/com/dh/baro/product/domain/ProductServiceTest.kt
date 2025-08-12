@@ -49,6 +49,11 @@ internal class ProductServiceTest(
             description = "Nice Hoodie",
             likesCount = 0,
             thumbnailUrl = "https://example.com/hoodie-thumb.jpg",
+            imageUrls = listOf(
+                "https://example.com/hoodie-1.jpg",
+                "https://example.com/hoodie-2.jpg"
+            ),
+            categoryIds = listOf(1L, 2L),
         )
 
         it("상품과 연결된 ProductCategory 를 모두 저장한다") {
@@ -57,7 +62,7 @@ internal class ProductServiceTest(
             }
             productRepository.existsById(saved.id) shouldBe true
 
-            val categoryIds = saved.productCategories.map { it.category.id }
+            val categoryIds = saved.getProductCategories().map { it.category.id }
             categoryIds.shouldContainExactlyInAnyOrder(listOf(top.id, shoe.id))
         }
     }

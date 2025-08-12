@@ -22,19 +22,8 @@ fun productFixture(
         thumbnailUrl = "https://example.com/$id-thumb.jpg",
         likesCount = likes,
     )
-
-    product.images += ProductImage(
-        id = id * 100,
-        product = product,
-        imageUrl = "https://example.com/$id-1.jpg",
-        displayOrder = 1,
-    )
-
-    product.productCategories += ProductCategory(
-        id = id * 10,
-        product = product,
-        category = category,
-    )
+    product.addImages(listOf("https://example.com/$id-1.jpg"))
+    product.addCategory(category)
 
     if (createdAtAgoDays > 0) {
         val field = product.javaClass.superclass!!.getDeclaredField("createdAt")

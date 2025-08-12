@@ -22,10 +22,8 @@ class ProductService(
             likesCount = cmd.likesCount,
             thumbnailUrl = cmd.thumbnailUrl,
         )
-
-        for (category in categories) {
-            product.addCategory(category)
-        }
+        product.addImages(cmd.imageUrls)
+        product.addCategories(categories)
 
         return productRepository.save(product)
     }

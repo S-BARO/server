@@ -1,6 +1,5 @@
 package com.dh.baro.product.presentation.swagger
 
-import com.dh.baro.core.ErrorResponse
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.Cursor
 import com.dh.baro.product.presentation.dto.*
@@ -48,26 +47,12 @@ interface ProductSwagger {
         responses = [
             ApiResponse(
                 responseCode = "201", description = "생성 성공",
-                content = [Content(schema = Schema(implementation = ProductResponse::class))]
-            ),
-            ApiResponse(
-                responseCode = "400", description = "검증 오류",
-                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
-            ),
-            ApiResponse(
-                responseCode = "401",
-                description = "로그인 필요",
-                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
-            ),
-            ApiResponse(
-                responseCode = "403",
-                description = "권한 부족",
-                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
+                content = [Content(schema = Schema(implementation = ProductCreateResponse::class))]
             )
         ]
     )
     @PostMapping
-    fun createProduct(@RequestBody request: ProductCreateRequest): ProductResponse
+    fun createProduct(@RequestBody request: ProductCreateRequest): ProductCreateResponse
 
     /* ───────────────────────────── 인기 상품 ───────────────────────────── */
     @Operation(
@@ -102,10 +87,6 @@ interface ProductSwagger {
                         """
                     )]
                 )]
-            ),
-            ApiResponse(
-                responseCode = "400", description = "cursor 쿼리 오류",
-                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
             )
         ]
     )
@@ -168,10 +149,6 @@ interface ProductSwagger {
             ApiResponse(
                 responseCode = "200", description = "조회 성공",
                 content = [Content(schema = Schema(implementation = ProductDetail::class))]
-            ),
-            ApiResponse(
-                responseCode = "404", description = "상품 없음",
-                content = [Content(schema = Schema(implementation = ErrorResponse::class))]
             )
         ]
     )

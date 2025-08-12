@@ -23,8 +23,8 @@ class ProductController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CheckAuth(UserRole.STORE_OWNER)
-    override fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductResponse =
-        ProductResponse.from(productFacade.createProduct(request))
+    override fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductCreateResponse =
+        ProductCreateResponse.from(productFacade.createProduct(request.toCommand()))
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
@@ -41,7 +41,7 @@ class ProductController(
         return SliceResponse.from(
             slice = slice,
             mapper = ProductListItem::from,
-            cursorExtractor = { PopularCursor(it.id, it.likesCount) },
+            cursorExtractor = { PopularCursor(it.id, it.getLikesCount()) },
         )
     }
 

@@ -68,7 +68,7 @@ internal class ProductQueryServiceTest(
         }
 
         context("cursor(likes,id)를 넘기면") {
-            val cursorLikes = p1.likesCount
+            val cursorLikes = p1.getLikesCount()
             val cursorId = p1.id
             val expectedIds = listOf(p2.id)
 
@@ -143,8 +143,8 @@ internal class ProductQueryServiceTest(
         context("상품 상세 조회 시") {
             it("연관 엔티티(Images·Categories)를 fetch join 으로 즉시 로딩한다") {
                 val detail = shouldNotThrowAny { productQueryService.getProductDetail(p1.id) }
-                detail.images.isNotEmpty() shouldBe true
-                detail.productCategories.first().category.id shouldBe top.id
+                detail.getImages().isNotEmpty() shouldBe true
+                detail.getProductCategories().first().category.id shouldBe top.id
             }
         }
     }
@@ -181,7 +181,7 @@ internal class ProductQueryServiceTest(
                 val lastItem = firstSlice.content.last()
                 nextSlice = productQueryService.getPopularProducts(
                     categoryId = null,
-                    cursorLikes = lastItem.likesCount,
+                    cursorLikes = lastItem.getLikesCount(),
                     cursorId = lastItem.id,
                     size = firstPageSize,
                 )

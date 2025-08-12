@@ -21,11 +21,11 @@ data class CartResponse(
         private fun CartItem.toResponse() = CartItemResponse(
             itemId = id,
             productId = product.id,
-            productName = product.name,
-            productThumbnailUrl = product.thumbnailUrl,
-            price = product.price,
+            productName = product.getName(),
+            productThumbnailUrl = product.getThumbnailUrl(),
+            price = product.getPrice(),
             quantity = quantity,
-            subtotal = product.price
+            subtotal = product.getPrice()
                 .multiply(BigDecimal(quantity))
                 .setScale(SCALE_NONE, RoundingMode.HALF_UP)
         )

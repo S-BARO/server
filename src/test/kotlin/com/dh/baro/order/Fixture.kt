@@ -21,15 +21,6 @@ fun productFixture(
         thumbnailUrl = "https://example.com/$id-thumb.jpg",
         likesCount = 0,
     ).apply {
-        images += ProductImage(
-            id = id * 100,
-            product = this,
-            imageUrl = "https://example.com/$id-1.jpg",
-            displayOrder = 1,
-        )
-        productCategories += ProductCategory(
-            id = id * 10 + 1,
-            product = this,
-            category = category,
-        )
+        this.addImages(listOf("https://example.com/$id-1.jpg"))
+        this.addCategory(category)
     }
