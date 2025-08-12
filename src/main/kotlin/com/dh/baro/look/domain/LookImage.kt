@@ -1,6 +1,7 @@
 package com.dh.baro.look.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
 @Entity
@@ -19,7 +20,19 @@ class LookImage(
 
     @Column(name = "display_order", nullable = false)
     val displayOrder: Int,
+) : AbstractTime() {
 
-    @Column(name = "is_thumbnail", nullable = false)
-    val isThumbnail: Boolean = false
-) : AbstractTime()
+    companion object {
+        fun of(
+            look: Look,
+            imageUrl: String,
+            displayOrder: Int,
+        ): LookImage =
+            LookImage(
+                id = IdGenerator.generate(),
+                look = look,
+                imageUrl = imageUrl,
+                displayOrder = displayOrder,
+            )
+    }
+}
