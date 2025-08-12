@@ -15,16 +15,16 @@ class Look(
     val creatorId: Long,
 
     @Column(name = "title", nullable = false)
-    var title: String,
+    private var title: String,
 
     @Lob @Column(name = "description")
-    var description: String? = null,
+    private var description: String? = null,
 
     @Column(name = "likes_count", nullable = false)
-    var likesCount: Int = 0,
+    private var likesCount: Int = 0,
 
     @Column(name = "thumbnail_url", nullable = false, length = 300)
-    var thumbnailUrl: String,
+    private var thumbnailUrl: String,
 
     @OneToMany(
         mappedBy = "look",
@@ -42,6 +42,14 @@ class Look(
     )
     private val lookProducts: MutableSet<LookProduct> = mutableSetOf(),
 ) : AbstractTime() {
+
+    fun getTitle() = title
+
+    fun getDescription() = description
+
+    fun getLikesCount() = likesCount
+
+    fun getThumbnailUrl() = thumbnailUrl
 
     fun addImages(imageUrls: List<String>) {
         imageUrls.forEachIndexed { idx, url ->

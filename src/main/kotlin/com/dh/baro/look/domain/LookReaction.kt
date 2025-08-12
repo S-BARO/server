@@ -22,7 +22,7 @@ class LookReaction(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "reaction_type", nullable = false, length = 10)
-    var reactionType: ReactionType,
+    val reactionType: ReactionType,
 ) : AbstractTime() {
 
     companion object {
