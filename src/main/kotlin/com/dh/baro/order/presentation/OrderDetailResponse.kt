@@ -31,7 +31,7 @@ data class OrderDetailResponse(
             items = order.items.map {
                 Item(
                     productId = it.product.id,
-                    productName = it.product.name,
+                    productName = it.product.getName(),
                     quantity = it.quantity,
                     priceAtPurchase = it.priceAtPurchase,
                 )

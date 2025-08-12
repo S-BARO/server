@@ -42,7 +42,7 @@ class OrderItem(
                 order = order,
                 product = product,
                 quantity = quantity,
-                priceAtPurchase = product.price,
+                priceAtPurchase = product.getPrice(),
             )
     }
 }

@@ -41,7 +41,7 @@ class ProductController(
         return SliceResponse.from(
             slice = slice,
             mapper = ProductListItem::from,
-            cursorExtractor = { PopularCursor(it.id, it.likesCount) },
+            cursorExtractor = { PopularCursor(it.id, it.getLikesCount()) },
         )
     }
 

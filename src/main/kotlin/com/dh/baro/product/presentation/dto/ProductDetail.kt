@@ -15,11 +15,11 @@ data class ProductDetail(
     companion object {
         fun from(product: Product) = ProductDetail(
             id = product.id,
-            name = product.name,
-            price = product.price,
-            description = product.description,
-            images = product.images.sortedBy { it.displayOrder }.map { it.imageUrl },
-            categories = product.productCategories.map { it.category.name },
+            name = product.getName(),
+            price = product.getPrice(),
+            description = product.getDescription(),
+            images = product.getImages().map { it.imageUrl },
+            categories = product.getProductCategories().map { it.category.name },
         )
     }
 }

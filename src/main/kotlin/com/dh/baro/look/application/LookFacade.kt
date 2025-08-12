@@ -2,8 +2,6 @@ package com.dh.baro.look.application
 
 import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.look.domain.*
-import com.dh.baro.look.domain.service.LookImageService
-import com.dh.baro.look.domain.service.LookProductService
 import com.dh.baro.look.domain.service.LookService
 import com.dh.baro.look.presentation.dto.LookDetailResponse
 import com.dh.baro.product.domain.service.ProductQueryService
@@ -15,8 +13,6 @@ class LookFacade(
     private val userService: UserService,
     private val productQueryService: ProductQueryService,
     private val lookService: LookService,
-    private val lookImageService: LookImageService,
-    private val lookProductService: LookProductService,
 ) {
 
     fun createLook(cmd: LookCreateCommand): Look {
@@ -29,17 +25,16 @@ class LookFacade(
         lookService.getSwipeLooks(userId, cursorId, size)
 
     fun getLookDetail(lookId: Long): LookDetailResponse {
-        val look = lookService.getLook(lookId)
-        val images = lookImageService.findByLookIdOrderByDisplay(lookId)
-        val lookProducts = lookProductService.findByLookIdOrderByDisplay(lookId)
+        val look = lookService.getLookDetail(lookId)
+        val orderedProducts = look.getOrderedProducts()
 
-        val productIds = lookProducts.map { it.productId }.distinct()
+        val productIds = orderedProducts.map { it.productId }.distinct()
         val products = productQueryService.getAllByIds(productIds)
 
         return LookDetailResponse.of(
             look = look,
-            images = images,
-            lookProducts = lookProducts,
+            images = look.getOrderedImages(),
+            lookProducts = orderedProducts,
             products = products,
         )
     }
