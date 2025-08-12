@@ -2,6 +2,8 @@ package com.dh.baro.look.domain
 
 import com.dh.baro.core.AbstractTime
 import com.dh.baro.core.IdGenerator
+import com.dh.baro.look.domain.dto.LookImageDto
+import com.dh.baro.look.domain.dto.LookProductDto
 import jakarta.persistence.*
 
 @Entity
@@ -32,7 +34,7 @@ class Look(
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
     )
-    val images: MutableSet<LookImage> = mutableSetOf(),
+    private val images: MutableSet<LookImage> = mutableSetOf(),
 
     @OneToMany(
         mappedBy = "look",
@@ -40,7 +42,7 @@ class Look(
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
     )
-    private val lookProducts: MutableSet<LookProduct> = mutableSetOf(),
+    private val products: MutableSet<LookProduct> = mutableSetOf(),
 ) : AbstractTime() {
 
     fun getTitle() = title
@@ -51,11 +53,24 @@ class Look(
 
     fun getThumbnailUrl() = thumbnailUrl
 
+    fun getOrderedImages(): List<LookImageDto> =
+        images.asSequence()
+            .sortedBy { it.displayOrder }
+            .map { LookImageDto(it.imageUrl, it.displayOrder) }
+            .toList()
+
+    fun getOrderedProducts(): List<LookProductDto> =
+        products.asSequence()
+            .sortedBy { it.displayOrder }
+            .map { LookProductDto(it.productId, it.displayOrder) }
+            .toList()
+
     fun addImages(imageUrls: List<String>) {
+        val start = images.size
         imageUrls.forEachIndexed { idx, url ->
             addImage(
                 imageUrl = url,
-                displayOrder = images.size + idx + 1,
+                displayOrder = start + idx + 1,
             )
         }
     }
@@ -70,11 +85,11 @@ class Look(
         )
 
     fun addProducts(productIds: List<Long>) {
-        val nextOrderStart = lookProducts.size
+        val nextOrderStart = products.size
         productIds
             .distinct()
             .filterNot { id ->
-                lookProducts.any { it.productId == id }
+                products.any { it.productId == id }
             }
             .forEachIndexed { idx, id ->
                 addProduct(id, nextOrderStart + idx + 1)
@@ -82,7 +97,7 @@ class Look(
     }
 
     private fun addProduct(productId: Long, displayOrder: Int) {
-        lookProducts += LookProduct.of(
+        products += LookProduct.of(
             look = this,
             productId = productId,
             displayOrder = displayOrder,
