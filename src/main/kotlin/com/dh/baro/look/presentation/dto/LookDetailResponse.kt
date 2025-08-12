@@ -1,8 +1,8 @@
 package com.dh.baro.look.presentation.dto
 
 import com.dh.baro.look.domain.Look
-import com.dh.baro.look.domain.dto.LookImageDto
-import com.dh.baro.look.domain.dto.LookProductDto
+import com.dh.baro.look.domain.vo.LookImageView
+import com.dh.baro.look.domain.vo.LookProductView
 import com.dh.baro.product.domain.Product
 import java.math.BigDecimal
 
@@ -31,8 +31,8 @@ data class LookDetailResponse(
     companion object {
         fun of(
             look: Look,
-            images: List<LookImageDto>,
-            lookProducts: List<LookProductDto>,
+            images: List<LookImageView>,
+            lookProducts: List<LookProductView>,
             products: List<Product>,
         ): LookDetailResponse {
             val productMap = products.associateBy { it.id }

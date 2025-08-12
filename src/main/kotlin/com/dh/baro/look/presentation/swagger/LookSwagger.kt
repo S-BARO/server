@@ -66,6 +66,7 @@ interface LookSwagger {
             사용자의 해당 룩에 대한 반응을 기록합니다.
             같은 반응을 반복 요청해도 멱등(상태 변화 없음)입니다.
             LIKE 반응의 최초 등록 시 likesCount가 1 증가합니다.
+            reationType = [LIKE, DISLIKE]
         """,
         parameters = [
             Parameter(`in` = ParameterIn.PATH, name = "lookId", description = "룩 ID", required = true, example = "1001")

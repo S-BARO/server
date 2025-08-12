@@ -6,7 +6,10 @@ import jakarta.persistence.*
 @Entity
 @Table(
     name = "look_products",
-    uniqueConstraints = [UniqueConstraint(columnNames = ["look_id", "product_id"])],
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = ["look_id", "product_id"]),
+        UniqueConstraint(columnNames = ["look_id", "display_order"])
+    ],
 )
 class LookProduct(
     @Id

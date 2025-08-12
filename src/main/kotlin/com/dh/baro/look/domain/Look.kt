@@ -2,8 +2,8 @@ package com.dh.baro.look.domain
 
 import com.dh.baro.core.AbstractTime
 import com.dh.baro.core.IdGenerator
-import com.dh.baro.look.domain.dto.LookImageDto
-import com.dh.baro.look.domain.dto.LookProductDto
+import com.dh.baro.look.domain.vo.LookImageView
+import com.dh.baro.look.domain.vo.LookProductView
 import jakarta.persistence.*
 
 @Entity
@@ -53,16 +53,16 @@ class Look(
 
     fun getThumbnailUrl() = thumbnailUrl
 
-    fun getOrderedImages(): List<LookImageDto> =
+    fun getOrderedImageViews(): List<LookImageView> =
         images.asSequence()
             .sortedBy { it.displayOrder }
-            .map { LookImageDto(it.imageUrl, it.displayOrder) }
+            .map { LookImageView(it.imageUrl, it.displayOrder) }
             .toList()
 
-    fun getOrderedProducts(): List<LookProductDto> =
+    fun getOrderedProductViews(): List<LookProductView> =
         products.asSequence()
             .sortedBy { it.displayOrder }
-            .map { LookProductDto(it.productId, it.displayOrder) }
+            .map { LookProductView(it.productId, it.displayOrder) }
             .toList()
 
     fun addImages(imageUrls: List<String>) {

@@ -26,14 +26,14 @@ class LookFacade(
 
     fun getLookDetail(lookId: Long): LookDetailResponse {
         val look = lookService.getLookDetail(lookId)
-        val orderedProducts = look.getOrderedProducts()
+        val orderedProducts = look.getOrderedProductViews()
 
-        val productIds = orderedProducts.map { it.productId }.distinct()
+        val productIds = orderedProducts.map { it.productId }
         val products = productQueryService.getAllByIds(productIds)
 
         return LookDetailResponse.of(
             look = look,
-            images = look.getOrderedImages(),
+            images = look.getOrderedImageViews(),
             lookProducts = orderedProducts,
             products = products,
         )

@@ -17,9 +17,10 @@ class ProductQueryService(
     private val productRepository: ProductRepository,
 ) {
     fun checkProductsExists(productIds: List<Long>) {
-        val products = productRepository.findAllById(productIds).toList()
+        val distinctIds = productIds.toSet()
+        val products = productRepository.findAllById(distinctIds).toList()
 
-        require(products.size == productIds.size) {
+        require(products.size == distinctIds.size) {
             ErrorMessage.PRODUCT_NOT_FOUND.format(productIds)
         }
     }
