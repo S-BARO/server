@@ -87,7 +87,7 @@ internal class OrderServiceTest(
             }
 
             it("상품 재고를 차감한다") {
-                productRepository.findById(p1.id).get().quantity shouldBe 3
+                productRepository.findById(p1.id).get().getQuantity() shouldBe 3
             }
 
             it("초기 상태는 ORDERED 이다") {
@@ -110,7 +110,7 @@ internal class OrderServiceTest(
 
                 // 롤백 확인
                 orderRepository.count() shouldBe 0
-                productRepository.findById(p1.id).get().quantity shouldBe 5
+                productRepository.findById(p1.id).get().getQuantity() shouldBe 5
             }
         }
 
@@ -143,7 +143,7 @@ internal class OrderServiceTest(
                 val order = orderService.createOrder(cmd)
 
                 order.items.shouldHaveSize(1) // p1 하나만
-                productRepository.findById(p1.id).get().quantity shouldBe 2 // 5-(1+2)
+                productRepository.findById(p1.id).get().getQuantity() shouldBe 2 // 5-(1+2)
             }
         }
 

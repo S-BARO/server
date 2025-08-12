@@ -57,7 +57,7 @@ internal class ProductServiceTest(
             }
             productRepository.existsById(saved.id) shouldBe true
 
-            val categoryIds = saved.productCategories.map { it.category.id }
+            val categoryIds = saved.getProductCategories().map { it.category.id }
             categoryIds.shouldContainExactlyInAnyOrder(listOf(top.id, shoe.id))
         }
     }
