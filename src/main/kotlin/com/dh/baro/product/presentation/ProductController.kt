@@ -23,8 +23,8 @@ class ProductController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CheckAuth(UserRole.STORE_OWNER)
-    override fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductResponse =
-        ProductResponse.from(productFacade.createProduct(request))
+    override fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductCreateResponse =
+        ProductCreateResponse.from(productFacade.createProduct(request.toCommand()))
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)

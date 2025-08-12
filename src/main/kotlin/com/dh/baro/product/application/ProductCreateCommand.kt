@@ -1,6 +1,5 @@
 package com.dh.baro.product.application
 
-import com.dh.baro.product.presentation.dto.ProductCreateRequest
 import java.math.BigDecimal
 
 data class ProductCreateCommand(
@@ -10,17 +9,6 @@ data class ProductCreateCommand(
     val description: String?,
     val likesCount: Int,
     val thumbnailUrl: String,
-) {
-
-    companion object {
-        fun toCommand(request: ProductCreateRequest): ProductCreateCommand =
-            ProductCreateCommand(
-                name = request.name,
-                price = request.price,
-                quantity = request.quantity,
-                description = request.description,
-                likesCount = request.likesCount,
-                thumbnailUrl = request.thumbnailUrl,
-            )
-    }
-}
+    val categoryIds: List<Long>,
+    val imageUrls: List<String>,
+)

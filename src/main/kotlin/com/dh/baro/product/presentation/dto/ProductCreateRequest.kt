@@ -1,5 +1,6 @@
 package com.dh.baro.product.presentation.dto
 
+import com.dh.baro.product.application.ProductCreateCommand
 import jakarta.validation.constraints.*
 import java.math.BigDecimal
 
@@ -23,4 +24,19 @@ data class ProductCreateRequest(
 
     @field:NotEmpty
     val categoryIds: List<Long>,
-)
+
+    @field:Size(min = 1, message = "최소 1개 이상의 이미지가 필요합니다.")
+    val imageUrls: List<@NotBlank String>,
+) {
+    fun toCommand(): ProductCreateCommand =
+        ProductCreateCommand(
+            name = name,
+            price = price,
+            quantity = quantity,
+            description = description,
+            likesCount = likesCount,
+            thumbnailUrl = thumbnailUrl,
+            categoryIds = categoryIds,
+            imageUrls = imageUrls,
+        )
+}

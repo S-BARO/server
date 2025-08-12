@@ -49,6 +49,11 @@ internal class ProductServiceTest(
             description = "Nice Hoodie",
             likesCount = 0,
             thumbnailUrl = "https://example.com/hoodie-thumb.jpg",
+            imageUrls = listOf(
+                "https://example.com/hoodie-1.jpg",
+                "https://example.com/hoodie-2.jpg"
+            ),
+            categoryIds = listOf(1L, 2L),
         )
 
         it("상품과 연결된 ProductCategory 를 모두 저장한다") {
