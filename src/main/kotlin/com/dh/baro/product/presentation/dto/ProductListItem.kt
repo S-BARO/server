@@ -13,9 +13,9 @@ data class ProductListItem(
     companion object {
         fun from(product: Product) = ProductListItem(
             id = product.id,
-            name = product.name,
-            price = product.price,
-            thumbnailUrl = product.thumbnailUrl,
+            name = product.getName(),
+            price = product.getPrice(),
+            thumbnailUrl = product.getThumbnailUrl(),
         )
     }
 }

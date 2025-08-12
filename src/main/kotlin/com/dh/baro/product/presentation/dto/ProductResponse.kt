@@ -15,11 +15,11 @@ data class ProductResponse(
     companion object {
         fun from(product: Product) = ProductResponse(
             id = product.id,
-            name = product.name,
-            price = product.price,
-            quantity = product.quantity,
-            thumbnailUrl = product.thumbnailUrl,
-            categoryIds = product.productCategories.map { it.category.id },
+            name = product.getName(),
+            price = product.getPrice(),
+            quantity = product.getQuantity(),
+            thumbnailUrl = product.getThumbnailUrl(),
+            categoryIds = product.getProductCategories().map { it.category.id },
         )
     }
 }

@@ -6,7 +6,6 @@ import com.dh.baro.look.domain.Look
 import com.dh.baro.look.domain.repository.LookRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -33,7 +32,7 @@ class LookService(
     fun getSwipeLooks(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
         lookRepository.findSwipeLooks(userId, cursorId, PageRequest.of(0, size))
 
-    fun getLook(lookId: Long): Look =
-        lookRepository.findByIdOrNull(lookId)
+    fun getLookDetail(lookId: Long): Look =
+        lookRepository.findWithImagesAndProductsById(lookId)
             ?: throw IllegalArgumentException(ErrorMessage.LOOK_NOT_FOUND.format(lookId))
 }

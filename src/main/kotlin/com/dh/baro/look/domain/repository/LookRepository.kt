@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param
 
 interface LookRepository : JpaRepository<Look, Long> {
 
+    @EntityGraph(attributePaths = ["images", "products"])
+    @Query("select l from Look l where l.id = :id")
+    fun findWithImagesAndProductsById(@Param("id") id: Long): Look?
+
     @Query("""
         select l from Look l
         where l.id not in (
