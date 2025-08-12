@@ -17,6 +17,12 @@ class UserService(
     private val socialAccountRepository: SocialAccountRepository,
 ) {
 
+    fun checkUserExists(userId: Long) {
+        require(userRepository.existsById(userId)) {
+            ErrorMessage.USER_NOT_FOUND.format(userId)
+        }
+    }
+
     fun getUserById(userId: Long): User =
         userRepository.findByIdOrNull(userId)
             ?: throw IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.format(userId))
