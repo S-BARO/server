@@ -87,11 +87,15 @@ class Product(
             )
         )
 
+    fun addCategories(categories: Collection<Category>) {
+        categories.forEach { addCategory(it) }
+    }
+
     fun addCategory(category: Category) {
         if (productCategories.any { it.category.id == category.id }) return
 
-        val pc = ProductCategory.of(this, category)
-        productCategories.add(pc)
+        val productCategory = ProductCategory.of(this, category)
+        productCategories.add(productCategory)
     }
 
     fun deductStockForOrder(orderQuantity: Int) {
