@@ -145,8 +145,8 @@ interface LookSwagger {
                         value = """
                         {
                           "content": [
-                            { "id": 2003, "title": "가을 캠퍼스룩", "thumbnailUrl": "https://..." },
-                            { "id": 2002, "title": "주말 데이트룩", "thumbnailUrl": "https://..." }
+                            { "lookId": 2003, "title": "가을 캠퍼스룩", "thumbnailUrl": "https://..." },
+                            { "lookId": 2002, "title": "주말 데이트룩", "thumbnailUrl": "https://..." }
                           ],
                           "hasNext": true,
                           "nextCursor": { "id": 2002 }
