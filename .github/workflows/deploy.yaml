@@ -86,10 +86,10 @@ jobs:
               -e PINPOINT_APP_NAME=prod-baro \
               -e PINPOINT_COLLECTOR=${{ secrets.PINPOINT_COLLECTOR }} \
               -e JAVA_TOOL_OPTIONS="-javaagent:/pinpoint/pinpoint-bootstrap-3.0.0.jar \
-              -Dpinpoint.agentId=\${PINPOINT_AGENT_ID} \
-              -Dpinpoint.applicationName=\${PINPOINT_APP_NAME} \
-              -Dpinpoint.profiler.transport.grpc.collector.ip=\${PINPOINT_COLLECTOR} \
-              -Dpinpoint.config=/pinpoint/pinpoint-root.config" \
+                -Dpinpoint.agentId=\${PINPOINT_AGENT_ID} \
+                -Dpinpoint.applicationName=\${PINPOINT_APP_NAME} \
+                -Dpinpoint.profiler.transport.grpc.collector.ip=\${PINPOINT_COLLECTOR} \
+                -Dpinpoint.config=/pinpoint/pinpoint-root.config" \
               -e DB_HOST=${{ secrets.DB_HOST }} \
               -e DB_NAME=${{ secrets.DB_NAME }} \
               -e DB_PORT=${{ secrets.DB_PORT }} \
