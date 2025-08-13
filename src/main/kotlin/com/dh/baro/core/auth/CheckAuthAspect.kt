@@ -7,7 +7,6 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Aspect
 @Component
@@ -15,10 +14,15 @@ class CheckAuthAspect(
     private val sessionManager: SessionManager
 ) {
 
-    @Around("@within(auth) || @annotation(auth)")
-    @Transactional(readOnly = true)
-    fun checkAuthentication(joinPoint: ProceedingJoinPoint, auth: CheckAuth): Any? {
+    @Around("@within(auth)")
+    fun checkOnClass(pjp: ProceedingJoinPoint, auth: CheckAuth) = doCheck(pjp, auth)
+
+    @Around("@annotation(auth)")
+    fun checkOnMethod(pjp: ProceedingJoinPoint, auth: CheckAuth) = doCheck(pjp, auth)
+
+    private fun doCheck(pjp: ProceedingJoinPoint, auth: CheckAuth): Any? {
         sessionManager.getCurrentUserId()
+
         if (auth.roles.isNotEmpty()) {
             val role = sessionManager.getCurrentUserRole()
             if (role != UserRole.ADMIN && role !in auth.roles) {
@@ -26,6 +30,6 @@ class CheckAuthAspect(
             }
         }
 
-        return joinPoint.proceed()
+        return pjp.proceed()
     }
 }
