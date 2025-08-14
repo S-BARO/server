@@ -82,8 +82,8 @@ jobs:
             sudo docker run -d -p 8080:8080 \
               -v /opt/pinpoint/agent:/opt/pinpoint \
               -e SPRING_PROFILES_ACTIVE=prod \
-              -e PINPOINT_AGENT_ID=prod-baro \
-              -e PINPOINT_APPLICATION_NAME=prod-baroBack \
+              -e PINPOINT_AGENT_ID=prod-BARO \
+              -e PINPOINT_APPLICATION_NAME=prod-BARO \
               -e PINPOINT_COLLECTOR=${{ secrets.PINPOINT_COLLECTOR }} \
               -e JAVA_TOOL_OPTIONS="-javaagent:/opt/pinpoint/pinpoint-bootstrap-3.0.0.jar \
                 -Dpinpoint.profiler.transport.grpc.collector.ip=${{ secrets.PINPOINT_COLLECTOR }} \
