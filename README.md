@@ -43,4 +43,4 @@
 
 [**[Part 3.] 분산 시스템에서 ID가 유일하려면?(Ft. Snowflake VS TSID 성능테스트)**](https://chobo-backend.tistory.com/52)
 
-[**[Part 4.] 반복되는 인증,인가 처리 없애버리기(Ft. AOP)**](https://chobo-backend.tistory.com/53)
+[**[Part 4.] 반복되는 인증,인가 처리 없애버리기(Ft. AOP & ArgumentResolver)**](https://chobo-backend.tistory.com/53)
