@@ -22,6 +22,9 @@ class User(
     @Column(name = "phone_number", unique = true)
     private var phoneNumber: String? = null,
 
+    @Column(name = "address", length = 500)
+    private var address: String? = null,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false, length = 20)
     val role: UserRole = UserRole.BUYER,
@@ -40,6 +43,8 @@ class User(
     fun getEmail() = email
 
     fun getPhoneNumber() = phoneNumber
+
+    fun getAddress() = address
 
     companion object {
         fun newUser(name: String, email: String): User {

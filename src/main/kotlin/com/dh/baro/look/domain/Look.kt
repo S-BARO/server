@@ -19,7 +19,8 @@ class Look(
     @Column(name = "title", nullable = false)
     private var title: String,
 
-    @Lob @Column(name = "description")
+    @Lob
+    @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private var description: String? = null,
 
     @Column(name = "likes_count", nullable = false)

@@ -8,6 +8,7 @@ data class UserProfileResponse(
     val name: String,
     val email: String,
     val phoneNumber: String?,
+    val address: String?,
     val role: UserRole,
 ) {
 
@@ -17,6 +18,7 @@ data class UserProfileResponse(
             name = user.getName(),
             email = user.getEmail(),
             phoneNumber = user.getPhoneNumber(),
+            address = user.getAddress(),
             role = user.role,
         )
     }

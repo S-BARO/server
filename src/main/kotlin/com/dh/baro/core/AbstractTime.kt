@@ -13,11 +13,11 @@ import java.time.Instant
 @EntityListeners(AuditingEntityListener::class)
 abstract class AbstractTime(
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
     var createdAt: Instant = instant(),
 
     @LastModifiedDate
-    @Column(name = "modified_at")
+    @Column(name = "modified_at", columnDefinition = "TIMESTAMP")
     var modifiedAt: Instant? = null,
 ) {
     @PrePersist

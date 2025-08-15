@@ -42,6 +42,7 @@ interface UserSwagger {
                                   "name": "홍길동",
                                   "email": "hong@gildong.dev",
                                   "phoneNumber": "010-1234-5678",
+                                  "address": "경기도 용인시 기흥구",
                                   "role": "BUYER"
                                 }
                                 """

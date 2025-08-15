@@ -25,7 +25,7 @@ class Product(
     private var quantity: Int = 0,
 
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private var description: String? = null,
 
     @Column(name = "likes_count", nullable = false)

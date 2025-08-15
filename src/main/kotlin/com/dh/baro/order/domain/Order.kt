@@ -16,7 +16,7 @@ class Order(
     @Column(name = "user_id", nullable = false)
     val userId: Long,
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price", nullable = false, precision = 10, scale = 0)
     var totalPrice: BigDecimal,
 
     @Column(name = "shipping_address", nullable = false, length = 500)

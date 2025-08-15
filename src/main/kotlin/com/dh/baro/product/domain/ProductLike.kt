@@ -7,11 +7,12 @@ import jakarta.persistence.*
 @Table(name = "product_likes")
 class ProductLike(
     @Id
+    @Column(name = "id")
     val id: Long,
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     val userId: Long,
 
-    @Column(name = "product_id")
+    @Column(name = "product_id", nullable = false)
     val productId: Long,
 ) : AbstractTime()

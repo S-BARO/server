@@ -24,7 +24,7 @@ class OrderItem(
     @Column(name = "quantity", nullable = false)
     val quantity: Int,
 
-    @Column(name = "price_at_purchase", nullable = false)
+    @Column(name = "price_at_purchase", nullable = false, precision = 10, scale = 0)
     val priceAtPurchase: BigDecimal,
 ) : AbstractTime() {
 
