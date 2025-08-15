@@ -36,6 +36,15 @@
 
 <br>
 
+# 📈 기술적 목표
+MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
+
+동시 접속자 수 : 500명(DAU/10)
+
+목표 응답 속도 : 200ms
+
+<br>
+
 # 🤔 기술적 Issue
 [**[Part 1.] JWT는 정말 괜찮은 방법일까? (Ft. 세션저장소 선택 이유)**](https://chobo-backend.tistory.com/50)
 
