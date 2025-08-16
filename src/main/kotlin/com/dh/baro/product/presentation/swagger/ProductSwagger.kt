@@ -98,7 +98,7 @@ interface ProductSwagger {
                         value = """
                         {
                           "content": [
-                            { "id": 21, "storeName" = "무신사", "productName": "Sneakers", "price": 99000, "thumbnailUrl": "..." }
+                            { "id": 21, "storeName": "무신사", "productName": "Sneakers", "price": 99000, "thumbnailUrl": "..." }
                           ],
                           "hasNext": true,
                           "nextCursor": { "id": 21, "likes": 500 }
@@ -141,7 +141,7 @@ interface ProductSwagger {
                         value = """
                         {
                           "content": [
-                            { "id": 12, "storeName" = "무신사", "productName": "Hoodie", "price": 59000, "thumbnailUrl": "..." }
+                            { "id": 12, "storeName": "무신사", "productName": "Hoodie", "price": 59000, "thumbnailUrl": "..." }
                           ],
                           "hasNext": false,
                           "nextCursor": { "id": 11 }
