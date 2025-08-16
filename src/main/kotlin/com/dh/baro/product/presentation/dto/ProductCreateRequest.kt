@@ -9,6 +9,9 @@ data class ProductCreateRequest(
     val name: String,
 
     @field:Positive
+    val storeId: Long,
+
+    @field:Positive
     val price: BigDecimal,
 
     @field:PositiveOrZero
@@ -31,6 +34,7 @@ data class ProductCreateRequest(
     fun toCommand(): ProductCreateCommand =
         ProductCreateCommand(
             name = name,
+            storeId = storeId,
             price = price,
             quantity = quantity,
             description = description,

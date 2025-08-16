@@ -16,6 +16,7 @@ class ProductService(
     fun createProduct(cmd: ProductCreateCommand, categories: List<Category>): Product {
         val product = Product.newProduct(
             name = cmd.name,
+            storeId = cmd.storeId,
             price = cmd.price,
             quantity = cmd.quantity,
             description = cmd.description,

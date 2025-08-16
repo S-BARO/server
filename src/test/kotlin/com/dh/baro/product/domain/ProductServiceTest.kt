@@ -44,6 +44,7 @@ internal class ProductServiceTest(
     describe("createProduct 메서드는") {
         val cmd = ProductCreateCommand(
             name = "Hoodie",
+            storeId = 123L,
             price = BigDecimal("59000"),
             quantity = 10,
             description = "Nice Hoodie",

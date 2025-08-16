@@ -33,12 +33,14 @@ interface ProductSwagger {
                     value = """
                     {
                       "name": "T-Shirt",
+                      "storeId": 123,
                       "price": 19900,
                       "quantity": 100,
                       "description": "면 100% 기본 티셔츠",
                       "likesCount": 0,
                       "thumbnailUrl": "https://example.com/11-thumb.jpg",
-                      "categoryIds": [1, 2]
+                      "categoryIds": [1, 2],
+                      "imageUrls": ["https://example.com/11-thumb.jpg"]
                     }
                     """
                 )]
@@ -52,7 +54,10 @@ interface ProductSwagger {
         ]
     )
     @PostMapping
-    fun createProduct(@RequestBody request: ProductCreateRequest): ProductCreateResponse
+    fun createProduct(
+        userId: Long,
+        @RequestBody request: ProductCreateRequest,
+    ): ProductCreateResponse
 
     /* ───────────────────────────── 인기 상품 ───────────────────────────── */
     @Operation(
