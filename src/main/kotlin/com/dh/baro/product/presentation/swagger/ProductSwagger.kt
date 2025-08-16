@@ -55,7 +55,6 @@ interface ProductSwagger {
     )
     @PostMapping
     fun createProduct(
-        userId: Long,
         @RequestBody request: ProductCreateRequest,
     ): ProductCreateResponse
 

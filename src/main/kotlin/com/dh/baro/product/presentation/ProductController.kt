@@ -25,7 +25,6 @@ class ProductController(
     @ResponseStatus(HttpStatus.CREATED)
     @CheckAuth(UserRole.STORE_OWNER)
     override fun createProduct(
-        @CurrentUser userId: Long,
         @Valid @RequestBody request: ProductCreateRequest,
     ): ProductCreateResponse =
         ProductCreateResponse.from(productFacade.createProduct(request.toCommand()))
