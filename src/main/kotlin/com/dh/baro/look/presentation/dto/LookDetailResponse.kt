@@ -1,9 +1,6 @@
 package com.dh.baro.look.presentation.dto
 
-import com.dh.baro.look.domain.Look
-import com.dh.baro.look.domain.vo.LookImageView
-import com.dh.baro.look.domain.vo.LookProductView
-import com.dh.baro.product.domain.Product
+import com.dh.baro.look.application.dto.LookDetailBundle
 import java.math.BigDecimal
 
 data class LookDetailResponse(
@@ -12,39 +9,36 @@ data class LookDetailResponse(
     val description: String?,
     val thumbnailUrl: String,
     val likesCount: Int,
-    val images: List<ImageDto>,
+    val lookImageUrls: List<String>,
     val products: List<ProductItemDto>,
 ) {
-    data class ImageDto(
-        val imageUrl: String,
-        val displayOrder: Int,
-    )
 
     data class ProductItemDto(
         val productId: Long,
-        val name: String,
+        val storeName: String,
+        val productName: String,
         val price: BigDecimal,
         val thumbnailUrl: String,
-        val displayOrder: Int,
     )
 
     companion object {
-        fun of(
-            look: Look,
-            images: List<LookImageView>,
-            lookProducts: List<LookProductView>,
-            products: List<Product>,
-        ): LookDetailResponse {
-            val productMap = products.associateBy { it.id }
 
-            val productDtos = lookProducts.mapNotNull { lp ->
-                val p = productMap[lp.productId] ?: return@mapNotNull null
+        fun from(bundle: LookDetailBundle): LookDetailResponse {
+            val look = bundle.look
+
+            val productMap = bundle.products.associateBy { it.id }
+            val storeMap = bundle.stores.associateBy { it.id }
+
+            val productItemDtos = bundle.orderedProductIds.mapNotNull { productId ->
+                val product = productMap[productId] ?: return@mapNotNull null
+                val store = storeMap[product.storeId]?: return@mapNotNull null
+
                 ProductItemDto(
-                    productId = p.id,
-                    name = p.getName(),
-                    price = p.getPrice(),
-                    thumbnailUrl = p.getThumbnailUrl(),
-                    displayOrder = lp.displayOrder,
+                    productId = product.id,
+                    storeName = store.getName(),
+                    productName = product.getName(),
+                    price = product.getPrice(),
+                    thumbnailUrl = product.getThumbnailUrl(),
                 )
             }
 
@@ -54,8 +48,8 @@ data class LookDetailResponse(
                 description = look.getDescription(),
                 thumbnailUrl = look.getThumbnailUrl(),
                 likesCount = look.getLikesCount(),
-                images = images.map { ImageDto(it.imageUrl, it.displayOrder) },
-                products = productDtos,
+                lookImageUrls = look.getOrderedImageUrls(),
+                products = productItemDtos,
             )
         }
     }
