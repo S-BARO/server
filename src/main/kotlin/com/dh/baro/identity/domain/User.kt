@@ -13,13 +13,13 @@ class User(
     @Column(name = "id")
     val id: Long,
 
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name", nullable = false, length = 100)
     private var name: String,
 
     @Column(name = "email", nullable = false, unique = true)
     private var email: String,
 
-    @Column(name = "phone_number", unique = true)
+    @Column(name = "phone_number", unique = true, length = 30)
     private var phoneNumber: String? = null,
 
     @Column(name = "address", length = 500)
@@ -50,7 +50,7 @@ class User(
         fun newUser(name: String, email: String): User {
             return User(
                 id = IdGenerator.generate(),
-                name = name,
+                name = name.trim(),
                 email = email,
             )
         }

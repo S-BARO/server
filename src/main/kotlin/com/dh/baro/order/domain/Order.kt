@@ -1,11 +1,13 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.AggregateRoot
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+@AggregateRoot
 @Entity
 @Table(name = "orders")
 class Order(
@@ -23,10 +25,15 @@ class Order(
     var shippingAddress: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 20)
+    @Column(name = "order_status", nullable = false, length = 20)
     var status: OrderStatus = OrderStatus.ORDERED,
 
-    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "order",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+    )
     val items: MutableSet<OrderItem> = mutableSetOf()
 ) : AbstractTime() {
 

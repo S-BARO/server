@@ -1,11 +1,13 @@
 package com.dh.baro.look.domain
 
 import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.AggregateRoot
 import com.dh.baro.core.IdGenerator
 import com.dh.baro.look.domain.vo.LookImageView
 import com.dh.baro.look.domain.vo.LookProductView
 import jakarta.persistence.*
 
+@AggregateRoot
 @Entity
 @Table(name = "looks")
 class Look(
