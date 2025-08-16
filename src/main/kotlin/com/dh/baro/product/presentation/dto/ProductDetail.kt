@@ -1,11 +1,13 @@
 package com.dh.baro.product.presentation.dto
 
+import com.dh.baro.identity.domain.Store
 import com.dh.baro.product.domain.Product
 import java.math.BigDecimal
 
 data class ProductDetail(
     val id: Long,
-    val name: String,
+    val storeName: String,
+    val productName: String,
     val price: BigDecimal,
     val description: String?,
     val images: List<String>,
@@ -13,9 +15,10 @@ data class ProductDetail(
 ) {
 
     companion object {
-        fun from(product: Product) = ProductDetail(
+        fun from(product: Product, store: Store) = ProductDetail(
             id = product.id,
-            name = product.getName(),
+            storeName = store.getName(),
+            productName = product.getName(),
             price = product.getPrice(),
             description = product.getDescription(),
             images = product.getImages().map { it.imageUrl },

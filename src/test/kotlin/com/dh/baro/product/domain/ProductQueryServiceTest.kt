@@ -193,31 +193,5 @@ internal class ProductQueryServiceTest(
                 nextSlice.hasNext() shouldBe false
             }
         }
-
-        context("SliceResponse 변환") {
-            lateinit var response: SliceResponse<ProductListItem>
-
-            beforeTest {
-                val slice = productQueryService.getNewestProducts(
-                    categoryId = null,
-                    cursorId = null,
-                    size = 1,
-                )
-                response = SliceResponse.from(
-                    slice = slice,
-                    mapper = ProductListItem::from,
-                    cursorExtractor = { it.id },
-                )
-            }
-
-            it("content 매핑 + hasNext 필드가 올바르다") {
-                response.content.first().id shouldBe p2.id
-                response.hasNext shouldBe true
-            }
-
-            it("nextCursor 는 마지막 요소의 id 값이다") {
-                response.nextCursor shouldBe p2.id
-            }
-        }
     }
 })

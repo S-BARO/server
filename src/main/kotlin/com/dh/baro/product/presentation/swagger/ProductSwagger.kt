@@ -58,6 +58,21 @@ interface ProductSwagger {
         @RequestBody request: ProductCreateRequest,
     ): ProductCreateResponse
 
+    /* ───────────────────────────── 상품 상세 ───────────────────────────── */
+    @Operation(
+        summary = "상품 상세 보기",
+        description = "특정 상품에 대한 상세 정보를 불러옵니다.",
+        parameters = [Parameter(`in` = ParameterIn.PATH, name = "productId", description = "상품 PK", example = "11", required = true)],
+        responses = [
+            ApiResponse(
+                responseCode = "200", description = "조회 성공",
+                content = [Content(schema = Schema(implementation = ProductDetail::class))]
+            )
+        ]
+    )
+    @GetMapping("/{productId}")
+    fun getProductDetail(@PathVariable productId: Long): ProductDetail
+
     /* ───────────────────────────── 인기 상품 ───────────────────────────── */
     @Operation(
         summary = "인기 상품 목록(무한 스크롤)",
@@ -83,7 +98,7 @@ interface ProductSwagger {
                         value = """
                         {
                           "content": [
-                            { "id": 21, "name": "Sneakers", "price": 99000, "thumbnailUrl": "..." }
+                            { "id": 21, "storeName": "무신사", "productName": "Sneakers", "price": 99000, "thumbnailUrl": "..." }
                           ],
                           "hasNext": true,
                           "nextCursor": { "id": 21, "likes": 500 }
@@ -126,7 +141,7 @@ interface ProductSwagger {
                         value = """
                         {
                           "content": [
-                            { "id": 12, "name": "Hoodie", "price": 59000, "thumbnailUrl": "..." }
+                            { "id": 12, "storeName": "무신사", "productName": "Hoodie", "price": 59000, "thumbnailUrl": "..." }
                           ],
                           "hasNext": false,
                           "nextCursor": { "id": 11 }
@@ -143,21 +158,6 @@ interface ProductSwagger {
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "21") size: Int
     ): SliceResponse<ProductListItem>
-
-    /* ───────────────────────────── 상품 상세 ───────────────────────────── */
-    @Operation(
-        summary = "상품 상세 보기",
-        description = "특정 상품에 대한 상세 정보를 불러옵니다.",
-        parameters = [Parameter(name = "productId", example = "11", required = true)],
-        responses = [
-            ApiResponse(
-                responseCode = "200", description = "조회 성공",
-                content = [Content(schema = Schema(implementation = ProductDetail::class))]
-            )
-        ]
-    )
-    @GetMapping("/{productId}")
-    fun getProductDetail(@PathVariable productId: Long): ProductDetail
 
     /* ──────────────── 예시 DTO (Swagger 문서 전용) ──────────────── */
     @Schema(hidden = true)
