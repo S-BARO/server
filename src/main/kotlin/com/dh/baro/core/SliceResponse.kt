@@ -19,5 +19,16 @@ data class SliceResponse<T>(
                 hasNext = slice.hasNext(),
                 nextCursor = slice.content.lastOrNull()?.let(cursorExtractor),
             )
+
+        fun <T, R> fromNullable(
+            slice: Slice<T>,
+            mapper: (T) -> R?,
+            cursorExtractor: (T) -> Any,
+        ): SliceResponse<R> =
+            SliceResponse(
+                content = slice.content.mapNotNull(mapper),
+                hasNext = slice.hasNext(),
+                nextCursor = slice.content.lastOrNull()?.let(cursorExtractor),
+            )
     }
 }
