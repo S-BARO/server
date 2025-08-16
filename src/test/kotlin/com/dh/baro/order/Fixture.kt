@@ -16,6 +16,7 @@ fun productFixture(
     Product(
         id = id,
         name = name,
+        storeId = 123L,
         price = price,
         quantity = quantity,
         thumbnailUrl = "https://example.com/$id-thumb.jpg",

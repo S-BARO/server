@@ -4,6 +4,7 @@ import com.dh.baro.core.Cursor
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.auth.CheckAuth
+import com.dh.baro.core.auth.CurrentUser
 import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.domain.service.ProductQueryService
@@ -23,7 +24,9 @@ class ProductController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CheckAuth(UserRole.STORE_OWNER)
-    override fun createProduct(@Valid @RequestBody request: ProductCreateRequest): ProductCreateResponse =
+    override fun createProduct(
+        @Valid @RequestBody request: ProductCreateRequest,
+    ): ProductCreateResponse =
         ProductCreateResponse.from(productFacade.createProduct(request.toCommand()))
 
     @GetMapping("/popular")

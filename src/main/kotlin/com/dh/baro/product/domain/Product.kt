@@ -15,6 +15,9 @@ class Product(
     @Column(name = "id")
     val id: Long,
 
+    @Column(name = "store_id", nullable = false)
+    val storeId: Long,
+
     @Column(name = "product_name", nullable = false, length = 100)
     private var name: String,
 
@@ -49,8 +52,7 @@ class Product(
         fetch = FetchType.LAZY
     )
     private val productCategories: MutableSet<ProductCategory> = mutableSetOf(),
-
-    ) : AbstractTime() {
+) : AbstractTime() {
 
     fun getName(): String = name
 
@@ -109,6 +111,7 @@ class Product(
     companion object {
         fun newProduct(
             name: String,
+            storeId: Long,
             price: BigDecimal,
             quantity: Int,
             thumbnailUrl: String,
@@ -117,6 +120,7 @@ class Product(
         ): Product =
             Product(
                 id = IdGenerator.generate(),
+                storeId = storeId,
                 name = name,
                 price = price,
                 quantity = quantity,

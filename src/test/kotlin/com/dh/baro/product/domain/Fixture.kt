@@ -17,6 +17,7 @@ fun productFixture(
     val product = Product(
         id = id,
         name = name,
+        storeId = 123L,
         price = BigDecimal("19900"),
         quantity = 10,
         thumbnailUrl = "https://example.com/$id-thumb.jpg",
