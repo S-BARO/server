@@ -18,6 +18,7 @@ enum class ErrorMessage(val message: String) {
 
     // Identity
     USER_NOT_FOUND("사용자를 찾을 수 없습니다: %d"),
+    STORE_NOT_FOUND("스토어를 찾을 수 없습니다: %d"),
     UNSUPPORTED_SOCIAL_LOGIN("지원하지 않는 소셜 로그인 제공자입니다: %s"),
     KAKAO_USER_FETCH_FAILED("카카오 사용자 정보 조회 실패: %s"),
 
