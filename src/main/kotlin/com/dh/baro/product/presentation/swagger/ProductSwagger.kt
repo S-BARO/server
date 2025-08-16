@@ -62,7 +62,7 @@ interface ProductSwagger {
     @Operation(
         summary = "상품 상세 보기",
         description = "특정 상품에 대한 상세 정보를 불러옵니다.",
-        parameters = [Parameter(name = "productId", example = "11", required = true)],
+        parameters = [Parameter(`in` = ParameterIn.PATH, name = "productId", description = "상품 PK", example = "11", required = true)],
         responses = [
             ApiResponse(
                 responseCode = "200", description = "조회 성공",
