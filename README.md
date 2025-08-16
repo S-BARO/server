@@ -25,7 +25,7 @@
 # 💾 ERD
 [**[바로(BARO) ERD]**](https://dbdiagram.io/d/BARO_ERD-6870cfbaf413ba3508661df3)
 
-<img width="1215" height="888" alt="image" src="https://github.com/user-attachments/assets/dcb22ade-14a1-4207-bf73-fb2429a36b2e" />
+<img width="1139" height="905" alt="image" src="https://github.com/user-attachments/assets/939f8592-2480-4811-89cf-9699243414ed" />
 
 
 <br>
