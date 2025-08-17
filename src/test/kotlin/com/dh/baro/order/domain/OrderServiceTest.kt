@@ -1,6 +1,7 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.order.application.OrderCreateCommand
 import com.dh.baro.order.categoryFixture
 import com.dh.baro.order.productFixture
@@ -97,14 +98,14 @@ internal class OrderServiceTest(
 
         context("재고가 부족하면") {
 
-            it("IllegalArgumentException를 던지고 롤백한다") {
+            it("ConflictException를 던지고 롤백한다") {
                 val cmd = OrderCreateCommand(
                     userId = USER_ID,
                     shippingAddress = "Seoul",
                     items = listOf(OrderCreateCommand.Item(p1.id, 99))
                 )
 
-                shouldThrow<IllegalArgumentException> {
+                shouldThrow<ConflictException> {
                     orderService.createOrder(cmd)
                 }.message shouldBe ErrorMessage.OUT_OF_STOCK.format(p1.id)
 
@@ -154,7 +155,7 @@ internal class OrderServiceTest(
             )
 
             it("OUT_OF_STOCK 예외가 발생한다") {
-                shouldThrow<IllegalArgumentException> {
+                shouldThrow<ConflictException> {
                     orderService.createOrder(cmd)
                 }.message shouldBe ErrorMessage.OUT_OF_STOCK.format(p3.id)
             }
