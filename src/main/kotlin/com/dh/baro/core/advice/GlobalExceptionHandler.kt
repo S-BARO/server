@@ -2,6 +2,7 @@ package com.dh.baro.core.advice
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.ErrorResponse
+import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.core.exception.ForbiddenException
 import com.dh.baro.core.exception.UnauthorizedException
 import jakarta.validation.ConstraintViolationException
@@ -124,6 +125,13 @@ class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     fun handleMethodNotSupported(e: HttpRequestMethodNotSupportedException): ErrorResponse {
         logger.info(e.message)
+        return ErrorResponse(ErrorMessage.METHOD_NOT_SUPPORTED.message)
+    }
+
+    @ExceptionHandler(ConflictException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleMethodNotSupported(e: ConflictException): ErrorResponse {
+        logger.warn(e.message)
         return ErrorResponse(ErrorMessage.METHOD_NOT_SUPPORTED.message)
     }
 

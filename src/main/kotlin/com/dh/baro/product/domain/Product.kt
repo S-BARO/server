@@ -4,6 +4,7 @@ import com.dh.baro.core.AbstractTime
 import com.dh.baro.core.AggregateRoot
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.IdGenerator
+import com.dh.baro.core.exception.ConflictException
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -101,8 +102,8 @@ class Product(
     }
 
     fun deductStockForOrder(orderQuantity: Int) {
-        require(quantity >= orderQuantity) {
-            ErrorMessage.OUT_OF_STOCK.format(id)
+        if(quantity < orderQuantity) {
+            throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(id))
         }
 
         quantity -= orderQuantity
