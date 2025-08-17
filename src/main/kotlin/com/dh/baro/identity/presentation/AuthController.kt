@@ -38,13 +38,4 @@ class AuthController(
     override fun logout(request: HttpServletRequest) {
         request.session.invalidate()
     }
-
-    @PostMapping("/login/test")
-    @ResponseStatus(HttpStatus.CREATED)
-    override fun issueAdminSession(request: HttpServletRequest) {
-        request.session.apply {
-            setAttribute(USER_ID, 1L)
-            setAttribute(USER_ROLE, UserRole.ADMIN)
-        }
-    }
 }
