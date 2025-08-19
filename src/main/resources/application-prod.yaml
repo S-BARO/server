@@ -6,7 +6,7 @@ server:
       cookie:
         name: JSESSIONID
         http-only: true
-        secure: false
+        secure: true
         same-site: none
 
 spring:
@@ -38,7 +38,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     open-in-view: false
 
   servlet:
@@ -70,8 +70,3 @@ management:
 logging:
   level:
     root: info
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: false
