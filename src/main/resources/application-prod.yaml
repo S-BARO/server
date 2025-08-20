@@ -6,7 +6,7 @@ server:
       cookie:
         name: JSESSIONID
         http-only: true
-        secure: true
+        secure: false
         same-site: none
   tomcat:
     mbeanregistry:
