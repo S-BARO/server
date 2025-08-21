@@ -80,7 +80,8 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             
             sudo docker run -d -p 8080:8080 \
-              -v /opt/pinpoint/agent:/opt/pinpoint \
+              -v /opt/pinpoint/agent:/opt/pinpoint:ro \
+              -v /opt/pinpoint/logs:/opt/pinpoint/logs \
               -e SPRING_PROFILES_ACTIVE=dev \
               -e PINPOINT_AGENT_ID=prod-BARO \
               -e PINPOINT_APPLICATION_NAME=dev-BARO \
