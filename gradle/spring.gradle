@@ -11,6 +11,7 @@ dependencies {
     implementation "org.springframework.session:spring-session-data-redis"
     implementation "org.springframework.retry:spring-retry"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+    implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${p6spyVersion}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "com.ninja-squad:springmockk:${springMockkVersion}"
