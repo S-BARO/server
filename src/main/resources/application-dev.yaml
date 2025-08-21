@@ -6,12 +6,12 @@ server:
       cookie:
         name: JSESSIONID
         http-only: true
-        secure: true
+        secure: false
         same-site: none
   tomcat:
     mbeanregistry:
       enabled: true
-  url: ${PROD_SERVER_URL}
+  url: ${DEV_SERVER_URL}
 
 spring:
   jackson:

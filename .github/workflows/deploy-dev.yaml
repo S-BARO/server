@@ -40,7 +40,7 @@ jobs:
 
       # 4) Gradle 빌드
       - name: Build with Gradle
-        run: ./gradlew build -DPROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} -Pspring.profiles.active=prod
+        run: ./gradlew build -DPROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} -Pspring.profiles.active=dev
 
       # 5) QEMU & Buildx 세팅 (멀티 아키텍처 빌드용)
       - name: Set up QEMU
@@ -66,12 +66,12 @@ jobs:
             --push .
 
       # 8) EC2 배포
-      - name: Deploy to prod
+      - name: Deploy to dev
         uses: appleboy/ssh-action@v0.1.5
-        id: deploy-prod
+        id: deploy-dev
         if: contains(github.ref, 'develop')
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.DEV_EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
@@ -80,13 +80,20 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             
             sudo docker run -d -p 8080:8080 \
-              -v /opt/pinpoint/agent:/opt/pinpoint \
-              -e SPRING_PROFILES_ACTIVE=prod \
+              -v /opt/pinpoint/agent:/opt/pinpoint:ro \
+              -e SPRING_PROFILES_ACTIVE=dev \
               -e PINPOINT_AGENT_ID=prod-BARO \
-              -e PINPOINT_APPLICATION_NAME=prod-BARO \
+              -e PINPOINT_APPLICATION_NAME=dev-BARO \
               -e PINPOINT_COLLECTOR=${{ secrets.PINPOINT_COLLECTOR }} \
-              -e JAVA_TOOL_OPTIONS="-javaagent:/opt/pinpoint/pinpoint-bootstrap-3.0.0.jar \
+              -e JAVA_TOOL_OPTIONS="-javaagent:/opt/pinpoint/pinpoint-bootstrap-3.0.3.jar \
+                -Dpinpoint.agentId=dev-BARO \
+                -Dpinpoint.applicationName=dev-BARO \
                 -Dpinpoint.profiler.transport.grpc.collector.ip=${{ secrets.PINPOINT_COLLECTOR }} \
+                -Dpinpoint.profiler.transport.grpc.agent.port=9991 \
+                -Dpinpoint.profiler.transport.grpc.stat.port=9992 \
+                -Dpinpoint.profiler.transport.grpc.span.port=9993 \
+                -Dprofiler.sampling.enable=true \
+                -Dprofiler.sampling.rate=1 \
                 -Dpinpoint.config=/opt/pinpoint/pinpoint-root.config" \
               -e DB_HOST=${{ secrets.DB_HOST }} \
               -e DB_NAME=${{ secrets.DB_NAME }} \
@@ -98,7 +105,7 @@ jobs:
               -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
               -e KAKAO_AUTH_URL=${{ secrets.KAKAO_AUTH_URL }} \
               -e KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} \
-              -e PROD_SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
+              -e SERVER_URL=${{ secrets.DEV_SERVER_URL }} \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             

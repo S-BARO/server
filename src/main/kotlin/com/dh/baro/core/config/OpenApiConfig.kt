@@ -13,10 +13,8 @@ class OpenApiConfig(private val environment: Environment) {
 
     @Bean
     fun customOpenAPI(): OpenAPI {
-        val activeProfile = environment.getProperty("spring.profiles.active", "local")
-
-        val serverUrl = System.getenv("PROD_SERVER_URL").takeUnless { it.isNullOrBlank() }
-            ?: "http://localhost:8080"
+        val activeProfile = environment.activeProfiles.firstOrNull() ?: "local"
+        val serverUrl = environment.getProperty("server.url") ?: "http://localhost:8080"
 
         return OpenAPI()
             .components(Components())

@@ -4,9 +4,11 @@ import com.dh.baro.core.auth.SessionKeys.USER_ID
 import com.dh.baro.core.auth.SessionKeys.USER_ROLE
 import com.dh.baro.identity.domain.UserRole
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
+@Profile("dev")
 @RestController
 @RequestMapping("/test")
 class TestController(
