@@ -1,6 +1,6 @@
 package com.dh.baro.product.domain
 
-import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
@@ -15,4 +15,8 @@ class ProductLike(
 
     @Column(name = "product_id", nullable = false)
     val productId: Long,
-) : AbstractTime()
+) : BaseTimeEntity() {
+
+    override fun getId(): Long = id
+
+}

@@ -1,6 +1,6 @@
 package com.dh.baro.look.domain
 
-import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.anotation.AggregateRoot
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
@@ -44,7 +44,9 @@ class Look(
         orphanRemoval = true,
     )
     private val products: MutableSet<LookProduct> = mutableSetOf(),
-) : AbstractTime() {
+) : BaseTimeEntity() {
+
+    override fun getId(): Long = id
 
     fun getTitle() = title
 

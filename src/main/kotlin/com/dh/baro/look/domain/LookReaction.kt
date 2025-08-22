@@ -1,6 +1,6 @@
 package com.dh.baro.look.domain
 
-import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
@@ -23,7 +23,9 @@ class LookReaction(
     @Enumerated(EnumType.STRING)
     @Column(name = "reaction_type", nullable = false, length = 10)
     val reactionType: ReactionType,
-) : AbstractTime() {
+) : BaseTimeEntity() {
+
+    override fun getId(): Long = id
 
     companion object {
         fun of(
