@@ -1,4 +1,4 @@
-package com.dh.baro.core
+package com.dh.baro.core.anotation
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)

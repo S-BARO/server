@@ -2,7 +2,7 @@ package com.dh.baro.look.presentation
 
 import com.dh.baro.core.Cursor
 import com.dh.baro.core.SliceResponse
-import com.dh.baro.core.auth.CurrentUser
+import com.dh.baro.core.anotation.CurrentUser
 import com.dh.baro.look.application.LookFacade
 import com.dh.baro.look.application.LookReactionFacade
 import com.dh.baro.look.presentation.dto.*

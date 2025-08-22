@@ -2,7 +2,7 @@ package com.dh.baro.identity.domain
 
 import com.dh.baro.core.AbstractTime
 import com.dh.baro.core.IdGenerator
-import com.dh.baro.core.AggregateRoot
+import com.dh.baro.core.anotation.AggregateRoot
 import jakarta.persistence.*
 
 @AggregateRoot

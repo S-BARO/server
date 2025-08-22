@@ -1,7 +1,7 @@
 package com.dh.baro.product.domain
 
 import com.dh.baro.core.AbstractTime
-import com.dh.baro.core.AggregateRoot
+import com.dh.baro.core.anotation.AggregateRoot
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.IdGenerator
 import com.dh.baro.core.exception.ConflictException
