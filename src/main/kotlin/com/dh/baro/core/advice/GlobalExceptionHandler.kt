@@ -130,9 +130,9 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(ConflictException::class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    fun handleMethodNotSupported(e: ConflictException): ErrorResponse {
+    fun handleConflict(e: ConflictException): ErrorResponse {
         logger.warn(e.message)
-        return ErrorResponse(ErrorMessage.METHOD_NOT_SUPPORTED.message)
+        return ErrorResponse.from(e)
     }
 
     // 서버가 지원하지 않는 미디어 타입
