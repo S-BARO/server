@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
-@Profile("dev")
+@Profile(value = ["local", "dev"])
 @RestController
 @RequestMapping("/test")
 class TestController(
