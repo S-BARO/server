@@ -12,7 +12,7 @@ import java.time.Instant
 abstract class BaseTimeEntity(
     @CreatedDate
     @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
-    val createdAt: Instant = instant(),
+    var createdAt: Instant = instant(),
 
     @LastModifiedDate
     @Column(name = "modified_at", columnDefinition = "TIMESTAMP")
