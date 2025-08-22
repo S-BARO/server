@@ -1,6 +1,6 @@
 package com.dh.baro.core.auth
 
-import com.dh.baro.core.anotation.CurrentUser
+import com.dh.baro.core.annotation.CurrentUser
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory

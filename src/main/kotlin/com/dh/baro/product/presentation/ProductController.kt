@@ -3,7 +3,7 @@ package com.dh.baro.product.presentation
 import com.dh.baro.core.Cursor
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.SliceResponse
-import com.dh.baro.core.anotation.CheckAuth
+import com.dh.baro.core.annotation.CheckAuth
 import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.presentation.dto.*

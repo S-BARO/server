@@ -1,4 +1,4 @@
-package com.dh.baro.core.anotation
+package com.dh.baro.core.annotation
 
 import com.dh.baro.identity.domain.UserRole
 

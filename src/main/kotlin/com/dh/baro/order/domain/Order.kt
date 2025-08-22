@@ -2,7 +2,7 @@ package com.dh.baro.order.domain
 
 import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
-import com.dh.baro.core.anotation.AggregateRoot
+import com.dh.baro.core.annotation.AggregateRoot
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.math.RoundingMode
