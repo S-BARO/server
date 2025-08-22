@@ -1,6 +1,6 @@
 package com.dh.baro.identity.domain
 
-import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
@@ -34,7 +34,9 @@ class Store(
     @Enumerated(EnumType.STRING)
     @Column(name = "store_status", nullable = false, length = 20)
     private var status: StoreStatus = StoreStatus.DRAFT,
-) : AbstractTime() {
+) : BaseTimeEntity() {
+
+    override fun getId(): Long = id
 
     fun getName(): String = name
 

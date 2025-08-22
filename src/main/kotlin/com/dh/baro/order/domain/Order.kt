@@ -1,8 +1,8 @@
 package com.dh.baro.order.domain
 
-import com.dh.baro.core.AbstractTime
-import com.dh.baro.core.AggregateRoot
+import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
+import com.dh.baro.core.anotation.AggregateRoot
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -34,8 +34,10 @@ class Order(
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
     )
-    val items: MutableSet<OrderItem> = mutableSetOf()
-) : AbstractTime() {
+    val items: MutableSet<OrderItem> = mutableSetOf(),
+) : BaseTimeEntity() {
+
+    override fun getId(): Long = id
 
     fun addItem(item: OrderItem) =
         items.add(item)

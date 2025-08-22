@@ -1,6 +1,6 @@
 package com.dh.baro.product.presentation
 
-import com.dh.baro.core.auth.CheckAuth
+import com.dh.baro.core.anotation.CheckAuth
 import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.CategoryFacade
 import com.dh.baro.product.presentation.dto.CategoryCreateRequest

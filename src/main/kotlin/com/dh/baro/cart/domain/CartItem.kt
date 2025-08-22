@@ -1,6 +1,6 @@
 package com.dh.baro.cart.domain
 
-import com.dh.baro.core.AbstractTime
+import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
 import com.dh.baro.identity.domain.User
 import com.dh.baro.product.domain.Product
@@ -26,7 +26,9 @@ class CartItem(
 
     @Column(name = "quantity", nullable = false)
     var quantity: Int = 1
-) : AbstractTime() {
+) : BaseTimeEntity() {
+
+    override fun getId(): Long = id
 
     fun addQuantity(quantity: Int) {
         this.quantity += quantity

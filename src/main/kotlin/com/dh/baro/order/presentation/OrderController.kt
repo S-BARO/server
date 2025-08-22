@@ -2,7 +2,7 @@ package com.dh.baro.order.presentation
 
 import com.dh.baro.core.Cursor
 import com.dh.baro.core.SliceResponse
-import com.dh.baro.core.auth.CurrentUser
+import com.dh.baro.core.anotation.CurrentUser
 import com.dh.baro.order.application.OrderFacade
 import com.dh.baro.order.application.OrderQueryFacade
 import com.dh.baro.order.presentation.swagger.OrderSwagger

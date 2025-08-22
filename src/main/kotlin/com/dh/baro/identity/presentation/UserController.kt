@@ -1,7 +1,7 @@
 package com.dh.baro.identity.presentation
 
-import com.dh.baro.core.auth.CurrentUser
-import com.dh.baro.core.auth.CheckAuth
+import com.dh.baro.core.anotation.CurrentUser
+import com.dh.baro.core.anotation.CheckAuth
 import com.dh.baro.identity.application.UserFacade
 import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.identity.presentation.dto.UserProfileResponse
