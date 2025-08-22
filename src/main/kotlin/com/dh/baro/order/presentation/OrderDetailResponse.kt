@@ -10,7 +10,7 @@ data class OrderDetailResponse(
     val orderStatus: OrderStatus,
     val shippingAddress: String,
     val totalPrice: BigDecimal,
-    val orderedAt: Instant,
+    val orderedAt: Instant?,
     val items: List<Item>,
 ) {
 

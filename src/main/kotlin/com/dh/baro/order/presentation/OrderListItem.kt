@@ -9,7 +9,7 @@ data class OrderListItem(
     val orderId: Long,
     val totalPrice: BigDecimal,
     val orderStatus: OrderStatus,
-    val orderedAt: Instant,
+    val orderedAt: Instant?,
 ) {
 
     companion object {
