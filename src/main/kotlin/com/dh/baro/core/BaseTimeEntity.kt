@@ -12,19 +12,13 @@ import java.time.Instant
 abstract class BaseTimeEntity(
     @CreatedDate
     @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
-    var createdAt: Instant = instant(),
+    var createdAt: Instant = Instant.EPOCH,
 
     @LastModifiedDate
     @Column(name = "modified_at", columnDefinition = "TIMESTAMP")
     var modifiedAt: Instant? = null,
 ) : Persistable<Long> {
 
-    override fun isNew(): Boolean = (this.modifiedAt == null)
+    override fun isNew(): Boolean = (this.createdAt == Instant.EPOCH)
 
-    @PrePersist
-    fun prePersist() {
-        if (modifiedAt == null) {
-            modifiedAt = createdAt
-        }
-    }
 }
