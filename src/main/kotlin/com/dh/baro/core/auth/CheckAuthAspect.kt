@@ -1,7 +1,7 @@
 package com.dh.baro.core.auth
 
 import com.dh.baro.core.ErrorMessage
-import com.dh.baro.core.anotation.CheckAuth
+import com.dh.baro.core.annotation.CheckAuth
 import com.dh.baro.core.exception.ForbiddenException
 import com.dh.baro.identity.domain.UserRole
 import org.aspectj.lang.ProceedingJoinPoint

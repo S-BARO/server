@@ -1,7 +1,7 @@
 package com.dh.baro.look.domain
 
 import com.dh.baro.core.BaseTimeEntity
-import com.dh.baro.core.anotation.AggregateRoot
+import com.dh.baro.core.annotation.AggregateRoot
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
