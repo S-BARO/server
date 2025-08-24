@@ -1,6 +1,7 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.order.application.OrderCreateCommand
 import com.dh.baro.product.domain.repository.ProductRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -59,10 +60,14 @@ class OrderService(
     }
 
     private fun addItemsToOrderV2(item: OrderCreateCommand.Item, order: Order) {
-        productRepository.deductStock(item.productId, item.quantity)
+        val updated = productRepository.deductStock(item.productId, item.quantity)
 
         val product = productRepository.findByIdOrNull(item.productId)
             ?: throw IllegalArgumentException(ErrorMessage.PRODUCT_NOT_FOUND.format(item.productId))
+
+        if (updated == 0) {
+            throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(item.productId))
+        }
 
         val orderItem = OrderItem.newOrderItem(
             order = order,
