@@ -3,12 +3,9 @@ package com.dh.baro.order.domain
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.order.application.OrderCreateCommand
-import com.dh.baro.order.categoryFixture
 import com.dh.baro.order.productFixture
 import com.dh.baro.product.domain.Product
 import com.dh.baro.product.domain.repository.ProductRepository
-import com.dh.baro.product.domain.Category
-import com.dh.baro.product.domain.repository.CategoryRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
@@ -38,19 +35,35 @@ internal class OrderServiceTest(
     private val orderService: OrderService,
     private val orderRepository: OrderRepository,
     private val productRepository: ProductRepository,
-    private val categoryRepository: CategoryRepository,
 ) : DescribeSpec({
 
-    lateinit var top: Category
     lateinit var p1: Product
     lateinit var p2: Product
     lateinit var p3: Product
 
     beforeEach {
-        top = categoryRepository.save(categoryFixture(1, "TOP"))
-        p1 = productRepository.save(productFixture1)
-        p2 = productRepository.save(productFixture2)
-        p3 = productRepository.save(productFixture3)
+        p1 = productFixture(
+            id = 11,
+            name = "A",
+            price = BigDecimal("1000"),
+            quantity = 5
+        )
+        p2 = productFixture(
+            id = 12,
+            name = "B",
+            price = BigDecimal("2000"),
+            quantity = 3
+        )
+        p3 = productFixture(
+            id = 13,
+            name = "C",
+            price = BigDecimal("1500"),
+            quantity = 0
+        )
+        
+        productRepository.save(p1)
+        productRepository.save(p2)
+        productRepository.save(p3)
     }
 
     afterEach {
@@ -65,6 +78,7 @@ internal class OrderServiceTest(
             beforeTest {
                 val cmd = OrderCreateCommand(
                     userId = USER_ID,
+                    productList = listOf(p1, p2),
                     shippingAddress = "Seoul",
                     items = listOf(
                         OrderCreateCommand.Item(p1.id, 2),
@@ -84,7 +98,7 @@ internal class OrderServiceTest(
 
             it("항목 개수와 수량이 정확하다") {
                 order.items.shouldHaveSize(2)
-                order.items.first { it.product.id == p1.id }.quantity shouldBe 2
+                order.items.first { it.productId == p1.id }.quantity shouldBe 2
             }
 
             it("상품 재고를 차감한다") {
@@ -101,6 +115,7 @@ internal class OrderServiceTest(
             it("ConflictException를 던지고 롤백한다") {
                 val cmd = OrderCreateCommand(
                     userId = USER_ID,
+                    productList = listOf(p1),
                     shippingAddress = "Seoul",
                     items = listOf(OrderCreateCommand.Item(p1.id, 99))
                 )
@@ -115,15 +130,16 @@ internal class OrderServiceTest(
             }
         }
 
-        context("존재하지 않는 상품 ID가 포함되면") {
+        context("productList에 없는 상품 ID가 items에 포함되면") {
             val missingId = 999L
             val cmd = OrderCreateCommand(
                 userId = USER_ID,
+                productList = listOf(p1), // p1만 있음
                 shippingAddress = "Seoul",
-                items = listOf(OrderCreateCommand.Item(missingId, 1))
+                items = listOf(OrderCreateCommand.Item(missingId, 1)) // 999는 productList에 없음
             )
 
-            it("IllegalArgumentException를 던진다") {
+            it("IllegalArgumentException을 던진다") {
                 shouldThrow<IllegalArgumentException> {
                     orderService.createOrder(cmd)
                 }.message shouldBe ErrorMessage.PRODUCT_NOT_FOUND.format(missingId)
@@ -133,6 +149,7 @@ internal class OrderServiceTest(
         context("동일 상품이 두 번 전달되면") {
             val cmd = OrderCreateCommand(
                 userId = USER_ID,
+                productList = listOf(p1),
                 shippingAddress = "Seoul",
                 items = listOf(
                     OrderCreateCommand.Item(p1.id, 1),
@@ -150,8 +167,10 @@ internal class OrderServiceTest(
 
         context("재고가 0인 상품이 포함되면") {
             val cmd = OrderCreateCommand(
-                USER_ID, "addr",
-                listOf(OrderCreateCommand.Item(p3.id, 1))
+                userId = USER_ID,
+                productList = listOf(p3),
+                shippingAddress = "addr",
+                items = listOf(OrderCreateCommand.Item(p3.id, 1))
             )
 
             it("OUT_OF_STOCK 예외가 발생한다") {
@@ -165,9 +184,5 @@ internal class OrderServiceTest(
 
     private companion object {
         private const val USER_ID = 1L
-        private val categoryFixture = categoryFixture(1, "TOP")
-        private val productFixture1 = productFixture(11, "A", categoryFixture, price = BigDecimal("1000"), quantity = 5)
-        private val productFixture2 = productFixture(12, "B", categoryFixture, price = BigDecimal("2000"), quantity = 3)
-        private val productFixture3 = productFixture(13, "C", categoryFixture, price = BigDecimal("1500"), quantity = 0)
     }
 }
