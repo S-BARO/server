@@ -35,6 +35,33 @@ class OrderService(
         return orderRepository.save(order)
     }
 
+    fun createOrderV3(cmd: OrderCreateCommand): Order {
+        val order = Order.newOrder(cmd.userId, cmd.shippingAddress)
+
+        val mergedItems = mergeDuplicateItems(cmd.items)
+
+        val product = productRepository.findByIdOrNull(mergedItems[0].productId)
+            ?: throw IllegalArgumentException(ErrorMessage.PRODUCT_NOT_FOUND.format(mergedItems[0].productId))
+
+        val orderItem = OrderItem.newOrderItem(
+            order = order,
+            product = product,
+            quantity = mergedItems[0].quantity,
+        )
+        order.addItem(orderItem)
+        order.updateTotalPrice()
+
+        val saved = orderRepository.save(order)
+
+        val updated = productRepository.deductStock(mergedItems[0].productId, mergedItems[0].quantity)
+
+        if (updated == 0) {
+            throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(mergedItems[0].productId))
+        }
+
+        return saved
+    }
+
     private fun mergeDuplicateItems(
         items: List<OrderCreateCommand.Item>
     ): List<OrderCreateCommand.Item> =
