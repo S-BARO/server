@@ -37,14 +37,14 @@ class OrderService(
             }
 
     private fun addItemsToOrder(item: OrderCreateCommand.Item, order: Order, productMapById: Map<Long, Product>) {
+        val product = productMapById[item.productId]
+            ?: throw IllegalArgumentException(ErrorMessage.PRODUCT_NOT_FOUND.format(item.productId))
+
         val updated = productRepository.deductStock(item.productId, item.quantity)
 
         require(updated != 0) {
             throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(item.productId))
         }
-
-        val product = productMapById[item.productId]
-            ?: throw IllegalStateException(ErrorMessage.PRODUCT_NOT_FOUND.format(item.productId))
 
         val orderItem = OrderItem.newOrderItem(
             order = order,
