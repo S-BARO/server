@@ -2,7 +2,6 @@ package com.dh.baro.order.domain
 
 import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
-import com.dh.baro.product.domain.Product
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -17,9 +16,8 @@ class OrderItem(
     @JoinColumn(name = "order_id", nullable = false)
     val order: Order,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    val product: Product,
+    @Column(name = "product_id", nullable = false)
+    val productId: Long,
 
     @Column(name = "quantity", nullable = false)
     val quantity: Int,
@@ -36,15 +34,16 @@ class OrderItem(
     companion object {
         fun newOrderItem(
             order: Order,
-            product: Product,
-            quantity: Int
+            productId: Long,
+            quantity: Int,
+            priceAtPurchase: BigDecimal,
         ): OrderItem =
             OrderItem(
                 id = IdGenerator.generate(),
                 order = order,
-                product = product,
+                productId = productId,
                 quantity = quantity,
-                priceAtPurchase = product.getPrice(),
+                priceAtPurchase = priceAtPurchase,
             )
     }
 }
