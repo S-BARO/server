@@ -16,13 +16,19 @@ import java.time.temporal.ChronoUnit
 class ProductQueryService(
     private val productRepository: ProductRepository,
 ) {
-    fun checkProductsExists(productIds: List<Long>) {
+    fun getProductsExists(productIds: List<Long>): List<Product> {
         val distinctIds = productIds.toSet()
         val products = productRepository.findAllById(distinctIds).toList()
 
         require(products.size == distinctIds.size) {
             ErrorMessage.PRODUCT_NOT_FOUND.format(productIds)
         }
+
+        return products
+    }
+
+    fun checkProductsExists(productIds: List<Long>) {
+        getProductsExists(productIds)
     }
 
     fun getProductDetail(productId: Long): Product =
