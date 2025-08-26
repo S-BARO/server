@@ -2,7 +2,9 @@ package com.dh.baro.order.presentation.swagger
 
 import com.dh.baro.core.ErrorResponse
 import com.dh.baro.core.SliceResponse
-import com.dh.baro.order.presentation.*
+import com.dh.baro.order.presentation.dto.OrderCreateRequest
+import com.dh.baro.order.presentation.dto.OrderDetailResponse
+import com.dh.baro.order.presentation.dto.OrderSummary
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -168,5 +170,5 @@ interface OrderSwagger {
         @Parameter(hidden = true) userId: Long,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "10") size: Int
-    ): SliceResponse<OrderListItem>
+    ): SliceResponse<OrderSummary>
 }

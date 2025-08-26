@@ -1,4 +1,6 @@
-package com.dh.baro.look.domain
+package com.dh.baro.look
+
+import com.dh.baro.look.domain.Look
 
 fun lookFixture(
     id: Long,

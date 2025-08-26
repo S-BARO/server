@@ -1,6 +1,6 @@
 package com.dh.baro.order.application
 
-import com.dh.baro.order.presentation.OrderCreateRequest
+import com.dh.baro.order.presentation.dto.OrderCreateRequest
 import com.dh.baro.product.domain.Product
 
 data class OrderCreateCommand(

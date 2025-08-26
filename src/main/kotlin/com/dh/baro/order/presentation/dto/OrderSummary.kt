@@ -1,11 +1,11 @@
-package com.dh.baro.order.presentation
+package com.dh.baro.order.presentation.dto
 
 import com.dh.baro.order.domain.Order
 import com.dh.baro.order.domain.OrderStatus
 import java.math.BigDecimal
 import java.time.Instant
 
-data class OrderListItem(
+data class OrderSummary(
     val orderId: Long,
     val totalPrice: BigDecimal,
     val orderStatus: OrderStatus,
@@ -13,7 +13,7 @@ data class OrderListItem(
 ) {
 
     companion object {
-        fun from(order: Order) = OrderListItem(
+        fun from(order: Order) = OrderSummary(
             orderId = order.id,
             totalPrice = order.totalPrice,
             orderStatus = order.status,

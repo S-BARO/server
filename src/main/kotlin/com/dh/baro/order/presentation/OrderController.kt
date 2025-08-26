@@ -4,6 +4,9 @@ import com.dh.baro.core.Cursor
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.order.application.OrderFacade
+import com.dh.baro.order.presentation.dto.OrderCreateRequest
+import com.dh.baro.order.presentation.dto.OrderDetailResponse
+import com.dh.baro.order.presentation.dto.OrderSummary
 import com.dh.baro.order.presentation.swagger.OrderSwagger
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -41,11 +44,11 @@ class OrderController(
         @CurrentUser userId: Long,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "10") size: Int,
-    ): SliceResponse<OrderListItem> {
+    ): SliceResponse<OrderSummary> {
         val slice = orderFacade.getOrdersByCursor(userId, cursorId, size)
         return SliceResponse.from(
             slice = slice,
-            mapper = OrderListItem::from,
+            mapper = OrderSummary::from,
             cursorExtractor = { Cursor(it.id) }
         )
     }

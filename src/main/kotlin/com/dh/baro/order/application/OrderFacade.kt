@@ -4,7 +4,7 @@ import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.order.domain.Order
 import com.dh.baro.order.domain.OrderQueryService
 import com.dh.baro.order.domain.OrderService
-import com.dh.baro.order.presentation.OrderCreateRequest
+import com.dh.baro.order.presentation.dto.OrderCreateRequest
 import com.dh.baro.product.domain.service.ProductQueryService
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service

@@ -1,4 +1,4 @@
-package com.dh.baro.order.presentation
+package com.dh.baro.order.presentation.dto
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
