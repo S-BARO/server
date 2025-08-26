@@ -17,19 +17,17 @@ class OrderFacade(
     private val orderQueryService: OrderQueryService,
 ) {
 
-    fun placeOrder(userId: Long, request: OrderCreateRequest): OrderDetailBundle {
+    fun placeOrder(userId: Long, request: OrderCreateRequest): Order {
         userService.checkUserExists(userId)
         val productList = productQueryService.getProductsExists(request.orderItems.map { orderItem -> orderItem.productId })
         val cmd = OrderCreateCommand.toCommand(userId, productList, request)
         val order = orderService.createOrder(cmd)
-        return OrderDetailBundle(order, productList)
+        return order
     }
 
-    fun getOrderDetail(userId: Long, orderId: Long): OrderDetailBundle {
-        val order = orderQueryService.getOrderDetailByUserId(orderId, userId)
-        val productList = productQueryService.getProductsExists(order.items.map { orderItem -> orderItem.productId })
-        return OrderDetailBundle(order, productList)
-    }
+    fun getOrderDetail(userId: Long, orderId: Long): Order =
+        orderQueryService.getOrderDetailByUserId(orderId, userId)
+
 
     fun getOrdersByCursor(
         userId: Long,

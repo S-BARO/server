@@ -2,7 +2,6 @@ package com.dh.baro.order.presentation.dto
 
 import com.dh.baro.order.domain.Order
 import com.dh.baro.order.domain.OrderStatus
-import com.dh.baro.product.domain.Product
 import java.math.BigDecimal
 import java.time.Instant
 
@@ -18,14 +17,13 @@ data class OrderDetailResponse(
     data class Item(
         val productId: Long,
         val productName: String,
+        val thumbnailUrl: String,
         val quantity: Int,
         val priceAtPurchase: BigDecimal,
     )
 
     companion object {
-        fun from(order: Order, productList: List<Product>): OrderDetailResponse {
-            val productMapByIds = productList.associateBy { it.id }
-
+        fun from(order: Order): OrderDetailResponse {
             return OrderDetailResponse(
                 orderId = order.id,
                 orderStatus = order.status,
@@ -33,15 +31,14 @@ data class OrderDetailResponse(
                 totalPrice = order.totalPrice,
                 orderedAt = order.createdAt,
                 items = order.items
-                    .mapNotNull { item ->
-                        productMapByIds[item.productId]?.let { product ->
-                            Item(
-                                productId = item.productId,
-                                productName = product.getName(),
-                                quantity = item.quantity,
-                                priceAtPurchase = item.priceAtPurchase,
-                            )
-                        }
+                    .map { item ->
+                        Item(
+                            productId = item.productId,
+                            productName = item.name,
+                            thumbnailUrl = item.thumbnailUrl,
+                            quantity = item.quantity,
+                            priceAtPurchase = item.priceAtPurchase,
+                        )
                     }
                     .sortedBy { it.productId }
             )

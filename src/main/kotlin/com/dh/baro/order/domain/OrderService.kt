@@ -49,6 +49,8 @@ class OrderService(
         val orderItem = OrderItem.newOrderItem(
             order = order,
             productId = item.productId,
+            name = product.getName(),
+            thumbnailUrl = product.getThumbnailUrl(),
             quantity = item.quantity,
             priceAtPurchase = product.getPrice(),
         )

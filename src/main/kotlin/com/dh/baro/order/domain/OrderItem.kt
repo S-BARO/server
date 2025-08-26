@@ -19,6 +19,12 @@ class OrderItem(
     @Column(name = "product_id", nullable = false)
     val productId: Long,
 
+    @Column(name = "product_name", nullable = false, length = 100)
+    val name: String,
+
+    @Column(name = "thumbnail_url", nullable = false, length = 300)
+    val thumbnailUrl: String,
+
     @Column(name = "quantity", nullable = false)
     val quantity: Int,
 
@@ -35,6 +41,8 @@ class OrderItem(
         fun newOrderItem(
             order: Order,
             productId: Long,
+            name: String,
+            thumbnailUrl: String,
             quantity: Int,
             priceAtPurchase: BigDecimal,
         ): OrderItem =
@@ -42,6 +50,8 @@ class OrderItem(
                 id = IdGenerator.generate(),
                 order = order,
                 productId = productId,
+                name = name,
+                thumbnailUrl = thumbnailUrl,
                 quantity = quantity,
                 priceAtPurchase = priceAtPurchase,
             )

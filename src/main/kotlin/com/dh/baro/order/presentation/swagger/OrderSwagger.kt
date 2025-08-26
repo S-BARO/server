@@ -66,12 +66,14 @@ interface OrderSwagger {
                             {
                               "productId": 11,
                               "productName": "T-Shirt",
+                              "thumbnailUrl": "123.jpg",
                               "quantity": 2,
                               "priceAtPurchase": 1000
                             },
                             {
                               "productId": 12,
                               "productName": "Hoodie",
+                              "thumbnailUrl": "123.jpg",
                               "quantity": 1,
                               "priceAtPurchase": 2000
                             }
@@ -105,7 +107,37 @@ interface OrderSwagger {
             ApiResponse(
                 responseCode = "200",
                 description = "조회 성공",
-                content = [Content(schema = Schema(implementation = OrderDetailResponse::class))]
+                content = [Content(
+                    schema = Schema(implementation = OrderDetailResponse::class),
+                    examples = [ExampleObject(
+                        name = "orderDetail",
+                        value = """
+                        {
+                          "orderId": 1001,
+                          "orderStatus": "ORDERED",
+                          "shippingAddress": "서울특별시 강남구 테헤란로 123",
+                          "totalPrice": 4000,
+                          "orderedAt": "2025-05-10T19:10:23.123Z",
+                          "items": [
+                            {
+                              "productId": 11,
+                              "productName": "T-Shirt",
+                              "thumbnailUrl": "123.jpg",
+                              "quantity": 2,
+                              "priceAtPurchase": 1000
+                            },
+                            {
+                              "productId": 12,
+                              "productName": "Hoodie",
+                              "thumbnailUrl": "123.jpg",
+                              "quantity": 1,
+                              "priceAtPurchase": 2000
+                            }
+                          ]
+                        }
+                        """
+                    )]
+                )]
             ),
             ApiResponse(
                 responseCode = "404",

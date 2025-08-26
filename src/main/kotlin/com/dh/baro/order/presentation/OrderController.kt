@@ -24,8 +24,8 @@ class OrderController(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: OrderCreateRequest,
     ): OrderDetailResponse {
-        val orderDetailBundle = orderFacade.placeOrder(userId, request)
-        return OrderDetailResponse.from(orderDetailBundle.order, orderDetailBundle.productList)
+        val order = orderFacade.placeOrder(userId, request)
+        return OrderDetailResponse.from(order)
     }
 
     @GetMapping("/{orderId}")
@@ -34,8 +34,8 @@ class OrderController(
         @CurrentUser userId: Long,
         @PathVariable orderId: Long,
     ): OrderDetailResponse {
-        val orderDetailBundle = orderFacade.getOrderDetail(userId, orderId)
-        return OrderDetailResponse.from(orderDetailBundle.order, orderDetailBundle.productList)
+        val order = orderFacade.getOrderDetail(userId, orderId)
+        return OrderDetailResponse.from(order)
     }
 
     @GetMapping
