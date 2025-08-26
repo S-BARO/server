@@ -1,4 +1,4 @@
-package com.dh.baro.order.presentation
+package com.dh.baro.order.presentation.dto
 
 import com.dh.baro.order.domain.Order
 import com.dh.baro.order.domain.OrderStatus
@@ -12,7 +12,7 @@ data class OrderDetailResponse(
     val shippingAddress: String,
     val totalPrice: BigDecimal,
     val orderedAt: Instant?,
-    val items: List<Item?>,
+    val items: List<Item>,
 ) {
 
     data class Item(
@@ -32,16 +32,18 @@ data class OrderDetailResponse(
                 shippingAddress = order.shippingAddress,
                 totalPrice = order.totalPrice,
                 orderedAt = order.createdAt,
-                items = order.items.map {
-                    productMapByIds[it.productId]?.let { product ->
-                        Item(
-                            productId = it.productId,
-                            productName = product.getName(),
-                            quantity = it.quantity,
-                            priceAtPurchase = it.priceAtPurchase,
-                        )
+                items = order.items
+                    .mapNotNull { item ->
+                        productMapByIds[item.productId]?.let { product ->
+                            Item(
+                                productId = item.productId,
+                                productName = product.getName(),
+                                quantity = item.quantity,
+                                priceAtPurchase = item.priceAtPurchase,
+                            )
+                        }
                     }
-                }
+                    .sortedBy { it.productId }
             )
         }
     }
