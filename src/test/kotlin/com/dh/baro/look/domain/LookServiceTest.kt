@@ -6,6 +6,7 @@ import com.dh.baro.look.domain.repository.LookImageRepository
 import com.dh.baro.look.domain.repository.LookProductRepository
 import com.dh.baro.look.domain.repository.LookRepository
 import com.dh.baro.look.domain.service.LookService
+import com.dh.baro.look.lookFixture
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec

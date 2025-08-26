@@ -3,6 +3,7 @@ package com.dh.baro.look.domain
 import com.dh.baro.look.domain.repository.LookReactionRepository
 import com.dh.baro.look.domain.repository.LookRepository
 import com.dh.baro.look.domain.service.LookReactionService
+import com.dh.baro.look.lookFixture
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual

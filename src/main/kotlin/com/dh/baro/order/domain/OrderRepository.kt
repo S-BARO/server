@@ -22,6 +22,6 @@ interface OrderRepository : JpaRepository<Order, Long> {
         pageable: Pageable,
     ): Slice<Order>
 
-    @EntityGraph(attributePaths = ["items", "items.product"])
-    fun findOrderByUserIdAndId(userId: Long, orderId: Long): Order?
+    @EntityGraph(attributePaths = ["items"])
+    fun findByIdAndUserId(orderId: Long, userId: Long): Order?
 }

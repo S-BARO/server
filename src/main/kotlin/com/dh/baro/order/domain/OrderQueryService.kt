@@ -1,8 +1,6 @@
-package com.dh.baro.order.application
+package com.dh.baro.order.domain
 
 import com.dh.baro.core.ErrorMessage
-import com.dh.baro.order.domain.Order
-import com.dh.baro.order.domain.OrderRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
@@ -10,13 +8,14 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
-class OrderQueryFacade(
+class OrderQueryService(
     private val orderRepository: OrderRepository,
 ) {
 
-    fun getOrderDetail(userId: Long, orderId: Long): Order =
-        orderRepository.findOrderByUserIdAndId(userId, orderId)
+    fun getOrderDetailByUserId(orderId: Long, userId: Long): Order {
+        return orderRepository.findByIdAndUserId(orderId, userId)
             ?: throw IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(orderId))
+    }
 
     fun getOrdersByCursor(
         userId: Long,

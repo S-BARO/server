@@ -1,5 +1,7 @@
-package com.dh.baro.product.domain
+package com.dh.baro.product
 
+import com.dh.baro.product.domain.Category
+import com.dh.baro.product.domain.Product
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.temporal.ChronoUnit

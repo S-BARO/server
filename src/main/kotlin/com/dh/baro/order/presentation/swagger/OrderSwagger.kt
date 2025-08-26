@@ -2,7 +2,9 @@ package com.dh.baro.order.presentation.swagger
 
 import com.dh.baro.core.ErrorResponse
 import com.dh.baro.core.SliceResponse
-import com.dh.baro.order.presentation.*
+import com.dh.baro.order.presentation.dto.OrderCreateRequest
+import com.dh.baro.order.presentation.dto.OrderDetailResponse
+import com.dh.baro.order.presentation.dto.OrderSummary
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -64,12 +66,14 @@ interface OrderSwagger {
                             {
                               "productId": 11,
                               "productName": "T-Shirt",
+                              "thumbnailUrl": "123.jpg",
                               "quantity": 2,
                               "priceAtPurchase": 1000
                             },
                             {
                               "productId": 12,
                               "productName": "Hoodie",
+                              "thumbnailUrl": "123.jpg",
                               "quantity": 1,
                               "priceAtPurchase": 2000
                             }
@@ -103,7 +107,37 @@ interface OrderSwagger {
             ApiResponse(
                 responseCode = "200",
                 description = "조회 성공",
-                content = [Content(schema = Schema(implementation = OrderDetailResponse::class))]
+                content = [Content(
+                    schema = Schema(implementation = OrderDetailResponse::class),
+                    examples = [ExampleObject(
+                        name = "orderDetail",
+                        value = """
+                        {
+                          "orderId": 1001,
+                          "orderStatus": "ORDERED",
+                          "shippingAddress": "서울특별시 강남구 테헤란로 123",
+                          "totalPrice": 4000,
+                          "orderedAt": "2025-05-10T19:10:23.123Z",
+                          "items": [
+                            {
+                              "productId": 11,
+                              "productName": "T-Shirt",
+                              "thumbnailUrl": "123.jpg",
+                              "quantity": 2,
+                              "priceAtPurchase": 1000
+                            },
+                            {
+                              "productId": 12,
+                              "productName": "Hoodie",
+                              "thumbnailUrl": "123.jpg",
+                              "quantity": 1,
+                              "priceAtPurchase": 2000
+                            }
+                          ]
+                        }
+                        """
+                    )]
+                )]
             ),
             ApiResponse(
                 responseCode = "404",
@@ -168,5 +202,5 @@ interface OrderSwagger {
         @Parameter(hidden = true) userId: Long,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "10") size: Int
-    ): SliceResponse<OrderListItem>
+    ): SliceResponse<OrderSummary>
 }

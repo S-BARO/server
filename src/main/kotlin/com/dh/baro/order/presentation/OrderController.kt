@@ -4,7 +4,9 @@ import com.dh.baro.core.Cursor
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.order.application.OrderFacade
-import com.dh.baro.order.application.OrderQueryFacade
+import com.dh.baro.order.presentation.dto.OrderCreateRequest
+import com.dh.baro.order.presentation.dto.OrderDetailResponse
+import com.dh.baro.order.presentation.dto.OrderSummary
 import com.dh.baro.order.presentation.swagger.OrderSwagger
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/orders")
 class OrderController(
-    private val orderQueryFacade: OrderQueryFacade,
     private val orderFacade: OrderFacade,
 ) : OrderSwagger {
 
@@ -27,23 +28,15 @@ class OrderController(
         return OrderDetailResponse.from(order)
     }
 
-    @PostMapping("/V3")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun placeOrderV3(
-        @CurrentUser userId: Long,
-        @Valid @RequestBody request: OrderCreateRequest,
-    ): OrderDetailResponse {
-        val order = orderFacade.placeOrderV3(userId, request)
-        return OrderDetailResponse.from(order)
-    }
-
     @GetMapping("/{orderId}")
     @ResponseStatus(HttpStatus.OK)
     override fun getOrderDetail(
         @CurrentUser userId: Long,
         @PathVariable orderId: Long,
-    ): OrderDetailResponse =
-        OrderDetailResponse.from(orderQueryFacade.getOrderDetail(userId, orderId))
+    ): OrderDetailResponse {
+        val order = orderFacade.getOrderDetail(userId, orderId)
+        return OrderDetailResponse.from(order)
+    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -51,11 +44,11 @@ class OrderController(
         @CurrentUser userId: Long,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "10") size: Int,
-    ): SliceResponse<OrderListItem> {
-        val slice = orderQueryFacade.getOrdersByCursor(userId, cursorId, size)
+    ): SliceResponse<OrderSummary> {
+        val slice = orderFacade.getOrdersByCursor(userId, cursorId, size)
         return SliceResponse.from(
             slice = slice,
-            mapper = OrderListItem::from,
+            mapper = OrderSummary::from,
             cursorExtractor = { Cursor(it.id) }
         )
     }
