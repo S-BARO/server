@@ -13,7 +13,7 @@ class OrderQueryService(
 ) {
 
     fun getOrderDetailByUserId(orderId: Long, userId: Long): Order {
-        return orderRepository.findOrderByIdAndUserId(orderId, userId)
+        return orderRepository.findByIdAndUserId(orderId, userId)
             ?: throw IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(orderId))
     }
 
