@@ -88,6 +88,15 @@ logging:
   level:
     root: info
 
+app:
+  async:
+    executor:
+      core-pool-size: 10
+      max-pool-size: 20
+      queue-capacity: 100
+      keep-alive-seconds: 120
+      thread-name-prefix: "event-async-"
+
 decorator:
   datasource:
     p6spy:
