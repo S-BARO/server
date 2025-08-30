@@ -34,7 +34,7 @@ class InventoryRedisRepository(
         if (items.isEmpty()) return true
         
         val mergedItems = mergedItems(items)
-        return executeScriptWithRetry(deductScriptSha, mergedItems) { result ->
+        return executeScriptWithRetry(deductScriptSha, mergedItems, initializeOnMissing = true) { result ->
             when (result) {
                 INSUFFICIENT_STOCK -> throw ConflictException(ErrorMessage.INSUFFICIENT_STOCK.message)
                 else -> false
@@ -46,7 +46,7 @@ class InventoryRedisRepository(
         if (items.isEmpty()) return true
         
         val mergedItems = mergedItems(items)
-        return executeScriptWithRetry(restoreScriptSha, mergedItems) { _ ->
+        return executeScriptWithRetry(restoreScriptSha, mergedItems, initializeOnMissing = false) { _ ->
             false
         }
     }
@@ -59,9 +59,10 @@ class InventoryRedisRepository(
     }
     
     private fun executeScriptWithRetry(
-        scriptSha: String, 
+        scriptSha: String,
         items: List<InventoryItem>,
-        errorHandler: (Long) -> Boolean
+        initializeOnMissing: Boolean,
+        shouldThrowError: (Long) -> Boolean
     ): Boolean {
         val keys = items.map { getStockKey(it.productId) }
         val quantities = items.map { it.quantity.toString() }
@@ -78,15 +79,16 @@ class InventoryRedisRepository(
 
             when (result) {
                 MISSING_KEYS -> {
-                    val productIds = items.map { it.productId }
-                    initializeStocksFromDb(productIds)
-                    retryCount++
+                    if (initializeOnMissing) {
+                        val productIds = items.map { it.productId }
+                        initializeStocksFromDb(productIds)
+                        retryCount++
+                        continue
+                    }
+                    return shouldThrowError(result)
                 }
                 else -> {
-                    if (errorHandler(result)) {
-                        return true
-                    }
-                    return true
+                    return shouldThrowError(result)
                 }
             }
         }
