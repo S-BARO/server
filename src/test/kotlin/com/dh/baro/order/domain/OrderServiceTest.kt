@@ -78,11 +78,10 @@ internal class OrderServiceTest(
             beforeTest {
                 val cmd = OrderCreateCommand(
                     userId = USER_ID,
-                    productList = listOf(p1, p2),
                     shippingAddress = "Seoul",
-                    items = listOf(
-                        OrderCreateCommand.Item(p1.id, 2),
-                        OrderCreateCommand.Item(p2.id, 1),
+                    orderItems = listOf(
+                        OrderCreateCommand.OrderItem(p1, 2),
+                        OrderCreateCommand.OrderItem(p2, 1),
                     )
                 )
                 order = shouldNotThrowAny { orderService.createOrder(cmd) }
@@ -115,9 +114,8 @@ internal class OrderServiceTest(
             it("ConflictException를 던지고 롤백한다") {
                 val cmd = OrderCreateCommand(
                     userId = USER_ID,
-                    productList = listOf(p1),
                     shippingAddress = "Seoul",
-                    items = listOf(OrderCreateCommand.Item(p1.id, 99))
+                    orderItems = listOf(OrderCreateCommand.OrderItem(p1, 99))
                 )
 
                 shouldThrow<ConflictException> {
@@ -130,30 +128,13 @@ internal class OrderServiceTest(
             }
         }
 
-        context("productList에 없는 상품 ID가 items에 포함되면") {
-            val missingId = 999L
-            val cmd = OrderCreateCommand(
-                userId = USER_ID,
-                productList = listOf(p1), // p1만 있음
-                shippingAddress = "Seoul",
-                items = listOf(OrderCreateCommand.Item(missingId, 1)) // 999는 productList에 없음
-            )
-
-            it("IllegalArgumentException을 던진다") {
-                shouldThrow<IllegalArgumentException> {
-                    orderService.createOrder(cmd)
-                }.message shouldBe ErrorMessage.PRODUCT_NOT_FOUND.format(missingId)
-            }
-        }
-
         context("동일 상품이 두 번 전달되면") {
             val cmd = OrderCreateCommand(
                 userId = USER_ID,
-                productList = listOf(p1),
                 shippingAddress = "Seoul",
-                items = listOf(
-                    OrderCreateCommand.Item(p1.id, 1),
-                    OrderCreateCommand.Item(p1.id, 2),
+                orderItems = listOf(
+                    OrderCreateCommand.OrderItem(p1, 1),
+                    OrderCreateCommand.OrderItem(p1, 2),
                 )
             )
 
@@ -168,9 +149,8 @@ internal class OrderServiceTest(
         context("재고가 0인 상품이 포함되면") {
             val cmd = OrderCreateCommand(
                 userId = USER_ID,
-                productList = listOf(p3),
                 shippingAddress = "addr",
-                items = listOf(OrderCreateCommand.Item(p3.id, 1))
+                orderItems = listOf(OrderCreateCommand.OrderItem(p3, 1))
             )
 
             it("OUT_OF_STOCK 예외가 발생한다") {
