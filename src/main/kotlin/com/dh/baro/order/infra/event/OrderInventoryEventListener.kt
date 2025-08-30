@@ -29,7 +29,7 @@ class OrderInventoryEventListener(
             outboxMessageRepository.save(outboxMessage)
         } catch (exception: Exception) {
             try {
-                inventoryRedisRepository.restoreStocksBatch(event.items)
+                inventoryRedisRepository.restoreStocks(event.items)
             } catch (restoreException: Exception) {
                 log.error(ErrorMessage.INVENTORY_RESTORE_ERROR.format(event.orderId), restoreException)
             }
