@@ -1,21 +1,7 @@
--- Validate input
-if #KEYS ~= #ARGV then
-    return -3
-end
-
-if #KEYS == 0 then
-    return 0
-end
-
 -- Phase 1: validation
-local stockValues = {}
 for i = 1, #KEYS do
     local key = KEYS[i]
     local deductAmount = tonumber(ARGV[i])
-
-    if deductAmount == nil or deductAmount <= 0 then
-        return -4  -- Invalid deduction amount
-    end
 
     local currentStock = redis.call('GET', key)
     if currentStock == false then
@@ -23,11 +9,9 @@ for i = 1, #KEYS do
     end
 
     local stock = tonumber(currentStock)
-    if stock < deductAmount then
+    if deductAmount <= 0 or stock < deductAmount then
         return -2  -- Insufficient stock
     end
-
-    stockValues[i] = stock
 end
 
 -- Phase 2: deduction
