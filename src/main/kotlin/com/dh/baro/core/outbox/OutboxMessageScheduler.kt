@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class OutboxMessageScheduler(
-    private val outboxBatchJob: OutboxBatchJob
+    private val outboxBatchJob: OutboxBatchJob,
 ) {
 
     @Scheduled(fixedDelay = 60_000) // 1분

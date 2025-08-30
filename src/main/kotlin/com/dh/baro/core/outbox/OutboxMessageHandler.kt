@@ -16,12 +16,12 @@ class OutboxMessageHandler(
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun handleInNewTx(outboxMessage: OutboxMessage) {
-        try {
+        runCatching {
             outboxMessageRouter.route(outboxMessage)
-            outboxMessage.markSendSuccess()
-        } catch (exception: Exception) {
-            outboxMessage.markSendFail()
-        } finally {
+        }.fold(
+            onSuccess = { outboxMessage.markSendSuccess() },
+            onFailure = { outboxMessage.markSendFail() }
+        ).apply {
             outboxMessageRepository.save(outboxMessage)
             if(outboxMessage.isDeadMessage()){
                 log.error(ErrorMessage.OUTBOX_MESSAGE_DEAD.format(outboxMessage.eventType, outboxMessage.id))

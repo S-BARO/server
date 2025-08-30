@@ -40,7 +40,7 @@ class OrderService(
 
         val updated = productRepository.deductStock(item.product.id, item.quantity)
 
-        require(updated != 0) {
+        if (updated == 0) {
             throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(item.product.id))
         }
 

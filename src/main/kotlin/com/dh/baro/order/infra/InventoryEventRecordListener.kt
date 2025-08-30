@@ -1,4 +1,4 @@
-package com.dh.baro.order.infra.event
+package com.dh.baro.order.infra
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.event.EventSerializer
@@ -13,7 +13,7 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
-class OrderInventoryEventListener(
+class InventoryEventRecordListener(
     private val eventSerializer: EventSerializer,
     private val outboxMessageRepository: OutboxMessageRepository,
     private val inventoryRedisRepository: InventoryRedisRepository,
@@ -23,17 +23,17 @@ class OrderInventoryEventListener(
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun recordInventoryDeductionEvent(event: InventoryDeductionRequestedEvent) {
-        try {
-            val payload = eventSerializer.serialize(event)
-            val outboxMessage = OutboxMessage.init(INVENTORY_DEDUCTION_EVENT, payload)
-            outboxMessageRepository.save(outboxMessage)
-        } catch (exception: Exception) {
-            try {
-                inventoryRedisRepository.restoreStocks(event.items)
-            } catch (restoreException: Exception) {
-                log.error(ErrorMessage.INVENTORY_RESTORE_ERROR.format(event.orderId), restoreException)
-            }
-            throw exception
+        val payload = eventSerializer.serialize(event)
+        val outboxMessage = OutboxMessage.init(INVENTORY_DEDUCTION_EVENT, payload)
+        outboxMessageRepository.save(outboxMessage)
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
+    fun restoreInventoryOnRollback(event: InventoryDeductionRequestedEvent) {
+        runCatching {
+            inventoryRedisRepository.restoreStocks(event.items)
+        }.onFailure { ex ->
+            log.error(ErrorMessage.INVENTORY_RESTORE_ERROR.format(event.orderId), ex)
         }
     }
 }

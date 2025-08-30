@@ -19,7 +19,6 @@ class OutboxMessage private constructor(
     @Column(nullable = false, length = 100)
     val eventType: String,
 
-    @Lob
     @Column(columnDefinition = "JSON")
     val payload: String,
 
