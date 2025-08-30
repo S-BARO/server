@@ -1,8 +1,8 @@
 package com.dh.baro.core.outbox
 
 import com.dh.baro.core.ErrorMessage
-import com.dh.baro.product.domain.event.InventoryDeductionRequestedEvent
-import com.dh.baro.product.domain.event.handler.InventoryEventHandler
+import com.dh.baro.product.infra.event.InventoryDeductionRequestedEvent
+import com.dh.baro.product.infra.event.InventoryEventHandler
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 

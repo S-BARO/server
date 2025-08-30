@@ -7,7 +7,7 @@ import com.dh.baro.order.domain.OrderService
 import com.dh.baro.order.domain.service.OrderServiceV2
 import com.dh.baro.order.presentation.dto.OrderCreateRequest
 import com.dh.baro.product.domain.InventoryItem
-import com.dh.baro.product.domain.event.InventoryDeductionRequestedEvent
+import com.dh.baro.product.infra.event.InventoryDeductionRequestedEvent
 import com.dh.baro.product.domain.service.InventoryService
 import com.dh.baro.product.domain.service.ProductQueryService
 import org.springframework.context.ApplicationEventPublisher
@@ -72,7 +72,7 @@ class OrderFacade(
 
     private fun publishInventoryDeductionEvent(order: Order, cmd: OrderCreateCommand) {
         val inventoryItems = cmd.orderItems.map { item ->
-            InventoryDeductionRequestedEvent.InventoryItem(
+            InventoryItem(
                 productId = item.product.id,
                 quantity = item.quantity,
             )

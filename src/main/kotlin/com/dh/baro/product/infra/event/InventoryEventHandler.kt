@@ -12,7 +12,7 @@ class InventoryEventHandler(
     @Transactional
     fun handleEvent(event: InventoryDeductionRequestedEvent) {
         event.items.forEach { item ->
-            inventoryService.deductInventory(item.productId, item.quantity)
+            inventoryService.deductStockFromDB(item.productId, item.quantity)
         }
     }
 }

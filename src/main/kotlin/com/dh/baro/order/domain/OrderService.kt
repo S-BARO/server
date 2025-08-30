@@ -16,10 +16,9 @@ class OrderService(
 
     fun createOrder(cmd: OrderCreateCommand): Order {
         val order = Order.newOrder(cmd.userId, cmd.shippingAddress)
-        val productMapById = cmd.orderItems.associateBy { it.product.id }
 
         val mergedItems = mergeDuplicateItems(cmd.orderItems)
-        mergedItems.forEach { addItemsToOrder(it, order, productMapById) }
+        mergedItems.forEach { addItemsToOrder(it, order) }
         order.updateTotalPrice()
 
         return orderRepository.save(order)
@@ -36,7 +35,7 @@ class OrderService(
                 OrderCreateCommand.OrderItem(firstItem.product, totalQty)
             }
 
-    private fun addItemsToOrder(item: OrderCreateCommand.OrderItem, order: Order, productMapById: Map<Long, OrderCreateCommand.OrderItem>) {
+    private fun addItemsToOrder(item: OrderCreateCommand.OrderItem, order: Order) {
         val product = item.product
 
         val updated = productRepository.deductStock(item.product.id, item.quantity)
