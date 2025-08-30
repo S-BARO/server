@@ -18,43 +18,85 @@ class InventoryRedisRepository(
 ) {
     private lateinit var batchStockDeductionScript: String
     private lateinit var batchStockRestoreScript: String
+    private lateinit var deductScriptSha: String
+    private lateinit var restoreScriptSha: String
     
     @PostConstruct
     private fun loadLuaScripts() {
         batchStockDeductionScript = ClassPathResource("lua/deduct-stocks.lua").inputStream.bufferedReader().readText()
         batchStockRestoreScript = ClassPathResource("lua/restore-stocks.lua").inputStream.bufferedReader().readText()
+        
+        deductScriptSha = redissonClient.script.scriptLoad(batchStockDeductionScript)
+        restoreScriptSha = redissonClient.script.scriptLoad(batchStockRestoreScript)
     }
 
     fun deductStocks(items: List<InventoryItem>): Boolean {
         if (items.isEmpty()) return true
         
+        val mergedItems = mergedItems(items)
+        return executeScriptWithRetry(deductScriptSha, mergedItems) { result ->
+            when (result) {
+                INSUFFICIENT_STOCK -> throw ConflictException(ErrorMessage.INSUFFICIENT_STOCK.message)
+                else -> false
+            }
+        }
+    }
+
+    fun restoreStocks(items: List<InventoryItem>): Boolean {
+        if (items.isEmpty()) return true
+        
+        val mergedItems = mergedItems(items)
+        return executeScriptWithRetry(restoreScriptSha, mergedItems) { _ ->
+            false
+        }
+    }
+
+    private fun mergedItems(items: List<InventoryItem>): List<InventoryItem> {
+        return items.groupBy { it.productId }
+            .map { (productId, itemList) ->
+                InventoryItem(productId, itemList.sumOf { it.quantity })
+            }
+    }
+    
+    private fun executeScriptWithRetry(
+        scriptSha: String, 
+        items: List<InventoryItem>,
+        errorHandler: (Long) -> Boolean
+    ): Boolean {
         val keys = items.map { getStockKey(it.productId) }
         val quantities = items.map { it.quantity.toString() }
         
-        val result = redissonClient.script.eval<Long>(
-            RScript.Mode.READ_WRITE,
-            batchStockDeductionScript,
-            RScript.ReturnType.INTEGER,
-            keys,
-            *quantities.toTypedArray()
-        )
+        var retryCount = 0
+        while (retryCount < MAX_RETRY_COUNT) {
+            val result = redissonClient.script.evalSha<Long>(
+                RScript.Mode.READ_WRITE,
+                scriptSha,
+                RScript.ReturnType.INTEGER,
+                keys,
+                *quantities.toTypedArray()
+            )
 
-        return when (result) {
-            -1L -> { // Redis에 재고 정보가 없는 상품들이 있는 경우, DB에서 초기화 후 재시도
-                val productIds = items.map { it.productId }
-                initializeStocksFromDb(productIds)
-                deductStocks(items) // 재귀 호출
+            when (result) {
+                MISSING_KEYS -> {
+                    val productIds = items.map { it.productId }
+                    initializeStocksFromDb(productIds)
+                    retryCount++
+                }
+                else -> {
+                    if (errorHandler(result)) {
+                        return true
+                    }
+                    return true
+                }
             }
-            -2L -> {
-                throw ConflictException(ErrorMessage.INSUFFICIENT_STOCK.message)
-            }
-            else -> true
         }
+        
+        throw IllegalStateException(ErrorMessage.INVENTORY_RETRY_EXCEEDED.format(MAX_RETRY_COUNT))
     }
 
     private fun initializeStocksFromDb(productIds: List<Long>) {
         val products = productRepository.findAllById(productIds)
-        
+
         products.forEach { product ->
             val key = getStockKey(product.id)
             val stock = product.getQuantity()
@@ -64,29 +106,11 @@ class InventoryRedisRepository(
         }
     }
 
-    fun restoreStocks(items: List<InventoryItem>): Boolean {
-        if (items.isEmpty()) return true
-        
-        val keys = items.map { getStockKey(it.productId) }
-        val quantities = items.map { it.quantity.toString() }
-        
-        val result = redissonClient.script.eval<Long>(
-            RScript.Mode.READ_WRITE,
-            batchStockRestoreScript,
-            RScript.ReturnType.INTEGER,
-            keys,
-            *quantities.toTypedArray()
-        )
-        
-        return when (result) {
-            1L -> { // Redis에 재고 정보가 없는 상품들이 있는 경우, DB에서 초기화 후 재시도
-                val productIds = items.map { it.productId }
-                initializeStocksFromDb(productIds)
-                restoreStocks(items) // 재귀 호출
-            }
-            else -> true
-        }
-    }
-
     private fun getStockKey(productId: Long): String = "product:stock:$productId"
+    
+    companion object {
+        private const val MAX_RETRY_COUNT = 1
+        private const val MISSING_KEYS = -1L
+        private const val INSUFFICIENT_STOCK = -2L
+    }
 }

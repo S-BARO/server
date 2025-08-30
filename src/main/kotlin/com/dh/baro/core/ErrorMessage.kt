@@ -27,10 +27,9 @@ enum class ErrorMessage(val message: String) {
     INVALID_POPULAR_PRODUCT_CURSOR("cursorLikes와 cursorId는 함께 지정하거나 함께 생략해야 합니다."),
     OUT_OF_STOCK("재고가 모두 소진되었습니다.[id = %d]"),
     INSUFFICIENT_STOCK("일부 상품의 재고가 부족합니다."),
-    INVALID_STOCK_OPERATION_INPUT("잘못된 입력: keys와 quantities 길이가 일치하지 않습니다."),
-    STOCK_RESTORE_FAILED("재고 복원 실패: keys와 quantities 길이 불일치"),
     PRODUCT_NOT_FOUND_FOR_DEDUCTION("재고 차감할 상품을 찾을 수 없습니다: %d"),
     INVENTORY_RESTORE_ERROR("Redis 재고 복원 중 오류 발생: orderId=%d"),
+    INVENTORY_RETRY_EXCEEDED("재고 초기화 재시도 횟수 초과: maxRetry=%d"),
 
     // Category
     CATEGORY_ALREADY_EXISTS("카테고리(id = %d)는 이미 존재합니다."),
