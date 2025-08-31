@@ -5,29 +5,33 @@ import com.dh.baro.product.domain.Product
 
 data class OrderCreateCommand(
     val userId: Long,
-    val productList: List<Product>,
     val shippingAddress: String,
-    val items: List<Item>,
+    val orderItems: List<OrderItem>,
 ) {
 
-    data class Item(
-        val productId: Long,
+    data class OrderItem(
+        val product: Product,
         val quantity: Int,
-    ) {
-
-        companion object {
-            fun of(orderItem: OrderCreateRequest.OrderItem): Item =
-                Item(orderItem.productId, orderItem.quantity)
-        }
-    }
+    )
 
     companion object {
         fun toCommand(userId: Long, productList: List<Product>, request: OrderCreateRequest): OrderCreateCommand {
+            val productMap = productList.associateBy { it.id }
+            
+            val orderItems = request.orderItems.map { requestItem ->
+                val product = productMap[requestItem.productId] 
+                    ?: throw IllegalArgumentException("상품을 찾을 수 없습니다: ${requestItem.productId}")
+                
+                OrderItem(
+                    product = product,
+                    quantity = requestItem.quantity
+                )
+            }
+            
             return OrderCreateCommand(
                 userId = userId,
-                productList = productList,
                 shippingAddress = request.shippingAddress,
-                items = request.orderItems.map { Item.of(it) },
+                orderItems = orderItems
             )
         }
     }

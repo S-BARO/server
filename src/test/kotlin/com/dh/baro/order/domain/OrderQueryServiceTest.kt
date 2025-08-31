@@ -81,9 +81,8 @@ internal class OrderQueryServiceTest(
             beforeTest {
                 val cmd = OrderCreateCommand(
                     userId = USER_ID,
-                    productList = listOf(p1),
                     shippingAddress = "Seoul",
-                    items = listOf(OrderCreateCommand.Item(p1.id, 1))
+                    orderItems = listOf(OrderCreateCommand.OrderItem(p1, 1))
                 )
                 savedOrder = orderService.createOrder(cmd)
             }
@@ -114,25 +113,22 @@ internal class OrderQueryServiceTest(
             o1 = orderService.createOrder(
                 OrderCreateCommand(
                     userId = USER_ID,
-                    productList = listOf(p1),
                     shippingAddress = "addr",
-                    items = listOf(OrderCreateCommand.Item(p1.id, 1))
+                    orderItems = listOf(OrderCreateCommand.OrderItem(p1, 1))
                 )
             )
             o2 = orderService.createOrder(
                 OrderCreateCommand(
                     userId = USER_ID,
-                    productList = listOf(p2),
                     shippingAddress = "addr",
-                    items = listOf(OrderCreateCommand.Item(p2.id, 1))
+                    orderItems = listOf(OrderCreateCommand.OrderItem(p2, 1))
                 )
             )
             o3 = orderService.createOrder(
                 OrderCreateCommand(
                     userId = USER_ID,
-                    productList = listOf(p1),
                     shippingAddress = "addr",
-                    items = listOf(OrderCreateCommand.Item(p1.id, 1))
+                    orderItems = listOf(OrderCreateCommand.OrderItem(p1, 1))
                 )
             )
         }

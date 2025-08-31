@@ -103,7 +103,7 @@ class Product(
         productCategories.add(productCategory)
     }
 
-    fun deductStockForOrder(orderQuantity: Int) {
+    fun deductStock(orderQuantity: Int) {
         if(quantity < orderQuantity) {
             throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(id))
         }

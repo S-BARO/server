@@ -20,5 +20,5 @@ class StoreService(
 
     fun getStoreById(storeId: Long): Store =
         storeRepository.findByIdOrNull(storeId)
-            ?: throw IllegalArgumentException(ErrorMessage.STORE_NOT_FOUND.message.format(storeId))
+            ?: throw IllegalArgumentException(ErrorMessage.STORE_NOT_FOUND.format(storeId))
 }
