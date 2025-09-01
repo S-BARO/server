@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import jakarta.annotation.PostConstruct
 import org.redisson.api.RScript
+import org.redisson.client.codec.StringCodec
 
 @Component
 class InventoryRedisRepository(
@@ -25,8 +26,9 @@ class InventoryRedisRepository(
         batchStockDeductionScript = ClassPathResource("lua/deduct-stocks.lua").inputStream.bufferedReader().readText()
         batchStockRestoreScript = ClassPathResource("lua/restore-stocks.lua").inputStream.bufferedReader().readText()
 
-        deductScriptSha = redissonClient.script.scriptLoad(batchStockDeductionScript)
-        restoreScriptSha = redissonClient.script.scriptLoad(batchStockRestoreScript)
+        val script = redissonClient.getScript(StringCodec.INSTANCE)
+        deductScriptSha = script.scriptLoad(batchStockDeductionScript)
+        restoreScriptSha = script.scriptLoad(batchStockRestoreScript)
     }
 
     fun deductStocks(items: List<InventoryItem>): Boolean {
@@ -66,7 +68,9 @@ class InventoryRedisRepository(
 
         var retryCount = 0
         while (retryCount < MAX_RETRY_COUNT) {
-            val result = redissonClient.script.evalSha<Long>(
+            val script = redissonClient.getScript(StringCodec.INSTANCE)
+
+            val result = script.evalSha<Long>(
                 RScript.Mode.READ_WRITE,
                 scriptSha,
                 RScript.ReturnType.INTEGER,
@@ -102,8 +106,9 @@ class InventoryRedisRepository(
         products.forEach { product ->
             val key = getStockKey(product.id)
             val stock = product.getQuantity()
-            val bucket = redissonClient.getBucket<Int>(key)
-            bucket.set(stock)
+
+            val bucket = redissonClient.getBucket<String>(key, StringCodec.INSTANCE)
+            bucket.set(stock.toString())
             bucket.expire(Duration.ofHours(12))
         }
     }
@@ -111,7 +116,7 @@ class InventoryRedisRepository(
     private fun getStockKey(productId: Long): String = "product:stock:$productId"
 
     companion object {
-        private const val MAX_RETRY_COUNT = 1
+        private const val MAX_RETRY_COUNT = 2
         private const val MISSING_KEYS = -1L
         private const val INSUFFICIENT_STOCK = -2L
         private const val INVALID_AMOUNT = -3L
