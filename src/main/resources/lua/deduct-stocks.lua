@@ -1,20 +1,28 @@
--- Phase 1: validation
+-- Validation
 for i = 1, #KEYS do
     local key = KEYS[i]
+
     local deductAmount = tonumber(ARGV[i])
+    if deductAmount == nil or deductAmount <= 0 then
+        return -3  -- INVALID_AMOUNT
+    end
 
     local currentStock = redis.call('GET', key)
     if currentStock == false then
-        return -1  -- Stock key not found
+        return -1  -- MISSING_KEYS
+    else
+        currentStock = tonumber(currentStock)
+        if currentStock == nil then
+            return -3  -- INVALID_AMOUNT
+        end
     end
 
-    local stock = tonumber(currentStock)
-    if deductAmount <= 0 or stock < deductAmount then
-        return -2  -- Insufficient stock
+    if currentStock < deductAmount then
+        return -2  -- INSUFFICIENT_STOCK
     end
 end
 
--- Phase 2: deduction
+-- Deduction
 for i = 1, #KEYS do
     local key = KEYS[i]
     local deductAmount = tonumber(ARGV[i])
