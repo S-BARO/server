@@ -24,8 +24,8 @@ spring:
     hikari:
       auto-commit: false
       connection-test-query: SELECT 1
-      minimum-idle: 4
-      maximum-pool-size: 8
+      minimum-idle: 32
+      maximum-pool-size: 64
 
   data:
     redis:
