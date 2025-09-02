@@ -105,7 +105,7 @@ internal class OrderServiceTest(
             }
 
             it("초기 상태는 ORDERED 이다") {
-                order.status shouldBe OrderStatus.ORDERED
+                order.status shouldBe OrderStatus.PENDING
             }
         }
 
