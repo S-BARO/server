@@ -10,7 +10,7 @@ enum class ErrorMessage(val message: String) {
     URL_PARAMETER_ERROR("요청 URL 파라미터 검증에 실패했습니다."),
     MISSING_REQUEST_HEADER("필수 요청 헤더가 누락되었습니다"),
     METHOD_ARGUMENT_TYPE_MISMATCH("요청 파라미터 타입이 올바르지 않습니다."),
-    ALREADY_DISCONNECTED("클라이언트 연결이 중단되었습니다."),
+    ALREADY_DISCONNECTED("클라이언트 연결이 중단되었습니다.")  ,
     NO_RESOURCE_FOUND("요청한 리소스를 찾을 수 없습니다."),
     METHOD_NOT_SUPPORTED("허용되지 않은 메서드입니다."),
     MEDIA_TYPE_NOT_SUPPORTED("허용되지 않은 미디어 타입입니다."),
@@ -42,6 +42,8 @@ enum class ErrorMessage(val message: String) {
 
     // Order
     ORDER_NOT_FOUND("주문을 찾을 수 없습니다: %d"),
+    ORDER_CONFIRM_INVALID_STATUS("주문 확정은 PENDING 상태에서만 가능합니다. 현재 상태: %s"),
+    ORDER_CONFIRM_NO_ITEMS("주문 항목이 없어 주문을 확정할 수 없습니다."),
 
     // Look
     LOOK_NOT_FOUND("룩을 찾을 수 없습니다: %d"),

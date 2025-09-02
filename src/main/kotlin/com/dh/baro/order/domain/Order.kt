@@ -1,6 +1,7 @@
 package com.dh.baro.order.domain
 
 import com.dh.baro.core.BaseTimeEntity
+import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.IdGenerator
 import com.dh.baro.core.annotation.AggregateRoot
 import jakarta.persistence.*
@@ -26,7 +27,7 @@ class Order(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false, length = 20)
-    var status: OrderStatus = OrderStatus.ORDERED,
+    var status: OrderStatus = OrderStatus.PENDING,
 
     @OneToMany(
         mappedBy = "order",
@@ -49,6 +50,18 @@ class Order(
             .setScale(0, RoundingMode.HALF_UP)
     }
 
+    fun confirmOrder() {
+        if (status != OrderStatus.PENDING) {
+            throw IllegalStateException(ErrorMessage.ORDER_CONFIRM_INVALID_STATUS.format(status))
+        }
+
+        if (items.isEmpty()) {
+            throw IllegalStateException(ErrorMessage.ORDER_CONFIRM_NO_ITEMS.message)
+        }
+
+        status = OrderStatus.ORDERED
+    }
+
     companion object {
         fun newOrder(
             userId: Long,
@@ -59,7 +72,7 @@ class Order(
                 userId = userId,
                 totalPrice = BigDecimal.ZERO,
                 shippingAddress = shippingAddress,
-                status = OrderStatus.ORDERED,
+                status = OrderStatus.PENDING,
             )
     }
 }

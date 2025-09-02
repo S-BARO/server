@@ -4,6 +4,7 @@ import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.order.application.OrderCreateCommand
 import com.dh.baro.product.domain.repository.ProductRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -53,5 +54,11 @@ class OrderService(
             priceAtPurchase = product.getPrice(),
         )
         order.addItem(orderItem)
+    }
+
+    fun confirmOrder(orderId: Long) {
+        val order = orderRepository.findByIdOrNull(orderId)
+            ?: throw IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(orderId))
+        order.confirmOrder()
     }
 }
