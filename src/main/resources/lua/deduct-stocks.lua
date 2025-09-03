@@ -1,32 +1,19 @@
--- Validation
 for i = 1, #KEYS do
     local key = KEYS[i]
-
     local deductAmount = tonumber(ARGV[i])
-    if deductAmount == nil or deductAmount <= 0 then
-        return -3  -- INVALID_AMOUNT
-    end
-
+    
+    -- 검증과 차감을 원자적으로 수행
     local currentStock = redis.call('GET', key)
     if currentStock == false then
-        return -1  -- MISSING_KEYS
-    else
-        currentStock = tonumber(currentStock)
-        if currentStock == nil then
-            return -3  -- INVALID_AMOUNT
-        end
+        return -1 -- MISSING_KEYS
     end
-
+    
+    currentStock = tonumber(currentStock)
     if currentStock < deductAmount then
-        return -2  -- INSUFFICIENT_STOCK
+        return -2 -- INSUFFICIENT_STOCK  
     end
-end
-
--- Deduction
-for i = 1, #KEYS do
-    local key = KEYS[i]
-    local deductAmount = tonumber(ARGV[i])
+    
+    -- 즉시 차감 수행
     redis.call('DECRBY', key, deductAmount)
 end
-
 return #KEYS
