@@ -1,6 +1,7 @@
 package com.dh.baro.product.domain.service
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.product.domain.InventoryItem
 import com.dh.baro.product.domain.repository.ProductRepository
 import com.dh.baro.product.infra.redis.InventoryRedisRepository
@@ -22,10 +23,10 @@ class InventoryService(
      */
     @Transactional
     fun deductStockFromDB(productId: Long, quantity: Int) {
-        val product = productRepository.findById(productId)
-            .orElseThrow { IllegalArgumentException(ErrorMessage.PRODUCT_NOT_FOUND_FOR_DEDUCTION.format(productId)) }
+        val updated = productRepository.deductStock(productId, quantity)
 
-        product.deductStock(quantity)
-        productRepository.save(product)
+        if (updated == 0) {
+            throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(productId))
+        }
     }
 }
