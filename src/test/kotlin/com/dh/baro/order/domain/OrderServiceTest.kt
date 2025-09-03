@@ -3,6 +3,7 @@ package com.dh.baro.order.domain
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.order.application.OrderCreateCommand
+import com.dh.baro.order.domain.service.OrderService
 import com.dh.baro.order.productFixture
 import com.dh.baro.product.domain.Product
 import com.dh.baro.product.domain.repository.ProductRepository

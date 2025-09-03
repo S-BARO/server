@@ -1,6 +1,8 @@
-package com.dh.baro.order.domain
+package com.dh.baro.order.domain.service
 
 import com.dh.baro.core.ErrorMessage
+import com.dh.baro.order.domain.Order
+import com.dh.baro.order.domain.OrderRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service

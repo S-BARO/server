@@ -1,7 +1,7 @@
 package com.dh.baro.product.infra.event
 
 import com.dh.baro.core.config.AsyncConfig.Companion.EVENT_ASYNC_TASK_EXECUTOR
-import com.dh.baro.order.domain.OrderService
+import com.dh.baro.order.domain.service.OrderService
 import com.dh.baro.product.domain.service.InventoryService
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component

@@ -2,8 +2,8 @@ package com.dh.baro.order.application
 
 import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.order.domain.Order
-import com.dh.baro.order.domain.OrderQueryService
-import com.dh.baro.order.domain.OrderService
+import com.dh.baro.order.domain.service.OrderQueryService
+import com.dh.baro.order.domain.service.OrderService
 import com.dh.baro.order.domain.service.OrderServiceV2
 import com.dh.baro.order.presentation.dto.OrderCreateRequest
 import com.dh.baro.product.domain.InventoryItem
