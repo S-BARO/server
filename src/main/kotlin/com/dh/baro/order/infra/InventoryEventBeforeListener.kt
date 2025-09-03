@@ -15,12 +15,12 @@ class InventoryEventBeforeListener(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
-    fun restoreInventoryOnRollback(event: InventoryDeductionRequestedEvent) {
-        runCatching {
-            inventoryRedisRepository.restoreStocks(event.items)
-        }.onFailure { ex ->
-            log.error(ErrorMessage.INVENTORY_RESTORE_ERROR.format(event.orderId), ex)
-        }
-    }
+//    @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
+//    fun restoreInventoryOnRollback(event: InventoryDeductionRequestedEvent) {
+//        runCatching {
+//            inventoryRedisRepository.restoreStocks(event.items)
+//        }.onFailure { ex ->
+//            log.error(ErrorMessage.INVENTORY_RESTORE_ERROR.format(event.orderId), ex)
+//        }
+//    }
 }
