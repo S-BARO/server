@@ -6,7 +6,6 @@ import com.dh.baro.product.domain.repository.ProductRepository
 import org.redisson.api.RedissonClient
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
-import java.time.Duration
 import jakarta.annotation.PostConstruct
 import org.redisson.api.RScript
 import org.redisson.client.codec.StringCodec
@@ -18,11 +17,13 @@ class InventoryRedisRepository(
 ) {
     private lateinit var batchStockDeductionScript: String
     private lateinit var batchStockRestoreScript: String
+    private lateinit var initStocksScript: String
 
     @PostConstruct
     private fun loadLuaScripts() {
         batchStockDeductionScript = ClassPathResource("lua/deduct-stocks.lua").inputStream.bufferedReader().readText()
         batchStockRestoreScript = ClassPathResource("lua/restore-stocks.lua").inputStream.bufferedReader().readText()
+        initStocksScript = ClassPathResource("lua/init-stocks.lua").inputStream.bufferedReader().readText()
     }
 
     fun deductStocks(items: List<InventoryItem>): Boolean {
@@ -97,15 +98,20 @@ class InventoryRedisRepository(
 
     private fun initializeStocksFromDb(productIds: List<Long>) {
         val products = productRepository.findAllById(productIds)
-
-        products.forEach { product ->
-            val key = getStockKey(product.id)
-            val stock = product.getQuantity()
-
-            val bucket = redissonClient.getBucket<String>(key, StringCodec.INSTANCE)
-            bucket.set(stock.toString())
-            bucket.expire(Duration.ofHours(12))
-        }
+        
+        if (products.isEmpty()) return
+        
+        val keys = products.map { getStockKey(it.id) }
+        val stocks = products.map { it.getQuantity().toString() }
+        
+        val redisScript = redissonClient.getScript(StringCodec.INSTANCE)
+        redisScript.eval<Long>(
+            RScript.Mode.READ_WRITE,
+            initStocksScript,
+            RScript.ReturnType.INTEGER,
+            keys,
+            *stocks.toTypedArray()
+        )
     }
 
     private fun getStockKey(productId: Long): String = "product:stock:$productId"
