@@ -19,3 +19,5 @@ for i = 1, #KEYS do
 
     redis.call('DECRBY', key, deductAmount)
 end
+
+return #KEYS
