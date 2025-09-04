@@ -18,24 +18,18 @@ class InventoryRedisRepository(
 ) {
     private lateinit var batchStockDeductionScript: String
     private lateinit var batchStockRestoreScript: String
-    private lateinit var deductScriptSha: String
-    private lateinit var restoreScriptSha: String
 
     @PostConstruct
     private fun loadLuaScripts() {
         batchStockDeductionScript = ClassPathResource("lua/deduct-stocks.lua").inputStream.bufferedReader().readText()
         batchStockRestoreScript = ClassPathResource("lua/restore-stocks.lua").inputStream.bufferedReader().readText()
-
-        val script = redissonClient.getScript(StringCodec.INSTANCE)
-        deductScriptSha = script.scriptLoad(batchStockDeductionScript)
-        restoreScriptSha = script.scriptLoad(batchStockRestoreScript)
     }
 
     fun deductStocks(items: List<InventoryItem>): Boolean {
         if (items.isEmpty()) return true
         val mergedItems = mergedItems(items)
 
-        return executeScript(deductScriptSha, mergedItems, autoInitializeFromDb = true) { result ->
+        return executeScript(batchStockDeductionScript, mergedItems, autoInitializeFromDb = true) { result ->
             when (result) {
                 INSUFFICIENT_STOCK -> throw IllegalArgumentException(ErrorMessage.INSUFFICIENT_STOCK.message)
                 else -> false
@@ -47,7 +41,7 @@ class InventoryRedisRepository(
         if (items.isEmpty()) return true
         val mergedItems = mergedItems(items)
 
-        return executeScript(restoreScriptSha, mergedItems, autoInitializeFromDb = false) { false }
+        return executeScript(batchStockRestoreScript, mergedItems, autoInitializeFromDb = false) { false }
     }
 
     private fun mergedItems(items: List<InventoryItem>): List<InventoryItem> {
@@ -58,7 +52,7 @@ class InventoryRedisRepository(
     }
 
     private fun executeScript(
-        scriptSha: String,
+        script: String,
         items: List<InventoryItem>,
         autoInitializeFromDb: Boolean,
         shouldThrowError: (Long) -> Boolean
@@ -68,11 +62,11 @@ class InventoryRedisRepository(
 
         var retryCount = 0
         while (retryCount < MAX_RETRY_COUNT) {
-            val script = redissonClient.getScript(StringCodec.INSTANCE)
+            val redisScript = redissonClient.getScript(StringCodec.INSTANCE)
 
-            val result = script.evalSha<Long>(
+            val result = redisScript.eval<Long>(
                 RScript.Mode.READ_WRITE,
-                scriptSha,
+                script,
                 RScript.ReturnType.INTEGER,
                 keys,
                 *quantities.toTypedArray()
