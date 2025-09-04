@@ -84,6 +84,7 @@ class InventoryRedisRepository(
                 }
 
                 INVALID_AMOUNT -> throw IllegalArgumentException(ErrorMessage.INVALID_STOCK_AMOUNT.message)
+                ERROR_WITH_ROLLBACK -> throw IllegalArgumentException("Error with rollback")
 
                 else -> {
                     return shouldThrowError(result)
@@ -114,5 +115,6 @@ class InventoryRedisRepository(
         private const val MISSING_KEYS = -1L
         private const val INSUFFICIENT_STOCK = -2L
         private const val INVALID_AMOUNT = -3L
+        private const val ERROR_WITH_ROLLBACK = -4L
     }
 }
