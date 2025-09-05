@@ -30,7 +30,7 @@
 
 <br>
 
-# 📈 기술적 목표
+# 📈 목표 성능
 MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
 
 동시 접속자 수 : 500명(DAU/10)
@@ -39,7 +39,7 @@ MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
 
 <br>
 
-# 🤔 기술적 Issue
+# 🤔 Technical Issue
 [**[Part 1] JWT는 정말 괜찮은 방법일까? (Ft. 세션저장소 선택 이유)**](https://chobo-backend.tistory.com/50)
 
 [**[Part 2] 확장성과 성능을 고려한 ERD 설계하기**](https://chobo-backend.tistory.com/51)
@@ -51,3 +51,7 @@ MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
 [**[Part 5] 주문 API 성능 개선 삽질기 (Ft. TPS 54.9% 개선)**](https://chobo-backend.tistory.com/54)
 
 [**[Part 6] DeadLock 범인 찾기 (Ft. 위험한 FK?)**](https://chobo-backend.tistory.com/55)
+
+[**[Part 7] 일괄 주문 기능 74.6% 개선 (Ft. Eventual Consistency)**](https://chobo-backend.tistory.com/56)
+
+[**[Part 8] Redis의 Lua Script는 Atomic 하지 않다..?**](https://chobo-backend.tistory.com/57)
