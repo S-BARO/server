@@ -48,7 +48,7 @@ MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
 
 [**[Part 4] 반복되는 인증,인가 처리 없애버리기(Ft. AOP & ArgumentResolver)**](https://chobo-backend.tistory.com/53)
 
-[**[Part 5] 주문 API 성능 개선 삽질기 (Ft. TPS 54.9% 개선)**](https://chobo-backend.tistory.com/54)
+[**[Part 5] 단일 주문 기능 개선 삽질기 (Ft. TPS 54.9% 개선)**](https://chobo-backend.tistory.com/54)
 
 [**[Part 6] DeadLock 범인 찾기 (Ft. 위험한 FK?)**](https://chobo-backend.tistory.com/55)
 
