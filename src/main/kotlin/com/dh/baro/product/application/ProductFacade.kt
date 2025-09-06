@@ -8,6 +8,7 @@ import com.dh.baro.product.domain.Product
 import com.dh.baro.product.domain.service.ProductQueryService
 import com.dh.baro.product.domain.service.ProductService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ProductFacade(
@@ -28,6 +29,7 @@ class ProductFacade(
         return ProductDetailBundle(product, store)
     }
 
+    @Transactional(readOnly = true)
     fun getPopularProducts(
         categoryId: Long?,
         cursorLikes: Int?,
