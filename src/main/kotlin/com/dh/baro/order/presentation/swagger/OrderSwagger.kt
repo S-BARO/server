@@ -149,7 +149,7 @@ interface OrderSwagger {
     @GetMapping("/{orderId}")
     fun getOrderDetail(
         @Parameter(hidden = true) userId: Long,
-        @PathVariable orderId: Long
+        @PathVariable orderId: String
     ): OrderDetailResponse
 
     /* ────────────────────────────────────────── 주문 목록(무한 스크롤) ───────────────────────────── */
@@ -200,7 +200,7 @@ interface OrderSwagger {
     @GetMapping
     fun getOrdersByCursor(
         @Parameter(hidden = true) userId: Long,
-        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(required = false) cursorId: String?,
         @RequestParam(defaultValue = "10") size: Int
     ): SliceResponse<OrderSummary>
 }

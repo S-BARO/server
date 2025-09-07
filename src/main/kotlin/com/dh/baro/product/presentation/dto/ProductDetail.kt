@@ -5,7 +5,7 @@ import com.dh.baro.product.domain.Product
 import java.math.BigDecimal
 
 data class ProductDetail(
-    val id: Long,
+    val id: String,
     val storeName: String,
     val productName: String,
     val price: BigDecimal,
@@ -16,7 +16,7 @@ data class ProductDetail(
 
     companion object {
         fun from(product: Product, store: Store) = ProductDetail(
-            id = product.id,
+            id = product.id.toString(),
             storeName = store.getName(),
             productName = product.getName(),
             price = product.getPrice(),

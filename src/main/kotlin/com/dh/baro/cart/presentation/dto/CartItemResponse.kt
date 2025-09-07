@@ -3,8 +3,8 @@ package com.dh.baro.cart.presentation.dto
 import java.math.BigDecimal
 
 data class CartItemResponse(
-    val itemId: Long,
-    val productId: Long,
+    val itemId: String,
+    val productId: String,
     val productName: String,
     val productThumbnailUrl: String?,
     val price: BigDecimal,

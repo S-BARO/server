@@ -8,7 +8,6 @@ server:
         http-only: true
         secure: true
         same-site: none
-        domain: .s-baro.shop
   tomcat:
     mbeanregistry:
       enabled: true

@@ -91,7 +91,7 @@ interface LookSwagger {
     @PutMapping("/{lookId}/reaction")
     fun recordReaction(
         @Parameter(hidden = true) userId: Long,
-        @PathVariable lookId: Long,
+        @PathVariable lookId: String,
         @RequestBody request: ReactionRequest,
     )
 
@@ -113,7 +113,7 @@ interface LookSwagger {
     @DeleteMapping("/{lookId}/reaction")
     fun cancelReaction(
         @Parameter(hidden = true) userId: Long,
-        @PathVariable lookId: Long,
+        @PathVariable lookId: String,
     )
 
     /* ───────────────────────── 스와이프 피드(무한 스크롤) ───────────────────────── */
@@ -160,7 +160,7 @@ interface LookSwagger {
     @GetMapping("/swipe")
     fun getSwipeLooks(
         @Parameter(hidden = true) userId: Long,
-        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(required = false) cursorId: String?,
         @RequestParam(defaultValue = "10") size: Int,
     ): SliceResponse<LookDto>
 
@@ -203,7 +203,7 @@ interface LookSwagger {
         ]
     )
     @GetMapping("/{lookId}")
-    fun getLookDetail(@PathVariable lookId: Long): LookDetailResponse
+    fun getLookDetail(@PathVariable lookId: String): LookDetailResponse
 
     /* ──────────────── 문서 전용 예시 DTO ─────────────── */
     @Schema(hidden = true)

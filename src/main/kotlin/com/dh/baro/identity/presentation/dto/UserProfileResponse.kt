@@ -4,7 +4,7 @@ import com.dh.baro.identity.domain.User
 import com.dh.baro.identity.domain.UserRole
 
 data class UserProfileResponse(
-    val id: Long,
+    val id: String,
     val name: String,
     val email: String,
     val phoneNumber: String?,
@@ -14,7 +14,7 @@ data class UserProfileResponse(
 
     companion object {
         fun from(user: User) = UserProfileResponse(
-            id = user.id,
+            id = user.id.toString(),
             name = user.getName(),
             email = user.getEmail(),
             phoneNumber = user.getPhoneNumber(),

@@ -18,7 +18,7 @@ data class LookCreateRequest(
     val imageUrls: List<@NotBlank String>,
 
     @field:Size(min = 1)
-    val productIds: List<Long>,
+    val productIds: List<String>,
 ) {
     fun toCommand(creatorId: Long) = LookCreateCommand(
         creatorId = creatorId,
@@ -26,6 +26,6 @@ data class LookCreateRequest(
         description = description,
         thumbnailUrl = thumbnailUrl,
         imageUrls = imageUrls,
-        productIds = productIds,
+        productIds = productIds.map { it.toLong() },
     )
 }

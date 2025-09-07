@@ -6,7 +6,7 @@ import java.math.BigDecimal
 import java.time.Instant
 
 data class OrderSummary(
-    val orderId: Long,
+    val orderId: String,
     val totalPrice: BigDecimal,
     val orderStatus: OrderStatus,
     val orderedAt: Instant?,
@@ -14,7 +14,7 @@ data class OrderSummary(
 
     companion object {
         fun from(order: Order) = OrderSummary(
-            orderId = order.id,
+            orderId = order.id.toString(),
             totalPrice = order.totalPrice,
             orderStatus = order.status,
             orderedAt = order.createdAt,

@@ -16,7 +16,7 @@ class CartFacade(
     fun addItem(userId: Long, request: AddItemRequest) {
         cartService.addItem(
             userId = userId,
-            productId = request.productId,
+            productId = request.productId.toLong(),
             quantity = request.quantity,
         )
     }

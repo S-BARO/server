@@ -35,14 +35,14 @@ class CartController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun updateQuantity(
         @CurrentUser userId: Long,
-        @PathVariable itemId: Long,
+        @PathVariable itemId: String,
         @Valid @RequestBody request: UpdateQuantityRequest,
-    ) = cartFacade.updateQuantity(userId, itemId, request.quantity)
+    ) = cartFacade.updateQuantity(userId, itemId.toLong(), request.quantity)
     
     @DeleteMapping("/items/{itemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun removeItem(
         @CurrentUser userId: Long,
-        @PathVariable itemId: Long,
-    ) = cartFacade.removeItem(userId, itemId)
+        @PathVariable itemId: String,
+    ) = cartFacade.removeItem(userId, itemId.toLong())
 }

@@ -28,7 +28,7 @@ class OrderFacade(
 
     fun placeOrder(userId: Long, request: OrderCreateRequest): Order {
         userService.checkUserExists(userId)
-        val productList = productQueryService.getProductsExists(request.orderItems.map { orderItem -> orderItem.productId })
+        val productList = productQueryService.getProductsExists(request.orderItems.map { orderItem -> orderItem.productId.toLong() })
         val cmd = OrderCreateCommand.toCommand(userId, productList, request)
         val order = orderService.createOrder(cmd)
         return order
@@ -39,7 +39,7 @@ class OrderFacade(
         userService.checkUserExists(userId)
 
         val productList = productQueryService.getProductsExists(
-            request.orderItems.map { orderItem -> orderItem.productId }
+            request.orderItems.map { orderItem -> orderItem.productId.toLong() },
         )
 
         val cmd = OrderCreateCommand.toCommand(userId, productList, request)

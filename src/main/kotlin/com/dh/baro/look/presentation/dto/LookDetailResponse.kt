@@ -4,7 +4,7 @@ import com.dh.baro.look.application.dto.LookDetailBundle
 import java.math.BigDecimal
 
 data class LookDetailResponse(
-    val lookId: Long,
+    val lookId: String,
     val title: String,
     val description: String?,
     val thumbnailUrl: String,
@@ -14,7 +14,7 @@ data class LookDetailResponse(
 ) {
 
     data class ProductItemDto(
-        val productId: Long,
+        val productId: String,
         val storeName: String,
         val productName: String,
         val price: BigDecimal,
@@ -34,7 +34,7 @@ data class LookDetailResponse(
                 val store = storeMap[product.storeId]?: return@mapNotNull null
 
                 ProductItemDto(
-                    productId = product.id,
+                    productId = product.id.toString(),
                     storeName = store.getName(),
                     productName = product.getName(),
                     price = product.getPrice(),
@@ -43,7 +43,7 @@ data class LookDetailResponse(
             }
 
             return LookDetailResponse(
-                lookId = look.id,
+                lookId = look.id.toString(),
                 title = look.getTitle(),
                 description = look.getDescription(),
                 thumbnailUrl = look.getThumbnailUrl(),

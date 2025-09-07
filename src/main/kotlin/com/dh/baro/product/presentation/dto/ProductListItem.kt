@@ -5,7 +5,7 @@ import com.dh.baro.product.domain.Product
 import java.math.BigDecimal
 
 data class ProductListItem(
-    val id: Long,
+    val id: String,
     val storeName: String,
     val productName: String,
     val price: BigDecimal,
@@ -15,7 +15,7 @@ data class ProductListItem(
         fun ofOrNull(product: Product, storeMap: Map<Long, Store>): ProductListItem? {
             val store = storeMap[product.storeId]?: return null
             return ProductListItem(
-                id = product.id,
+                id = product.id.toString(),
                 storeName = store.getName(),
                 productName = product.getName(),
                 price = product.getPrice(),

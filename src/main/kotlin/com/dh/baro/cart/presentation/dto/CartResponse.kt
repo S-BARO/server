@@ -19,8 +19,8 @@ data class CartResponse(
         }
 
         private fun CartItem.toResponse() = CartItemResponse(
-            itemId = id,
-            productId = product.id,
+            itemId = id.toString(),
+            productId = product.id.toString(),
             productName = product.getName(),
             productThumbnailUrl = product.getThumbnailUrl(),
             price = product.getPrice(),

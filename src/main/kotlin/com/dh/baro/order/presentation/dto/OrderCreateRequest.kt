@@ -16,10 +16,17 @@ data class OrderCreateRequest(
 ) {
 
     data class OrderItem(
-        @field:Positive(message = "유효하지 않은 상품 ID 입니다.")
-        val productId: Long,
+        @field:NotBlank(message = "상품 ID를 입력해주세요.")
+        val productId: String,
 
         @field:Positive(message = "수량은 1개 이상이어야 합니다.")
         val quantity: Int,
+    ) {
+        fun toLongProductId() = productId.toLong()
+    }
+    
+    fun convertToLongIds() = OrderCreateRequest(
+        shippingAddress = shippingAddress,
+        orderItems = orderItems.map { OrderItem(it.productId.toLong().toString(), it.quantity) }
     )
 }
