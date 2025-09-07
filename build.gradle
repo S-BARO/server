@@ -19,6 +19,12 @@ repositories {
     mavenCentral()
 }
 
+allOpen {
+     annotation("jakarta.persistence.Entity")
+     annotation("jakarta.persistence.MappedSuperclass")
+     annotation("jakarta.persistence.Embeddable")
+}
+
 apply from: "gradle/core.gradle"
 apply from: "gradle/db.gradle"
 apply from: "gradle/jetbrains.gradle"
