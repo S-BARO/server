@@ -15,7 +15,7 @@ class StoreService(
 
     fun getStoresByIds(storeIds: Collection<Long>): List<Store> {
         if (storeIds.isEmpty()) return emptyList()
-        return storeRepository.findAllById(storeIds).toList()
+        return storeRepository.findAllById(storeIds)
     }
 
     fun getStoreById(storeId: Long): Store =
