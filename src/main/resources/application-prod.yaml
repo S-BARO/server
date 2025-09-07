@@ -24,7 +24,6 @@ spring:
     password: ${DB_PASSWORD}
     hikari:
       auto-commit: false
-      connection-test-query: SELECT 1
       minimum-idle: 4
       maximum-pool-size: 8
 
