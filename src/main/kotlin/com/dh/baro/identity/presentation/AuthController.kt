@@ -9,6 +9,7 @@ import com.dh.baro.identity.presentation.dto.OauthLoginRequest
 import com.dh.baro.identity.presentation.swagger.AuthSwagger
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     private val authFacade: AuthFacade
 ) : AuthSwagger {
+    private val logger = LoggerFactory.getLogger(this::class.simpleName)
 
     @PostMapping("/login/oauth")
     @ResponseStatus(HttpStatus.OK)
@@ -25,11 +27,12 @@ class AuthController(
         request: HttpServletRequest
     ): LoginResponse {
         val result = authFacade.login(oauthLoginRequest.provider, oauthLoginRequest.accessToken)
+        logger.info("Login result userId: ${result.userId}")
         request.session.apply {
             setAttribute(USER_ID, result.userId)
             setAttribute(USER_ROLE, result.userRole)
+            logger.info("Session saved userId: ${getAttribute(USER_ID)}")
         }
-
         return LoginResponse(result.isNew)
     }
 
