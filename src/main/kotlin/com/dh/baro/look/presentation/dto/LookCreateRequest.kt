@@ -1,6 +1,5 @@
 package com.dh.baro.look.presentation.dto
 
-import com.dh.baro.core.StringListToLongListDeserializer
 import com.dh.baro.look.application.LookCreateCommand
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import jakarta.validation.constraints.NotBlank
@@ -19,7 +18,6 @@ data class LookCreateRequest(
     @field:Size(min = 1)
     val imageUrls: List<@NotBlank String>,
 
-    @JsonDeserialize(using = StringListToLongListDeserializer::class)
     @field:Size(min = 1)
     val productIds: List<Long>,
 ) {

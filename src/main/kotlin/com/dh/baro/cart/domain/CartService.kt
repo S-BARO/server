@@ -1,6 +1,7 @@
 package com.dh.baro.cart.domain
 
 import com.dh.baro.core.ErrorMessage
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -20,7 +21,13 @@ class CartService(
             ?.also { it.addQuantity(quantity); return it }
         validateCartLimit(userId)
 
-        return cartItemRepository.save(CartItem.newCartItem(userId, productId, quantity))
+        return try {
+            cartItemRepository.save(CartItem.newCartItem(userId, productId, quantity))
+        } catch (e: DataIntegrityViolationException) {
+            val existingItem = cartItemRepository.findByUserIdAndProductId(userId, productId)?: throw e
+            existingItem.addQuantity(quantity)
+            existingItem
+        }
     }
 
     private fun validateCartLimit(userId: Long) {

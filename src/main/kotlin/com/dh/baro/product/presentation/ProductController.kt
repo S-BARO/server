@@ -27,8 +27,8 @@ class ProductController(
         ProductCreateResponse.from(productFacade.createProduct(request.toCommand()))
 
     @GetMapping("/{productId}")
-    override fun getProductDetail(@PathVariable productId: Long): ProductDetail {
-        val productDetailBundle = productFacade.getProductDetail(productId)
+    override fun getProductDetail(@PathVariable productId: String): ProductDetail {
+        val productDetailBundle = productFacade.getProductDetail(productId.toLong())
         return ProductDetail.from(productDetailBundle.product, productDetailBundle.store)
     }
 

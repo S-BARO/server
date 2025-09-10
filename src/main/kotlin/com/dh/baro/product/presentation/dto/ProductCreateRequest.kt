@@ -1,9 +1,6 @@
 package com.dh.baro.product.presentation.dto
 
-import com.dh.baro.core.StringListToLongListDeserializer
-import com.dh.baro.core.StringToLongDeserializer
 import com.dh.baro.product.application.ProductCreateCommand
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import jakarta.validation.constraints.*
 import java.math.BigDecimal
 
@@ -11,7 +8,6 @@ data class ProductCreateRequest(
     @field:Size(min = 1, max = 100)
     val name: String,
 
-    @JsonDeserialize(using = StringToLongDeserializer::class)
     @field:NotNull
     val storeId: Long,
 
@@ -29,7 +25,6 @@ data class ProductCreateRequest(
     @field:NotBlank
     val thumbnailUrl: String,
 
-    @JsonDeserialize(using = StringListToLongListDeserializer::class)
     @field:NotEmpty
     val categoryIds: List<Long>,
 

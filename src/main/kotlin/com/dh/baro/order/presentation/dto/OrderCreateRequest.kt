@@ -1,6 +1,5 @@
 package com.dh.baro.order.presentation.dto
 
-import com.dh.baro.core.StringToLongDeserializer
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
@@ -19,7 +18,6 @@ data class OrderCreateRequest(
 ) {
 
     data class OrderItem(
-        @JsonDeserialize(using = StringToLongDeserializer::class)
         @field:NotNull(message = "상품 ID를 입력해주세요.")
         val productId: Long,
 

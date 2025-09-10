@@ -71,7 +71,7 @@ interface ProductSwagger {
         ]
     )
     @GetMapping("/{productId}")
-    fun getProductDetail(@PathVariable productId: Long): ProductDetail
+    fun getProductDetail(@PathVariable productId: String): ProductDetail
 
     /* ───────────────────────────── 인기 상품 ───────────────────────────── */
     @Operation(
