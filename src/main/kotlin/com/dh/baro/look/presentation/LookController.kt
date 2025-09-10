@@ -30,11 +30,11 @@ class LookController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun recordReaction(
         @CurrentUser userId: Long,
-        @PathVariable lookId: String,
+        @PathVariable lookId: Long,
         @Valid @RequestBody request: ReactionRequest,
     ) = lookReactionFacade.recordReaction(
         userId = userId,
-        lookId = lookId.toLong(),
+        lookId = lookId,
         reactionType = request.reactionType,
     )
 
@@ -42,28 +42,28 @@ class LookController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun cancelReaction(
         @CurrentUser userId: Long,
-        @PathVariable lookId: String,
-    ) = lookReactionFacade.cancelReaction(userId, lookId.toLong())
+        @PathVariable lookId: Long,
+    ) = lookReactionFacade.cancelReaction(userId, lookId)
 
     @GetMapping("/swipe")
     @ResponseStatus(HttpStatus.OK)
     override fun getSwipeLooks(
         @CurrentUser userId: Long,
-        @RequestParam(required = false) cursorId: String?,
+        @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "10") size: Int,
     ): SliceResponse<LookDto> {
-        val slice = lookFacade.getSwipeLooks(userId, cursorId?.toLong(), size)
+        val slice = lookFacade.getSwipeLooks(userId, cursorId, size)
         return SliceResponse.from(
             slice,
             mapper = LookDto::from,
-            cursorExtractor = { Cursor(it.id.toString()) }
+            cursorExtractor = { Cursor(it.id) }
         )
     }
 
     @GetMapping("/{lookId}")
     @ResponseStatus(HttpStatus.OK)
-    override fun getLookDetail(@PathVariable lookId: String): LookDetailResponse {
-        val lookDetailBundle = lookFacade.getLookDetail(lookId.toLong())
+    override fun getLookDetail(@PathVariable lookId: Long): LookDetailResponse {
+        val lookDetailBundle = lookFacade.getLookDetail(lookId)
         return LookDetailResponse.from(lookDetailBundle)
     }
 }

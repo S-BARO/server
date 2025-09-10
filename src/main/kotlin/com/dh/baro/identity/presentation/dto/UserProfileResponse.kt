@@ -1,10 +1,13 @@
 package com.dh.baro.identity.presentation.dto
 
+import com.dh.baro.core.LongToStringSerializer
 import com.dh.baro.identity.domain.User
 import com.dh.baro.identity.domain.UserRole
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 data class UserProfileResponse(
-    val id: String,
+    @JsonSerialize(using = LongToStringSerializer::class)
+    val id: Long,
     val name: String,
     val email: String,
     val phoneNumber: String?,
@@ -14,7 +17,7 @@ data class UserProfileResponse(
 
     companion object {
         fun from(user: User) = UserProfileResponse(
-            id = user.id.toString(),
+            id = user.id,
             name = user.getName(),
             email = user.getEmail(),
             phoneNumber = user.getPhoneNumber(),

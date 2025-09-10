@@ -121,7 +121,7 @@ interface CartSwagger {
     @PatchMapping("/items/{itemId}")
     fun updateQuantity(
         @Parameter(hidden = true) userId: Long,
-        @PathVariable itemId: String,
+        @PathVariable itemId: Long,
         @RequestBody request: UpdateQuantityRequest
     )
 
@@ -145,6 +145,6 @@ interface CartSwagger {
     @DeleteMapping("/items/{itemId}")
     fun removeItem(
         @Parameter(hidden = true) userId: Long,
-        @PathVariable itemId: String
+        @PathVariable itemId: Long
     )
 }

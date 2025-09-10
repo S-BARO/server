@@ -1,11 +1,14 @@
 package com.dh.baro.product.presentation.dto
 
+import com.dh.baro.core.LongToStringSerializer
 import com.dh.baro.identity.domain.Store
 import com.dh.baro.product.domain.Product
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.math.BigDecimal
 
 data class ProductDetail(
-    val id: String,
+    @JsonSerialize(using = LongToStringSerializer::class)
+    val id: Long,
     val storeName: String,
     val productName: String,
     val price: BigDecimal,
@@ -16,7 +19,7 @@ data class ProductDetail(
 
     companion object {
         fun from(product: Product, store: Store) = ProductDetail(
-            id = product.id.toString(),
+            id = product.id,
             storeName = store.getName(),
             productName = product.getName(),
             price = product.getPrice(),

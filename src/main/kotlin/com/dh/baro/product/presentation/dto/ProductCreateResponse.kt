@@ -1,15 +1,18 @@
 package com.dh.baro.product.presentation.dto
 
+import com.dh.baro.core.LongToStringSerializer
 import com.dh.baro.product.domain.Product
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 data class ProductCreateResponse(
-    val id: String,
+    @JsonSerialize(using = LongToStringSerializer::class)
+    val id: Long,
     val name: String,
 ) {
 
     companion object {
         fun from(product: Product) = ProductCreateResponse(
-            id = product.id.toString(),
+            id = product.id,
             name = product.getName(),
         )
     }
