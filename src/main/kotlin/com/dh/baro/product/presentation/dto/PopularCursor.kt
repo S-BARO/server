@@ -1,6 +1,10 @@
 package com.dh.baro.product.presentation.dto
 
+import com.dh.baro.core.LongToStringSerializer
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+
 data class PopularCursor(
-    val id: String,
+    @JsonSerialize(using = LongToStringSerializer::class)
+    val id: Long,
     val likes: Int,
 )

@@ -111,8 +111,8 @@ interface ProductSwagger {
     )
     @GetMapping("/popular")
     fun getPopularProducts(
-        @RequestParam(required = false) categoryId: String?,
-        @RequestParam(required = false) cursorId: String?,
+        @RequestParam(required = false) categoryId: Long?,
+        @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false) cursorLikes: Int?,
         @RequestParam(defaultValue = "21") size: Int
     ): SliceResponse<ProductListItem>
@@ -154,8 +154,8 @@ interface ProductSwagger {
     )
     @GetMapping("/newest")
     fun getNewestProducts(
-        @RequestParam(required = false) categoryId: String?,
-        @RequestParam(required = false) cursorId: String?,
+        @RequestParam(required = false) categoryId: Long?,
+        @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "21") size: Int
     ): SliceResponse<ProductListItem>
 

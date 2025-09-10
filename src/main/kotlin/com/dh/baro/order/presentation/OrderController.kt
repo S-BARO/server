@@ -42,9 +42,9 @@ class OrderController(
     @ResponseStatus(HttpStatus.OK)
     override fun getOrderDetail(
         @CurrentUser userId: Long,
-        @PathVariable orderId: String,
+        @PathVariable orderId: Long,
     ): OrderDetailResponse {
-        val order = orderFacade.getOrderDetail(userId, orderId.toLong())
+        val order = orderFacade.getOrderDetail(userId, orderId)
         return OrderDetailResponse.from(order)
     }
 
@@ -52,14 +52,14 @@ class OrderController(
     @ResponseStatus(HttpStatus.OK)
     override fun getOrdersByCursor(
         @CurrentUser userId: Long,
-        @RequestParam(required = false) cursorId: String?,
+        @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "10") size: Int,
     ): SliceResponse<OrderSummary> {
-        val slice = orderFacade.getOrdersByCursor(userId, cursorId?.toLong(), size)
+        val slice = orderFacade.getOrdersByCursor(userId, cursorId, size)
         return SliceResponse.from(
             slice = slice,
             mapper = OrderSummary::from,
-            cursorExtractor = { Cursor(it.id.toString()) }
+            cursorExtractor = { Cursor(it.id) }
         )
     }
 }

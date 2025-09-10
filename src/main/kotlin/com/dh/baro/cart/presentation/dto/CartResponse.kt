@@ -1,6 +1,6 @@
 package com.dh.baro.cart.presentation.dto
 
-import com.dh.baro.cart.domain.CartItem
+import com.dh.baro.cart.application.CartItemBundle
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -11,23 +11,16 @@ data class CartResponse(
     companion object {
         private const val SCALE_NONE = 0
 
-        fun from(cartItems: List<CartItem>): CartResponse {
-            val responses = cartItems.map { it.toResponse() }
-            val total = responses.fold(BigDecimal.ZERO) { sum, item -> sum + item.subtotal }
-                .setScale(SCALE_NONE, RoundingMode.HALF_UP)
-            return CartResponse(responses, total)
-        }
+        fun from(bundles: List<CartItemBundle>): CartResponse {
+            val items = bundles.map { bundle ->
+                CartItemResponse.from(bundle)
+            }
 
-        private fun CartItem.toResponse() = CartItemResponse(
-            itemId = id.toString(),
-            productId = product.id.toString(),
-            productName = product.getName(),
-            productThumbnailUrl = product.getThumbnailUrl(),
-            price = product.getPrice(),
-            quantity = quantity,
-            subtotal = product.getPrice()
-                .multiply(BigDecimal(quantity))
-                .setScale(SCALE_NONE, RoundingMode.HALF_UP)
-        )
+            val totalPrice = items.fold(BigDecimal.ZERO) { sum, item ->
+                sum + item.subtotal
+            }.setScale(SCALE_NONE, RoundingMode.HALF_UP)
+
+            return CartResponse(items, totalPrice)
+        }
     }
 }

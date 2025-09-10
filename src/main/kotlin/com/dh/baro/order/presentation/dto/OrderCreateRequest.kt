@@ -1,7 +1,9 @@
 package com.dh.baro.order.presentation.dto
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.Size
 
@@ -16,17 +18,11 @@ data class OrderCreateRequest(
 ) {
 
     data class OrderItem(
-        @field:NotBlank(message = "상품 ID를 입력해주세요.")
-        val productId: String,
+        @field:NotNull(message = "상품 ID를 입력해주세요.")
+        val productId: Long,
 
         @field:Positive(message = "수량은 1개 이상이어야 합니다.")
         val quantity: Int,
-    ) {
-        fun toLongProductId() = productId.toLong()
-    }
-    
-    fun convertToLongIds() = OrderCreateRequest(
-        shippingAddress = shippingAddress,
-        orderItems = orderItems.map { OrderItem(it.productId.toLong().toString(), it.quantity) }
     )
+    
 }

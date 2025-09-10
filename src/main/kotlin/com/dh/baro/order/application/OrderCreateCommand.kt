@@ -19,7 +19,7 @@ data class OrderCreateCommand(
             val productMap = productList.associateBy { it.id }
             
             val orderItems = request.orderItems.map { requestItem ->
-                val product = productMap[requestItem.productId.toLong()]
+                val product = productMap[requestItem.productId]
                     ?: throw IllegalArgumentException("상품을 찾을 수 없습니다: ${requestItem.productId}")
                 
                 OrderItem(

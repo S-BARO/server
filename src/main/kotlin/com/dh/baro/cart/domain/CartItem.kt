@@ -2,8 +2,6 @@ package com.dh.baro.cart.domain
 
 import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
-import com.dh.baro.identity.domain.User
-import com.dh.baro.product.domain.Product
 import jakarta.persistence.*
 
 @Entity
@@ -16,13 +14,11 @@ class CartItem(
     @Column(name = "id")
     val id: Long,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    val user: User,
+    @Column(name = "user_id", nullable = false)
+    val userId: Long,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    val product: Product,
+    @Column(name = "product_id", nullable = false)
+    val productId: Long,
 
     @Column(name = "quantity", nullable = false)
     var quantity: Int = 1
@@ -39,11 +35,11 @@ class CartItem(
     }
 
     companion object {
-        fun newCartItem(user: User, product: Product, quantity: Int): CartItem {
+        fun newCartItem(userId: Long, productId: Long, quantity: Int): CartItem {
             return CartItem(
                 id = IdGenerator.generate(),
-                user = user,
-                product = product,
+                userId = userId,
+                productId = productId,
                 quantity = quantity,
             )
         }

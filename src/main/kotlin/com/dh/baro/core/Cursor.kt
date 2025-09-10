@@ -1,5 +1,8 @@
 package com.dh.baro.core
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+
 class Cursor (
-    val id: String,
+    @JsonSerialize(using = LongToStringSerializer::class)
+    val id: Long,
 )

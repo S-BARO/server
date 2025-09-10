@@ -11,5 +11,5 @@ class CategoryFacade(
 ) {
 
     fun createCategory(request: CategoryCreateRequest): Category =
-        categoryService.createCategory(request.id.toLong(), request.name)
+        categoryService.createCategory(request.id, request.name)
 }
