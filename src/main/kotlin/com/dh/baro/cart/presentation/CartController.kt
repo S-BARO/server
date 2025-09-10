@@ -21,8 +21,10 @@ class CartController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    override fun getCart(@CurrentUser userId: Long): CartResponse =
-        CartResponse.from(cartFacade.getCartItems(userId))
+    override fun getCart(@CurrentUser userId: Long): CartResponse {
+        val cartItemBundles = cartFacade.getCartItems(userId)
+        return CartResponse.from(cartItemBundles)
+    }
 
     @PostMapping("/items")
     @ResponseStatus(HttpStatus.CREATED)
