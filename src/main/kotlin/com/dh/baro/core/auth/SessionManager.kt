@@ -11,14 +11,10 @@ import org.springframework.stereotype.Component
 class SessionManager(
     private val request: HttpServletRequest
 ) {
-    private val logger = LoggerFactory.getLogger(this::class.simpleName)
 
     fun getCurrentUserId(): Long {
         val session = request.getSession(false)
-        logger.info("Session exists: ${session != null}, sessionId: ${session?.id}")
-
         val userId = session?.getAttribute(SessionKeys.USER_ID)
-        logger.info("Session getAttribute result: $userId, type: ${userId?.javaClass}")
 
         return userId as? Long
             ?: throw UnauthorizedException(ErrorMessage.UNAUTHORIZED.message)
