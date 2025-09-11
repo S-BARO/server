@@ -4,6 +4,7 @@ import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.look.domain.ReactionType
 import com.dh.baro.look.domain.service.LookReactionService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class LookReactionFacade(
@@ -11,6 +12,7 @@ class LookReactionFacade(
     private val lookReactionService: LookReactionService,
 ) {
 
+    @Transactional
     fun recordReaction(userId: Long, lookId: Long, reactionType: ReactionType) {
         userService.checkUserExists(userId)
         lookReactionService.createReactionIfAbsent(
