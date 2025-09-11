@@ -13,7 +13,7 @@ class SwipeFacade(
 
     fun recordSwipe(userId: Long, lookId: Long, reactionType: ReactionType) {
         userService.checkUserExists(userId)
-        swipeService.createSwipeIfAbsent(
+        swipeService.upsertSwipe(
             userId = userId,
             lookId = lookId,
             reactionType = reactionType,

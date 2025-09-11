@@ -4,7 +4,7 @@ import com.dh.baro.look.domain.Swipe
 
 interface SwipeRepository {
 
-    fun save(swipe: Swipe): Swipe
+    fun upsert(swipe: Swipe): Swipe
 
     fun existsByUserIdAndLookId(userId: Long, lookId: Long): Boolean
 
