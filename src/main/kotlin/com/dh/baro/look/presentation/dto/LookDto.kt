@@ -13,8 +13,8 @@ data class LookDto(
     companion object {
         fun from(look: Look) = LookDto(
             lookId = look.id,
-            title = look.getTitle(),
-            thumbnailUrl = look.getThumbnailUrl(),
+            title = look.title,
+            thumbnailUrl = look.thumbnailUrl,
         )
     }
 }

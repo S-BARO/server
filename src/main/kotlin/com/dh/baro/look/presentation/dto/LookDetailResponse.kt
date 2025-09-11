@@ -48,10 +48,10 @@ data class LookDetailResponse(
 
             return LookDetailResponse(
                 lookId = look.id,
-                title = look.getTitle(),
-                description = look.getDescription(),
-                thumbnailUrl = look.getThumbnailUrl(),
-                likesCount = look.getLikesCount(),
+                title = look.title,
+                description = look.description,
+                thumbnailUrl = look.thumbnailUrl,
+                likesCount = look.likesCount,
                 lookImageUrls = look.getOrderedImageUrls(),
                 products = productItemDtos,
             )
