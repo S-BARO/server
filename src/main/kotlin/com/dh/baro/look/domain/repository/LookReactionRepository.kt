@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query
 interface LookReactionRepository : JpaRepository<LookReaction, Long> {
     fun existsByUserIdAndLookId(userId: Long, lookId: Long): Boolean
 
+    fun findByUserIdAndLookId(userId: Long, lookId: Long): LookReaction?
+
     fun deleteByUserIdAndLookId(userId: Long, lookId: Long): Long
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)

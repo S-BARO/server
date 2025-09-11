@@ -4,6 +4,7 @@ import com.dh.baro.look.domain.LookReaction
 import com.dh.baro.look.domain.ReactionType
 import com.dh.baro.look.domain.repository.LookReactionRepository
 import com.dh.baro.look.domain.repository.LookRepository
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,9 +16,16 @@ class LookReactionService(
 
     @Transactional
     fun createReactionIfAbsent(userId: Long, lookId: Long, reactionType: ReactionType) {
-        if (lookReactionRepository.existsByUserIdAndLookId(userId, lookId)) return
-        saveReaction(userId, lookId, reactionType)
-        incrementLikeCountIfNeeded(reactionType, lookId)
+        runCatching {
+            saveReaction(userId, lookId, reactionType)
+        }.onFailure { exception ->
+            when {
+                exception is DataIntegrityViolationException -> {
+                    updateReaction(userId, lookId, reactionType)
+                }
+                else -> throw exception
+            }
+        }
     }
 
     private fun saveReaction(userId: Long, lookId: Long, reactionType: ReactionType) {
@@ -28,6 +36,11 @@ class LookReactionService(
                 reactionType = reactionType,
             )
         )
+    }
+
+    private fun updateReaction(userId: Long, lookId: Long, reactionType: ReactionType) {
+        lookReactionRepository.findByUserIdAndLookId(userId, lookId)
+            ?.changeReactionType(reactionType)
     }
 
     private fun incrementLikeCountIfNeeded(type: ReactionType, lookId: Long) {
