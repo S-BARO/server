@@ -1,63 +1,25 @@
 package com.dh.baro.look.domain
 
-import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.annotation.AggregateRoot
 import com.dh.baro.core.IdGenerator
-import jakarta.persistence.*
+import java.time.Instant
 
 @AggregateRoot
-@Entity
-@Table(name = "looks")
-class Look(
-    @Id
-    @Column(name = "id")
+data class Look(
     val id: Long,
-
-    @Column(name = "creator_id", nullable = false)
     val creatorId: Long,
-
-    @Column(name = "title", nullable = false)
-    private var title: String,
-
-    @Lob
-    @Column(name = "description", columnDefinition = "MEDIUMTEXT")
-    private var description: String? = null,
-
-    @Column(name = "likes_count", nullable = false)
-    private var likesCount: Int = 0,
-
-    @Column(name = "thumbnail_url", nullable = false, length = 300)
-    private var thumbnailUrl: String,
-
-    @OneToMany(
-        mappedBy = "look",
-        fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
-        orphanRemoval = true,
-    )
-    private val images: MutableSet<LookImage> = mutableSetOf(),
-
-    @OneToMany(
-        mappedBy = "look",
-        fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
-        orphanRemoval = true,
-    )
-    private val products: MutableSet<LookProduct> = mutableSetOf(),
-) : BaseTimeEntity() {
-
-    override fun getId(): Long = id
-
-    fun getTitle() = title
-
-    fun getDescription() = description
-
-    fun getLikesCount() = likesCount
-
-    fun getThumbnailUrl() = thumbnailUrl
+    val title: String,
+    val description: String? = null,
+    val likesCount: Int = 0,
+    val thumbnailUrl: String,
+    val images: List<LookImage> = emptyList(),
+    val lookProducts: List<LookProduct> = emptyList(),
+    val createdAt: Instant? = null,
+    val modifiedAt: Instant? = null,
+) {
 
     fun getOrderedProductIds(): List<Long> =
-        products.asSequence()
+        lookProducts.asSequence()
             .sortedBy { it.displayOrder }
             .map { it.productId }
             .toList()
@@ -68,43 +30,31 @@ class Look(
             .map { it.imageUrl }
             .toList()
 
-    fun addImages(imageUrls: List<String>) {
-        val start = images.size
-        imageUrls.forEachIndexed { idx, url ->
-            addImage(
+    fun withImages(imageUrls: List<String>): Look {
+        val newImages = imageUrls.mapIndexed { index, url ->
+            LookImage.of(
                 imageUrl = url,
-                displayOrder = start + idx + 1,
+                displayOrder = images.size + index + 1,
             )
         }
+        return copy(images = images + newImages)
     }
 
-    private fun addImage(imageUrl: String, displayOrder: Int) =
-        images.add(
-            LookImage.of(
-                look = this,
-                imageUrl = imageUrl,
-                displayOrder = displayOrder,
-            )
-        )
+    fun withProducts(productIds: List<Long>): Look {
+        val existingProductIds = lookProducts.map { it.productId }.toSet()
+        val nextOrderStart = lookProducts.size
 
-    fun addProducts(productIds: List<Long>) {
-        val nextOrderStart = products.size
-        productIds
+        val newProducts = productIds
             .distinct()
-            .filterNot { id ->
-                products.any { it.productId == id }
+            .filterNot { it in existingProductIds }
+            .mapIndexed { index, productId ->
+                LookProduct.of(
+                    productId = productId,
+                    displayOrder = nextOrderStart + index + 1
+                )
             }
-            .forEachIndexed { idx, id ->
-                addProduct(id, nextOrderStart + idx + 1)
-            }
-    }
 
-    private fun addProduct(productId: Long, displayOrder: Int) {
-        products += LookProduct.of(
-            look = this,
-            productId = productId,
-            displayOrder = displayOrder,
-        )
+        return copy(lookProducts = lookProducts + newProducts)
     }
 
     companion object {
@@ -113,13 +63,20 @@ class Look(
             title: String,
             description: String?,
             thumbnailUrl: String,
-        ): Look =
-            Look(
+            imageUrls: List<String> = emptyList(),
+            productIds: List<Long> = emptyList(),
+        ): Look {
+            val look = Look(
                 id = IdGenerator.generate(),
                 creatorId = creatorId,
                 title = title,
                 description = description,
                 thumbnailUrl = thumbnailUrl,
             )
+            
+            return look
+                .withImages(imageUrls)
+                .withProducts(productIds)
+        }
     }
 }

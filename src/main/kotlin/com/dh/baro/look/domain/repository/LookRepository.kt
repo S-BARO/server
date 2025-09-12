@@ -1,44 +1,26 @@
 package com.dh.baro.look.domain.repository
 
 import com.dh.baro.look.domain.Look
-import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
-import org.springframework.data.jpa.repository.*
-import org.springframework.data.repository.query.Param
 
-interface LookRepository : JpaRepository<Look, Long> {
+interface LookRepository {
 
-    @EntityGraph(attributePaths = ["images", "products"])
-    @Query("select l from Look l where l.id = :id")
-    fun findWithImagesAndProductsById(@Param("id") id: Long): Look?
+    fun save(look: Look): Look
 
-    @Query("""
-        select l from Look l
-        where l.id not in (
-            select lr.lookId from LookReaction lr where lr.userId = :userId
-        )
-        and (:cursorId is null or l.id < :cursorId)
-        order by l.id desc
-    """)
-    fun findSwipeLooks(
-        @Param("userId") userId: Long,
-        @Param("cursorId") cursorId: Long?,
-        pageable: Pageable,
+    fun existsById(id: Long): Boolean
+
+    fun findWithImagesAndProductsById(id: Long): Look?
+
+    fun findLooksForSwipe(
+        userId: Long,
+        cursorId: Long?,
+        lookIds: List<Long>,
+        size: Int,
     ): Slice<Look>
 
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("""
-        update Look l 
-        set l.likesCount = l.likesCount + 1 
-        where l.id = :lookId
-    """)
-    fun incrementLike(@Param("lookId") lookId: Long): Int
+    fun incrementLike(lookId: Long): Int
 
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("""
-        update Look l
-        set l.likesCount = l.likesCount - 1
-        where l.id = :lookId and l.likesCount > 0
-    """)
     fun decrementLike(lookId: Long): Int
+
+    fun deleteById(id: Long)
 }
