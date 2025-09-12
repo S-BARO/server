@@ -18,7 +18,7 @@ class SwipeService(
             lookId = lookId,
             reactionType = reactionType,
         )
-        swipeRepository.upsert(swipe)
+        swipeRepository.upsertSwipe(swipe)
     }
 
     @Transactional

@@ -4,9 +4,9 @@ import com.dh.baro.look.domain.Swipe
 
 interface SwipeRepository {
 
-    fun upsert(swipe: Swipe): Swipe
+    fun upsertSwipe(swipe: Swipe): Swipe
 
-    fun existsByUserIdAndLookId(userId: Long, lookId: Long): Boolean
+    fun findLookIdsByUserId(userId: Long): List<Long>
 
     fun findByUserIdAndLookId(userId: Long, lookId: Long): Swipe?
 

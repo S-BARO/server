@@ -6,11 +6,11 @@ import com.mongodb.DuplicateKeyException
 import org.springframework.stereotype.Repository
 
 @Repository
-class SwipeMongoRepository(
+class SwipeRepositoryImpl(
     private val swipeDocumentRepository: SwipeDocumentRepository,
 ) : SwipeRepository {
 
-    override fun upsert(swipe: Swipe): Swipe {
+    override fun upsertSwipe(swipe: Swipe): Swipe {
         return try {
             val document = SwipeDocument.fromDomain(swipe)
             val saved = swipeDocumentRepository.save(document)
@@ -22,8 +22,9 @@ class SwipeMongoRepository(
         }
     }
 
-    override fun existsByUserIdAndLookId(userId: Long, lookId: Long): Boolean {
-        return swipeDocumentRepository.existsByUserIdAndLookId(userId, lookId)
+    override fun findLookIdsByUserId(userId: Long): List<Long> {
+        return swipeDocumentRepository.findLookIdsByUserId(userId)
+            .map { it.getLookId() }
     }
 
     override fun findByUserIdAndLookId(userId: Long, lookId: Long): Swipe? {

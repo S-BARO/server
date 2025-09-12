@@ -5,7 +5,8 @@ import org.springframework.data.mongodb.repository.Query
 
 interface SwipeDocumentRepository : MongoRepository<SwipeDocument, String> {
 
-    fun existsByUserIdAndLookId(userId: Long, lookId: Long): Boolean
+    @Query("{ 'user_id': ?0 }")
+    fun findLookIdsByUserId(userId: Long): List<LookIdProjection>
 
     fun findByUserIdOrderByIdDesc(userId: Long): List<SwipeDocument>
 
@@ -15,4 +16,8 @@ interface SwipeDocumentRepository : MongoRepository<SwipeDocument, String> {
 
     @Query(value = "{'user_id': ?0, 'look_id': ?1, 'reaction_type': 'LIKE'}", delete = true)
     fun deleteLikeByUserIdAndLookId(userId: Long, lookId: Long): Long
+}
+
+interface LookIdProjection {
+    fun getLookId(): Long
 }

@@ -22,7 +22,6 @@ data class Swipe(
                 userId = userId,
                 lookId = lookId,
                 reactionType = reactionType,
-                createdAt = Instant.now(),
             )
         }
     }

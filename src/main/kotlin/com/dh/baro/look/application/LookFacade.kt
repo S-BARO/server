@@ -24,7 +24,7 @@ class LookFacade(
     }
 
     fun getSwipeLooks(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
-        lookService.getSwipeLooks(userId, cursorId, size)
+        lookService.getLooksForSwipe(userId, cursorId, size)
 
     fun getLookDetail(lookId: Long): LookDetailBundle {
         val look = lookService.getLookDetail(lookId)
