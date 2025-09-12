@@ -3,8 +3,10 @@ package com.dh.baro.look.infra.mongodb
 import com.dh.baro.look.domain.Swipe
 import com.dh.baro.look.domain.repository.SwipeRepository
 import com.mongodb.DuplicateKeyException
+import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Repository
 
+@Primary
 @Repository
 class SwipeRepositoryImpl(
     private val swipeDocumentRepository: SwipeDocumentRepository,

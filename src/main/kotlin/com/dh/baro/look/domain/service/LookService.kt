@@ -6,6 +6,7 @@ import com.dh.baro.look.domain.Look
 import com.dh.baro.look.domain.ReactionType
 import com.dh.baro.look.domain.repository.LookRepository
 import com.dh.baro.look.domain.repository.SwipeRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class LookService(
     private val lookRepository: LookRepository,
-    private val swipeRepository: SwipeRepository,
 ) {
 
     @Transactional
@@ -24,17 +24,20 @@ class LookService(
             title = cmd.title,
             description = cmd.description,
             thumbnailUrl = cmd.thumbnailUrl,
-            imageUrls = cmd.imageUrls,
-            productIds = cmd.productIds,
         )
+        look.addImages(cmd.imageUrls)
+        look.addProducts(cmd.productIds)
 
         return lookRepository.save(look)
     }
 
-    fun getLooksForSwipe(userId: Long, cursorId: Long?, size: Int): Slice<Look> {
-        val lookIds = swipeRepository.findLookIdsByUserId(userId)
-        return lookRepository.findLooksForSwipe(userId, cursorId, lookIds, size)
-    }
+    fun getLooksForSwipe(lookIds: List<Long>, cursorId: Long?, size: Int): Slice<Look> =
+        lookRepository.findLooksForSwipe(
+            cursorId = cursorId,
+            lookIds = lookIds,
+            lookIdsEmpty = lookIds.isEmpty(),
+            pageable = PageRequest.of(0, size)
+        )
 
     fun getLookDetail(lookId: Long): Look =
         lookRepository.findWithImagesAndProductsById(lookId)

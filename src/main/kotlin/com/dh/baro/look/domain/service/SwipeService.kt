@@ -7,9 +7,14 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(readOnly = true)
 class SwipeService(
     private val swipeRepository: SwipeRepository,
 ) {
+
+    fun getLookIdsByUserId(userId: Long): List<Long> {
+        return swipeRepository.findLookIdsByUserId(userId)
+    }
 
     @Transactional
     fun upsertSwipe(userId: Long, lookId: Long, reactionType: ReactionType) {
