@@ -33,6 +33,9 @@ spring:
       timeout: 1s
       password: ${REDIS_PASSWORD}
 
+    mongodb:
+      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}?authSource=${MONGODB_AUTH_SOURCE}
+
   session:
     timeout: 30m
     redis:
