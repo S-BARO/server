@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface LookJpaRepository : JpaRepository<LookEntity, Long> {
 
-    @EntityGraph(attributePaths = ["images", "products"])
+    @EntityGraph(attributePaths = ["images", "lookProducts"])
     @Query("select l from LookEntity l where l.id = :id")
     fun findWithImagesAndProductsById(@Param("id") id: Long): LookEntity?
 
