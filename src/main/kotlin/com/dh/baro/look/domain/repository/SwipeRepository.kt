@@ -10,8 +10,6 @@ interface SwipeRepository {
 
     fun findByUserIdAndLookId(userId: Long, lookId: Long): Swipe?
 
-    fun findUserSwipeHistory(userId: Long): List<Swipe>
-
     fun deleteByUserIdAndLookId(userId: Long, lookId: Long): Long
 
     fun deleteLikeIfExists(userId: Long, lookId: Long): Int

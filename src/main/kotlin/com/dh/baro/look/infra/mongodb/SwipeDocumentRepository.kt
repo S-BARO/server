@@ -8,8 +8,6 @@ interface SwipeDocumentRepository : MongoRepository<SwipeDocument, String> {
     @Query("{ 'user_id': ?0 }")
     fun findLookIdsByUserId(userId: Long): List<LookIdProjection>
 
-    fun findByUserIdOrderByIdDesc(userId: Long): List<SwipeDocument>
-
     fun findByUserIdAndLookId(userId: Long, lookId: Long): SwipeDocument?
 
     fun deleteByUserIdAndLookId(userId: Long, lookId: Long): Long

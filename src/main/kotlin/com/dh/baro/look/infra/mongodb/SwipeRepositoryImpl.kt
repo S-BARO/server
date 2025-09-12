@@ -2,8 +2,8 @@ package com.dh.baro.look.infra.mongodb
 
 import com.dh.baro.look.domain.Swipe
 import com.dh.baro.look.domain.repository.SwipeRepository
-import com.mongodb.DuplicateKeyException
 import org.springframework.context.annotation.Primary
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Repository
 
 @Primary
@@ -17,7 +17,7 @@ class SwipeRepositoryImpl(
             val document = SwipeDocument.fromDomain(swipe)
             val saved = swipeDocumentRepository.save(document)
             saved.toDomain()
-        } catch (ex: DuplicateKeyException) {
+        } catch (ex: DataIntegrityViolationException) {
             val existing = findByUserIdAndLookId(swipe.userId, swipe.lookId)!!
             val updated = existing.copy(reactionType = swipe.reactionType)
             swipeDocumentRepository.save(SwipeDocument.fromDomain(updated)).toDomain()
@@ -32,11 +32,6 @@ class SwipeRepositoryImpl(
     override fun findByUserIdAndLookId(userId: Long, lookId: Long): Swipe? {
         return swipeDocumentRepository.findByUserIdAndLookId(userId, lookId)
             ?.toDomain()
-    }
-
-    override fun findUserSwipeHistory(userId: Long): List<Swipe> {
-        return swipeDocumentRepository.findByUserIdOrderByIdDesc(userId)
-            .map { it.toDomain() }
     }
 
     override fun deleteByUserIdAndLookId(userId: Long, lookId: Long): Long {

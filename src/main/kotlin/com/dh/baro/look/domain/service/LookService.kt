@@ -5,7 +5,6 @@ import com.dh.baro.look.application.LookCreateCommand
 import com.dh.baro.look.domain.Look
 import com.dh.baro.look.domain.ReactionType
 import com.dh.baro.look.domain.repository.LookRepository
-import com.dh.baro.look.domain.repository.SwipeRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
@@ -16,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional
 class LookService(
     private val lookRepository: LookRepository,
 ) {
+
+    fun checkLookExists(lookId: Long) {
+        require(lookRepository.existsById(lookId)) {
+            ErrorMessage.LOOK_NOT_FOUND.format(lookId)
+        }
+    }
 
     @Transactional
     fun createLook(cmd: LookCreateCommand): Look {
