@@ -14,15 +14,14 @@ interface LookRepository : JpaRepository<Look, Long> {
 
     @Query("""
         select l from Look l
-        where l.id not in (
-            select lr.lookId from LookReaction lr where lr.userId = :userId
-        )
+        where (:lookIdsEmpty = true or l.id not in :lookIds)
         and (:cursorId is null or l.id < :cursorId)
         order by l.id desc
     """)
-    fun findSwipeLooks(
-        @Param("userId") userId: Long,
+    fun findLooksForSwipe(
         @Param("cursorId") cursorId: Long?,
+        @Param("lookIds") lookIds: List<Long>,
+        @Param("lookIdsEmpty") lookIdsEmpty: Boolean,
         pageable: Pageable,
     ): Slice<Look>
 

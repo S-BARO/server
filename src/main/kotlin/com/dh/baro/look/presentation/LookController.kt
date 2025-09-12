@@ -4,7 +4,7 @@ import com.dh.baro.core.Cursor
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.look.application.LookFacade
-import com.dh.baro.look.application.LookReactionFacade
+import com.dh.baro.look.application.SwipeFacade
 import com.dh.baro.look.presentation.dto.*
 import com.dh.baro.look.presentation.swagger.LookSwagger
 import jakarta.validation.Valid
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/looks")
 class LookController(
     private val lookFacade: LookFacade,
-    private val lookReactionFacade: LookReactionFacade,
+    private val swipeFacade: SwipeFacade,
 ) : LookSwagger {
 
     @PostMapping
@@ -26,24 +26,24 @@ class LookController(
     ): LookCreateResponse =
         LookCreateResponse.from(lookFacade.createLook(request.toCommand(userId)))
 
-    @PutMapping("/{lookId}/reaction")
+    @PutMapping("/{lookId}/swipe")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    override fun recordReaction(
+    override fun recordSwipe(
         @CurrentUser userId: Long,
         @PathVariable lookId: Long,
-        @Valid @RequestBody request: ReactionRequest,
-    ) = lookReactionFacade.recordReaction(
+        @Valid @RequestBody request: SwipeRequest,
+    ) = swipeFacade.recordSwipe(
         userId = userId,
         lookId = lookId,
         reactionType = request.reactionType,
     )
 
-    @DeleteMapping("/{lookId}/reaction")
+    @DeleteMapping("/{lookId}/swipe")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    override fun cancelReaction(
+    override fun cancelSwipe(
         @CurrentUser userId: Long,
         @PathVariable lookId: Long,
-    ) = lookReactionFacade.cancelReaction(userId, lookId)
+    ) = swipeFacade.cancelSwipe(userId, lookId)
 
     @GetMapping("/swipe")
     @ResponseStatus(HttpStatus.OK)

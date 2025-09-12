@@ -33,10 +33,10 @@ class LookProduct(
             productId: Long,
             displayOrder: Int
         ) = LookProduct(
-                id = IdGenerator.generate(),
-                look = look,
-                productId = productId,
-                displayOrder = displayOrder,
-            )
+            id = IdGenerator.generate(),
+            look = look,
+            productId = productId,
+            displayOrder = displayOrder,
+        )
     }
 }

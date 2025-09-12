@@ -4,7 +4,6 @@ import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.exception.UnauthorizedException
 import com.dh.baro.identity.domain.UserRole
 import jakarta.servlet.http.HttpServletRequest
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component

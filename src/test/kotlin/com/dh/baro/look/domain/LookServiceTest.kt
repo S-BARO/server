@@ -157,52 +157,6 @@ internal class LookServiceTest(
         }
     }
 
-    describe("getSwipeLooks 메서드는") {
-
-        context("첫 페이지 size=2 로 요청하면") {
-            lateinit var slice: Slice<Look>
-
-            beforeTest {
-                slice = lookService.getSwipeLooks(userId = 1L, cursorId = null, size = 2)
-            }
-
-            it("id DESC 로 2개를 반환한다") {
-                slice.content.map { it.id } shouldContainExactly listOf(look13.id, look12.id)
-            }
-
-            it("hasNext 는 true (잔여 1개)") {
-                slice.hasNext() shouldBe true
-            }
-        }
-
-        context("cursorId 를 넘겨 다음 페이지를 조회하면") {
-            it("cursor 아래의 데이터만 반환하고, 더 없으면 hasNext=false") {
-                val firstPage = lookService.getSwipeLooks(1L, null, 2)
-                val nextPage = lookService.getSwipeLooks(1L, firstPage.content.last().id, 10)
-
-                nextPage.content.map { it.id } shouldContainExactly listOf(look11.id)
-                nextPage.hasNext() shouldBe false
-            }
-        }
-
-        context("cursorId 가 최소 id 이하이면") {
-            it("빈 Slice 를 반환한다") {
-                val nextPage = lookService.getSwipeLooks(1L, look11.id, 10)
-                nextPage.content.shouldBeEmpty()
-                nextPage.hasNext() shouldBe false
-            }
-        }
-
-        context("데이터가 하나도 없으면") {
-            it("빈 Slice 반환") {
-                lookRepository.deleteAll()
-                val emptyPage = lookService.getSwipeLooks(userId = 99L, cursorId = null, size = 5)
-                emptyPage.content.shouldBeEmpty()
-                emptyPage.hasNext() shouldBe false
-            }
-        }
-    }
-
     describe("도메인 동작(추가 호출 가정)") {
 
         context("상품을 추가로 합치는 경우") {

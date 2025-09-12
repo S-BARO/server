@@ -59,13 +59,13 @@ interface LookSwagger {
         @RequestBody request: LookCreateRequest,
     ): LookCreateResponse
 
-    /* ───────────────── 룩 반응(좋아요/싫어요) 등록/대체(멱등) ───────────────── */
+    /* ───────────────── 룩 스와이프(좋아요/싫어요) 등록/대체(멱등) ───────────────── */
     @Operation(
-        summary = "룩 반응 등록(좋아요/싫어요)",
+        summary = "룩 스와이프 등록(좋아요/싫어요)",
         description = """
-            사용자의 해당 룩에 대한 반응을 기록합니다.
-            같은 반응을 반복 요청해도 멱등(상태 변화 없음)입니다.
-            LIKE 반응의 최초 등록 시 likesCount가 1 증가합니다.
+            사용자의 해당 룩에 대한 스와이프를 기록합니다.
+            같은 스와이프를 반복 요청해도 멱등(상태 변화 없음)입니다.
+            LIKE 스와이프의 최초 등록 시 likesCount가 1 증가합니다.
             reationType = [LIKE, DISLIKE]
         """,
         parameters = [
@@ -74,12 +74,12 @@ interface LookSwagger {
         requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
             required = true,
             content = [Content(
-                schema = Schema(implementation = ReactionRequest::class),
+                schema = Schema(implementation = SwipeRequest::class),
                 examples = [ExampleObject(
-                    name = "likeRequest",
+                    name = "likeSwipe",
                     value = """{ "reactionType": "LIKE" }"""
                 ), ExampleObject(
-                    name = "dislikeRequest",
+                    name = "dislikeSwipe",
                     value = """{ "reactionType": "DISLIKE" }"""
                 )]
             )]
@@ -88,20 +88,20 @@ interface LookSwagger {
             ApiResponse(responseCode = "204", description = "성공 (본문 없음)")
         ]
     )
-    @PutMapping("/{lookId}/reaction")
-    fun recordReaction(
+    @PutMapping("/{lookId}/swipe")
+    fun recordSwipe(
         @Parameter(hidden = true) userId: Long,
         @PathVariable lookId: Long,
-        @RequestBody request: ReactionRequest,
+        @RequestBody request: SwipeRequest,
     )
 
-    /* ──────────────────────── 룩 반응 취소(좋아요/싫어요 제거) ─────────────────────── */
+    /* ──────────────────────── 룩 스와이프 취소(좋아요/싫어요 제거) ─────────────────────── */
     @Operation(
-        summary = "룩 반응 취소",
+        summary = "룩 스와이프 취소",
         description = """
-            사용자의 해당 룩에 대한 반응(좋아요/싫어요)을 취소합니다.
+            사용자의 해당 룩에 대한 스와이프(좋아요/싫어요)를 취소합니다.
             LIKE 취소 시에만 likesCount가 1 감소합니다.
-            반응이 없어도 멱등하게 204를 반환합니다.
+            스와이프가 없어도 멱등하게 204를 반환합니다.
         """,
         parameters = [
             Parameter(`in` = ParameterIn.PATH, name = "lookId", description = "룩 ID", required = true, example = "1001")
@@ -110,8 +110,8 @@ interface LookSwagger {
             ApiResponse(responseCode = "204", description = "성공 (본문 없음)")
         ]
     )
-    @DeleteMapping("/{lookId}/reaction")
-    fun cancelReaction(
+    @DeleteMapping("/{lookId}/swipe")
+    fun cancelSwipe(
         @Parameter(hidden = true) userId: Long,
         @PathVariable lookId: Long,
     )
@@ -120,7 +120,7 @@ interface LookSwagger {
     @Operation(
         summary = "스와이프용 룩 목록(무한 스크롤)",
         description = """
-            로그인 사용자가 아직 반응(좋아요/싫어요)하지 않은 룩을 최신순으로 반환합니다.
+            로그인 사용자가 아직 스와이프하지 않은 룩을 최신순으로 반환합니다.
             커서 기반 페이지네이션:
             cursorId: 이전 페이지의 마지막 룩 ID
             size: 페이지 크기(기본 10)

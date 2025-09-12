@@ -2,26 +2,29 @@ package com.dh.baro.look.application
 
 import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.look.domain.ReactionType
-import com.dh.baro.look.domain.service.LookReactionService
+import com.dh.baro.look.domain.service.LookService
+import com.dh.baro.look.domain.service.SwipeService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class LookReactionFacade(
+class SwipeFacade(
     private val userService: UserService,
-    private val lookReactionService: LookReactionService,
+    private val lookService: LookService,
+    private val swipeService: SwipeService,
 ) {
 
     @Transactional
-    fun recordReaction(userId: Long, lookId: Long, reactionType: ReactionType) {
+    fun recordSwipe(userId: Long, lookId: Long, reactionType: ReactionType) {
         userService.checkUserExists(userId)
-        lookReactionService.createReactionIfAbsent(
+        lookService.checkLookExists(lookId)
+        swipeService.upsertSwipe(
             userId = userId,
             lookId = lookId,
             reactionType = reactionType,
         )
     }
 
-    fun cancelReaction(userId: Long, lookId: Long) =
-        lookReactionService.deleteReaction(userId, lookId)
+    fun cancelSwipe(userId: Long, lookId: Long) =
+        swipeService.deleteSwipe(userId, lookId)
 }

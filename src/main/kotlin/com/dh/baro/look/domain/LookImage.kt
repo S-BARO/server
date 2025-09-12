@@ -5,7 +5,12 @@ import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "look_images")
+@Table(
+    name = "look_images",
+    uniqueConstraints = [
+        UniqueConstraint(name = "uk_look_image_look_display_order", columnNames = ["look_id", "display_order"])
+    ]
+)
 class LookImage(
     @Id
     @Column(name = "id")
