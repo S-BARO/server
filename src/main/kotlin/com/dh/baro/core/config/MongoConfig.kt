@@ -22,8 +22,8 @@ class MongoConfig {
         val settings = MongoClientSettings.builder()
             .applyConnectionString(ConnectionString(mongoUri))
             .applyToConnectionPoolSettings { builder ->
-                builder.maxSize(20)
-                    .minSize(20)
+                builder.maxSize(30)
+                    .minSize(30)
                     .maxWaitTime(30, TimeUnit.SECONDS)
             }
             .applyToSocketSettings { builder ->
