@@ -6,6 +6,7 @@ import com.dh.baro.order.domain.service.OrderQueryService
 import com.dh.baro.order.domain.service.OrderService
 import com.dh.baro.order.domain.service.OrderServiceV2
 import com.dh.baro.order.presentation.dto.OrderCreateRequest
+import com.dh.baro.order.domain.event.OrderPlacedEvent
 import com.dh.baro.product.domain.InventoryItem
 import com.dh.baro.product.infra.event.InventoryDeductionRequestedEvent
 import com.dh.baro.product.domain.service.InventoryService
@@ -85,5 +86,28 @@ class OrderFacade(
         )
 
         eventPublisher.publishEvent(event)
+    }
+
+    @Transactional
+    fun placeOrderV3(userId: Long, request: OrderCreateRequest): Order {
+        val productList = productQueryService.getProductsExists(
+            request.orderItems.map { orderItem -> orderItem.productId },
+        )
+
+        val cmd = OrderCreateCommand.toCommand(userId, productList, request)
+        val order = orderServiceV2.createOrderV2(cmd)
+
+        val inventoryItems = cmd.orderItems.map { item ->
+            InventoryItem(item.product.id, item.quantity)
+        }
+        inventoryService.deductStocksFromRedis(inventoryItems)
+
+        val orderPlacedEvent = OrderPlacedEvent(
+            orderId = order.id,
+            userId = cmd.userId,
+            items = inventoryItems
+        )
+        eventPublisher.publishEvent(orderPlacedEvent)
+        return order
     }
 }
