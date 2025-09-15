@@ -62,6 +62,18 @@ class Order(
         status = OrderStatus.ORDERED
     }
 
+    fun cancel(reason: String) {
+        if (status == OrderStatus.CANCELED) {
+            throw IllegalStateException("주문(orderId = $id) 는 이미 취소되었습니다.")
+        }
+
+        if (status in listOf(OrderStatus.SHIPPED, OrderStatus.DELIVERED)) {
+            throw IllegalStateException("$status 상태일 때는 주문(orderId = $id)을 취소할 수 없습니다.")
+        }
+
+        status = OrderStatus.CANCELED
+    }
+
     companion object {
         fun newOrder(
             userId: Long,
