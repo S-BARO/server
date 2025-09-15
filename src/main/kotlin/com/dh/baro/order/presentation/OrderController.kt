@@ -38,6 +38,16 @@ class OrderController(
         return OrderDetailResponse.from(order)
     }
 
+    @PostMapping("/V3")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun placeOrderV3(
+        @RequestParam userId: Long,
+        @Valid @RequestBody request: OrderCreateRequest,
+    ): OrderDetailResponse {
+        val order = orderFacade.placeOrderV3(userId, request)
+        return OrderDetailResponse.from(order)
+    }
+
     @GetMapping("/{orderId}")
     @ResponseStatus(HttpStatus.OK)
     override fun getOrderDetail(
