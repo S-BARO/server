@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class InventoryKafkaConsumer(
-    private val inventoryService: InventoryService
+    private val inventoryService: InventoryService,
 ) {
 
     @KafkaListener(
@@ -27,7 +27,7 @@ class InventoryKafkaConsumer(
         @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String,
         @Header(KafkaHeaders.RECEIVED_PARTITION) partition: Int,
         @Header(KafkaHeaders.OFFSET) offset: Long,
-        acknowledgment: Acknowledgment
+        acknowledgment: Acknowledgment,
     ) {
         inventoryService.deductStocksFromDatabase(event.items)
         acknowledgment.acknowledge()
