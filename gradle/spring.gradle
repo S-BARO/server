@@ -15,6 +15,8 @@ dependencies {
     implementation "org.redisson:redisson-spring-boot-starter:${redissonVersion}"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
     implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${p6spyVersion}"
+    implementation "org.axonframework:axon-spring-boot-starter:${axonVersion}"
+    implementation "org.axonframework:axon-modelling:${axonVersion}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "com.ninja-squad:springmockk:${springMockkVersion}"
