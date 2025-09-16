@@ -64,11 +64,11 @@ class Order(
 
     fun cancel(reason: String) {
         if (status == OrderStatus.CANCELED) {
-            throw IllegalStateException("주문(orderId = $id) 는 이미 취소되었습니다.")
+            throw IllegalStateException(ErrorMessage.ORDER_ALREADY_CANCELLED.format(id))
         }
 
         if (status in listOf(OrderStatus.SHIPPED, OrderStatus.DELIVERED)) {
-            throw IllegalStateException("$status 상태일 때는 주문(orderId = $id)을 취소할 수 없습니다.")
+            throw IllegalStateException(ErrorMessage.ORDER_CANCEL_INVALID_STATUS.format(status, id))
         }
 
         status = OrderStatus.CANCELED
