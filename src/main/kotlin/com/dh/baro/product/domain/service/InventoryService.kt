@@ -28,7 +28,7 @@ class InventoryService(
         val updated = productRepository.deductStock(productId, quantity)
 
         if (updated == 0) {
-            throw InventoryInsufficientException(productId)
+            throw InventoryInsufficientException(productId, quantity)
         }
     }
 }
