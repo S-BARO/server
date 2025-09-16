@@ -1,7 +1,6 @@
 package com.dh.baro.product.domain.service
 
-import com.dh.baro.core.ErrorMessage
-import com.dh.baro.core.exception.ConflictException
+import com.dh.baro.core.exception.InventoryInsufficientException
 import com.dh.baro.product.domain.InventoryItem
 import com.dh.baro.product.domain.repository.ProductRepository
 import com.dh.baro.product.infra.redis.InventoryRedisRepository
@@ -18,9 +17,6 @@ class InventoryService(
        return inventoryRedisRepository.deductStocks(items)
     }
 
-    /**
-     * 여러 상품의 DB 재고를 한번에 차감 (Kafka 이벤트 처리용)
-     */
     @Transactional
     fun deductStocksFromDatabase(items: List<InventoryItem>) {
         items.forEach { item ->
@@ -32,7 +28,7 @@ class InventoryService(
         val updated = productRepository.deductStock(productId, quantity)
 
         if (updated == 0) {
-            throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(productId))
+            throw InventoryInsufficientException(productId)
         }
     }
 }
