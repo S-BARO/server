@@ -2,7 +2,7 @@ package com.dh.baro.core.outbox
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.config.KafkaConfig
-import com.dh.baro.order.domain.event.OrderPlacedEvent
+import com.dh.baro.order.application.event.OrderPlacedEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component

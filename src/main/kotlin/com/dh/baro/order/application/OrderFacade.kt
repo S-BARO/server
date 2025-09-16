@@ -6,7 +6,7 @@ import com.dh.baro.order.domain.service.OrderQueryService
 import com.dh.baro.order.domain.service.OrderService
 import com.dh.baro.order.domain.service.OrderServiceV2
 import com.dh.baro.order.presentation.dto.OrderCreateRequest
-import com.dh.baro.order.domain.event.OrderPlacedEvent
+import com.dh.baro.order.application.event.OrderPlacedEvent
 import com.dh.baro.product.domain.InventoryItem
 import com.dh.baro.product.domain.service.InventoryService
 import com.dh.baro.product.domain.service.ProductQueryService

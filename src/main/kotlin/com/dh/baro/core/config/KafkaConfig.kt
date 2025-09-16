@@ -1,8 +1,8 @@
 package com.dh.baro.core.config
 
-import com.dh.baro.order.domain.event.OrderPlacedEvent
-import com.dh.baro.order.domain.event.InventoryDeductionCompletedEvent
-import com.dh.baro.order.domain.event.InventoryInsufficientEvent
+import com.dh.baro.order.application.event.OrderPlacedEvent
+import com.dh.baro.product.application.event.InventoryDeductionCompletedEvent
+import com.dh.baro.product.application.event.InventoryInsufficientEvent
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.TopicPartition
