@@ -1,9 +1,11 @@
 package com.dh.baro.core.config
 
 import com.dh.baro.order.domain.event.OrderPlacedEvent
-import com.dh.baro.product.infra.event.InventoryDeductionRequestedEvent
+import com.dh.baro.order.domain.event.InventoryDeductionCompletedEvent
+import com.dh.baro.order.domain.event.InventoryInsufficientEvent
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -13,6 +15,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.*
 import org.springframework.kafka.listener.ContainerProperties
 import org.springframework.kafka.listener.DefaultErrorHandler
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer
+import org.springframework.util.backoff.FixedBackOff
 import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.kafka.support.serializer.JsonSerializer
 
@@ -102,7 +106,19 @@ class KafkaConfig {
         factory.consumerFactory = consumerFactory()
         factory.containerProperties.ackMode = ContainerProperties.AckMode.MANUAL
         factory.setConcurrency(3) // 동시 처리 스레드 수
-        factory.setCommonErrorHandler(DefaultErrorHandler()) // 에러 처리 설정
+
+        // DLQ 처리
+        val recoverer = DeadLetterPublishingRecoverer(kafkaTemplate()) { record, _ ->
+            val dltTopic = when (record.topic()) {
+                ORDER_EVENTS_TOPIC -> ORDER_EVENTS_DLQ_TOPIC
+                INVENTORY_EVENTS_TOPIC -> INVENTORY_EVENTS_DLQ_TOPIC
+                else -> "${record.topic()}-dlt"
+            }
+            TopicPartition(dltTopic, record.partition())
+        }
+
+        val errorHandler = DefaultErrorHandler(recoverer, FixedBackOff(1000L, 3L))
+        factory.setCommonErrorHandler(errorHandler)
 
         return factory
     }
@@ -110,7 +126,8 @@ class KafkaConfig {
     private fun buildTypeMapping(): String {
         val mappings = mapOf(
             "OrderPlacedEvent" to OrderPlacedEvent::class.java.name,
-            "InventoryDeductionRequestedEvent" to InventoryDeductionRequestedEvent::class.java.name
+            "InventoryDeductionCompletedEvent" to InventoryDeductionCompletedEvent::class.java.name,
+            "InventoryInsufficientEvent" to InventoryInsufficientEvent::class.java.name
         )
 
         return mappings.entries.joinToString(",") { "${it.key}:${it.value}" }
@@ -118,5 +135,8 @@ class KafkaConfig {
 
     companion object {
         const val ORDER_EVENTS_TOPIC = "order-events"
+        const val ORDER_EVENTS_DLQ_TOPIC = "order-events-dlt"
+        const val INVENTORY_EVENTS_TOPIC = "inventory-events"
+        const val INVENTORY_EVENTS_DLQ_TOPIC = "inventory-events-dlt"
     }
 }
