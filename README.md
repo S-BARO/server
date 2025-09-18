@@ -18,7 +18,8 @@
 
 # 🗺️ System Architecture
 
-<img width="1782" height="999" alt="image" src="https://github.com/user-attachments/assets/a80d1300-a04a-4e71-9a5a-049cbd749eea" />
+<img width="1372" height="1070" alt="image" src="https://github.com/user-attachments/assets/4039d51b-b1e4-487d-ab9b-9e7b66616ba2" />
+
 
 <br>
 
