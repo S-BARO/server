@@ -8,7 +8,7 @@ class OutboxMessageScheduler(
     private val outboxBatchJob: OutboxBatchJob,
 ) {
 
-    @Scheduled(fixedDelay = 60_000) // 1분
+    @Scheduled(fixedDelay = 200)
     fun runOutboxJob() {
         outboxBatchJob.run()
     }
