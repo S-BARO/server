@@ -38,7 +38,7 @@ class InventoryRedisRepository(
         }
     }
 
-    fun restoreStocks(items: List<InventoryItem>): Boolean {
+    fun rollbackStocks(items: List<InventoryItem>): Boolean {
         if (items.isEmpty()) return true
         val mergedItems = mergedItems(items)
 
