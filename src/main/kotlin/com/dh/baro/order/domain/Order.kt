@@ -63,7 +63,7 @@ class Order(
     }
 
     fun cancel(reason: String) {
-        if (status == OrderStatus.CANCELED) {
+        if (status == OrderStatus.CANCELLED) {
             throw IllegalStateException(ErrorMessage.ORDER_ALREADY_CANCELLED.format(id))
         }
 
@@ -71,7 +71,7 @@ class Order(
             throw IllegalStateException(ErrorMessage.ORDER_CANCEL_INVALID_STATUS.format(status, id))
         }
 
-        status = OrderStatus.CANCELED
+        status = OrderStatus.CANCELLED
     }
 
     fun changeStatus(newStatus: OrderStatus) {
