@@ -74,6 +74,10 @@ class Order(
         status = OrderStatus.CANCELED
     }
 
+    fun changeStatus(newStatus: OrderStatus) {
+        this.status = newStatus
+    }
+
     companion object {
         fun newOrder(
             userId: Long,
