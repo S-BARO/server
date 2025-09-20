@@ -16,13 +16,14 @@ class OutboxMessageHandler(
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun handleInNewTx(outboxMessage: OutboxMessage) {
-        runCatching {
-            outboxMessageRouter.route(outboxMessage)
-        }.fold(
-            onSuccess = { outboxMessage.markSendSuccess() },
-            onFailure = { outboxMessage.markSendFail() }
-        ).apply {
+        val isSuccess = outboxMessageRouter.route(outboxMessage)
+
+        if (isSuccess) {
+            outboxMessageRepository.delete(outboxMessage)
+        } else {
+            outboxMessage.markSendFail()
             outboxMessageRepository.save(outboxMessage)
+
             if(outboxMessage.isDeadMessage()){
                 log.error(ErrorMessage.OUTBOX_MESSAGE_DEAD.format(outboxMessage.eventType, outboxMessage.id))
             }
