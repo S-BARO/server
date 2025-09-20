@@ -17,6 +17,10 @@ class InventoryService(
        return inventoryRedisRepository.deductStocks(items)
     }
 
+    fun rollbackStocks(items: List<InventoryItem>): Boolean {
+        return inventoryRedisRepository.rollbackStocks(items)
+    }
+
     @Transactional
     fun deductStocksFromDatabase(items: List<InventoryItem>) {
         items.forEach { item ->
