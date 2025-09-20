@@ -6,6 +6,7 @@ import com.dh.baro.order.application.event.OrderPlacedEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
+import java.util.concurrent.TimeUnit
 
 @Component
 class OutboxMessageRouter(
@@ -13,14 +14,20 @@ class OutboxMessageRouter(
     private val objectMapper: ObjectMapper,
 ) {
 
-    fun route(msg: OutboxMessage) {
-        when (msg.eventType) {
-            ORDER_PLACED_EVENT -> {
-                val event = objectMapper.readValue(msg.payload, OrderPlacedEvent::class.java)
-                kafkaTemplate.send(KafkaConfig.ORDER_EVENTS_TOPIC, event.orderId.toString(), event)
-            }
+    fun route(msg: OutboxMessage): Boolean {
+        return try {
+            when (msg.eventType) {
+                ORDER_PLACED_EVENT -> {
+                    val event = objectMapper.readValue(msg.payload, OrderPlacedEvent::class.java)
+                    val future = kafkaTemplate.send(KafkaConfig.ORDER_EVENTS_TOPIC, event.orderId.toString(), event)
+                    future.get(1, TimeUnit.SECONDS)
+                    true
+                }
 
-            else -> throw IllegalStateException(ErrorMessage.UNKNOWN_EVENT_TYPE.format(msg.eventType))
+                else -> throw IllegalStateException(ErrorMessage.UNKNOWN_EVENT_TYPE.format(msg.eventType))
+            }
+        } catch (e: Exception) {
+            false
         }
     }
 
