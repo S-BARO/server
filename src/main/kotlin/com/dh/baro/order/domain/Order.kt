@@ -27,7 +27,7 @@ class Order(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false, length = 20)
-    var status: OrderStatus = OrderStatus.PENDING,
+    var status: OrderStatus = OrderStatus.ORDERED,
 
     @OneToMany(
         mappedBy = "order",
@@ -51,7 +51,7 @@ class Order(
     }
 
     fun confirmOrder() {
-        if (status != OrderStatus.PENDING) {
+        if (status != OrderStatus.ORDERED) {
             throw IllegalStateException(ErrorMessage.ORDER_CONFIRM_INVALID_STATUS.format(status))
         }
 
@@ -88,7 +88,7 @@ class Order(
                 userId = userId,
                 totalPrice = BigDecimal.ZERO,
                 shippingAddress = shippingAddress,
-                status = OrderStatus.PENDING,
+                status = OrderStatus.ORDERED,
             )
     }
 }
