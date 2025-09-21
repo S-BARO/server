@@ -37,6 +37,9 @@ spring:
       uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}?authSource=${MONGODB_AUTH_SOURCE}
       auto-index-creation: true
 
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:9092
+
   session:
     timeout: 30m
     redis:
