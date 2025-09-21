@@ -107,6 +107,7 @@ jobs:
               -e KAKAO_AUTH_URL=${{ secrets.KAKAO_AUTH_URL }} \
               -e KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} \
               -e SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
+              -e KAFKA_HOST=${{ secrets.KAFKA_HOST }} \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             

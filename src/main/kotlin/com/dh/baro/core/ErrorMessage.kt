@@ -44,6 +44,10 @@ enum class ErrorMessage(val message: String) {
     ORDER_NOT_FOUND("주문을 찾을 수 없습니다: %d"),
     ORDER_CONFIRM_INVALID_STATUS("주문 확정은 PENDING 상태에서만 가능합니다. 현재 상태: %s"),
     ORDER_CONFIRM_NO_ITEMS("주문 항목이 없어 주문을 확정할 수 없습니다."),
+    ORDER_ALREADY_CANCELLED("주문(orderId = %d)는 이미 취소되었습니다."),
+    ORDER_CANCEL_INVALID_STATUS("%s 상태일 때는 주문(orderId = %d)을 취소할 수 없습니다."),
+    ORDER_COMPENSATION_USER_NOT_AVAILABLE("보상 트랜잭션 실행 시 사용자 정보를 찾을 수 없습니다."),
+    ORDER_COMPENSATION_INVENTORY_CONFLICT("재고 부족으로 인한 주문 취소: 상품 %d"),
 
     // Look
     LOOK_NOT_FOUND("룩을 찾을 수 없습니다: %d"),
