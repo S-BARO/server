@@ -1,4 +1,4 @@
-package com.dh.baro.core.kafka
+package com.dh.baro.core.dlt
 
 import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
