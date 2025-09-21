@@ -3,9 +3,11 @@ package com.dh.baro.order.infra
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.outbox.OutboxMessage
 import com.dh.baro.core.outbox.OutboxMessageRepository
+import com.dh.baro.core.outbox.OutboxMessageRouter
 import com.dh.baro.order.application.event.OrderPlacedEvent
 import com.dh.baro.order.domain.OrderRepository
 import com.dh.baro.order.domain.OrderStatus
+import org.springframework.data.repository.findByIdOrNull
 import com.dh.baro.product.application.event.InventoryInsufficientEvent
 import com.dh.baro.product.domain.InventoryItem
 import com.dh.baro.product.domain.service.InventoryService
@@ -32,7 +34,7 @@ class OrderEventListener(
     fun saveToOutbox(event: OrderPlacedEvent) {
         val payload = objectMapper.writeValueAsString(event)
         val outboxMessage = OutboxMessage.init(
-            eventType = ORDER_PLACED_EVENT,
+            eventType = OutboxMessageRouter.ORDER_PLACED_EVENT,
             payload = payload
         )
         outboxMessageRepository.save(outboxMessage)
@@ -50,8 +52,8 @@ class OrderEventListener(
         }
 
         try {
-            val order = orderRepository.findById(inventoryInsufficientEvent.orderId)
-                .orElseThrow { IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(inventoryInsufficientEvent.orderId)) }
+            val order = orderRepository.findByIdOrNull(inventoryInsufficientEvent.orderId)
+                ?: throw IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(inventoryInsufficientEvent.orderId))
 
             order.changeStatus(OrderStatus.CANCELLED)
             orderRepository.save(order)
@@ -75,7 +77,4 @@ class OrderEventListener(
         }
     }
 
-    companion object {
-        private const val ORDER_PLACED_EVENT = "ORDER_PLACED"
-    }
 }

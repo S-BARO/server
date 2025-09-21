@@ -1,4 +1,4 @@
-package com.dh.baro.core.dlt
+package com.dh.baro.core.dlq
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.kafka.clients.consumer.ConsumerRecord

@@ -97,9 +97,8 @@ class KafkaConfig {
 
             // JSON 역직렬화 설정
             JsonDeserializer.TRUSTED_PACKAGES to "com.dh.baro",
-            JsonDeserializer.VALUE_DEFAULT_TYPE to OrderPlacedEvent::class.java.name,
             JsonDeserializer.TYPE_MAPPINGS to buildTypeMapping(),
-            JsonDeserializer.USE_TYPE_INFO_HEADERS to false
+            JsonDeserializer.USE_TYPE_INFO_HEADERS to true
         )
     }
 
@@ -112,12 +111,12 @@ class KafkaConfig {
 
         // DLQ 처리
         val recoverer = DeadLetterPublishingRecoverer(kafkaTemplate()) { record, _ ->
-            val dltTopic = when (record.topic()) {
+            val dlqTopic = when (record.topic()) {
                 ORDER_EVENTS_TOPIC -> ORDER_EVENTS_DLQ_TOPIC
                 INVENTORY_EVENTS_TOPIC -> INVENTORY_EVENTS_DLQ_TOPIC
-                else -> "${record.topic()}-dlt"
+                else -> "${record.topic()}-dlq"
             }
-            TopicPartition(dltTopic, record.partition())
+            TopicPartition(dlqTopic, record.partition())
         }
 
         val errorHandler = DefaultErrorHandler(recoverer, FixedBackOff(1000L, 3L))
@@ -138,8 +137,8 @@ class KafkaConfig {
 
     companion object {
         const val ORDER_EVENTS_TOPIC = "order-events"
-        const val ORDER_EVENTS_DLQ_TOPIC = "order-events-dlt"
+        const val ORDER_EVENTS_DLQ_TOPIC = "order-events-dlq"
         const val INVENTORY_EVENTS_TOPIC = "inventory-events"
-        const val INVENTORY_EVENTS_DLQ_TOPIC = "inventory-events-dlt"
+        const val INVENTORY_EVENTS_DLQ_TOPIC = "inventory-events-dlq"
     }
 }

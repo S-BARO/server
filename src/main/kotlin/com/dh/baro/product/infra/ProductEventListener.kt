@@ -1,7 +1,9 @@
 package com.dh.baro.product.infra
 
+import com.dh.baro.core.exception.InventoryInsufficientException
 import com.dh.baro.core.outbox.OutboxMessageRepository
 import com.dh.baro.core.outbox.OutboxMessage
+import com.dh.baro.core.outbox.OutboxMessageRouter
 import com.dh.baro.order.application.event.OrderPlacedEvent
 import com.dh.baro.order.infra.IdempotencyService
 import com.dh.baro.product.application.event.InventoryInsufficientEvent
@@ -36,7 +38,7 @@ class ProductEventListener(
         try {
             inventoryService.deductStocksFromDatabase(orderPlacedEvent.items)
             idempotencyService.markProcessingAsCompleted(orderPlacedEvent.eventId)
-        } catch (e: Exception) {
+        } catch (e: InventoryInsufficientException) {
             log.error("Stock deduction failed for orderId: ${orderPlacedEvent.orderId}", e)
 
             orderPlacedEvent.items.forEach { item ->
@@ -47,13 +49,16 @@ class ProductEventListener(
                 )
 
                 val outboxMessage = OutboxMessage.init(
-                    eventType = "INVENTORY_INSUFFICIENT",
+                    eventType = OutboxMessageRouter.INVENTORY_INSUFFICIENT_EVENT,
                     payload = objectMapper.writeValueAsString(inventoryInsufficientEvent)
                 )
 
                 outboxMessageRepository.save(outboxMessage)
             }
 
+            idempotencyService.markProcessingAsCompleted(orderPlacedEvent.eventId, "inventory_insufficient")
+        } catch (e: Exception) {
+            log.error("Unexpected error during stock deduction for orderId: ${orderPlacedEvent.orderId}", e)
             idempotencyService.removeProcessingState(orderPlacedEvent.eventId)
             throw e
         }

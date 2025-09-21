@@ -1,4 +1,4 @@
-package com.dh.baro.core.dlt
+package com.dh.baro.core.dlq
 
 import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator

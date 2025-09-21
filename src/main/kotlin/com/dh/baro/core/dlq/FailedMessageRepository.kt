@@ -1,4 +1,4 @@
-package com.dh.baro.core.dlt
+package com.dh.baro.core.dlq
 
 import org.springframework.data.jpa.repository.JpaRepository
 
