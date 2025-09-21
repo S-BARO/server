@@ -30,10 +30,14 @@ class InventoryRedisRepository(
         if (items.isEmpty()) return true
         val mergedItems = mergedItems(items)
 
-        return executeScript(batchStockDeductionScript, mergedItems, autoInitializeFromDb = true) { result ->
+        return executeScript(
+            script = batchStockDeductionScript,
+            items = mergedItems,
+            autoInitializeFromDb = true
+        ) { result ->
             when (result) {
                 INSUFFICIENT_STOCK -> throw IllegalArgumentException(ErrorMessage.INSUFFICIENT_STOCK.message)
-                else -> false
+                else -> result >= 0
             }
         }
     }
@@ -42,7 +46,13 @@ class InventoryRedisRepository(
         if (items.isEmpty()) return true
         val mergedItems = mergedItems(items)
 
-        return executeScript(batchStockRestoreScript, mergedItems, autoInitializeFromDb = false) { false }
+        return executeScript(
+            script = batchStockRestoreScript,
+            items = mergedItems,
+            autoInitializeFromDb = false
+        ) { result ->
+            result >= 0
+        }
     }
 
     private fun mergedItems(items: List<InventoryItem>): List<InventoryItem> {
@@ -56,7 +66,7 @@ class InventoryRedisRepository(
         script: String,
         items: List<InventoryItem>,
         autoInitializeFromDb: Boolean,
-        shouldThrowError: (Long) -> Boolean
+        resultHandler: (Long) -> Boolean
     ): Boolean {
         val keys = items.map { getStockKey(it.productId) }
         val quantities = items.map { it.quantity.toString() }
@@ -81,14 +91,14 @@ class InventoryRedisRepository(
                         retryCount++
                         continue
                     }
-                    return shouldThrowError(result)
+                    return resultHandler(result)
                 }
 
                 INVALID_AMOUNT -> throw IllegalArgumentException(ErrorMessage.INVALID_STOCK_AMOUNT.message)
                 ERROR_WITH_ROLLBACK -> throw IllegalArgumentException("Error with rollback")
 
                 else -> {
-                    return shouldThrowError(result)
+                    return resultHandler(result)
                 }
             }
         }
