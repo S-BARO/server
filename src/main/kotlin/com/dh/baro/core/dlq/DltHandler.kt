@@ -18,7 +18,6 @@ class DltHandler(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    @DltHandler
     @Transactional
     @KafkaListener(topics = ["order-events.DLT", "inventory-events.DLT"], groupId = "dlt-handler")
     fun handleDltMessage(
