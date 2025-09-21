@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.DltHandler
+import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.KafkaHeaders
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.stereotype.Component
@@ -19,11 +20,12 @@ class DltHandler(
 
     @DltHandler
     @Transactional
+    @KafkaListener(topics = ["order-events.DLT", "inventory-events.DLT"], groupId = "dlt-handler")
     fun handleDltMessage(
         consumerRecord: ConsumerRecord<String, Any>,
         @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String,
-        @Header(value = KafkaHeaders.EXCEPTION_MESSAGE, required = false) exceptionMessage: String?,
-        @Header(value = "kafka_dlt-original-consumer-group", required = false) consumerGroup: String?
+        @Header(value = KafkaHeaders.DLT_EXCEPTION_MESSAGE, required = false) exceptionMessage: String?,
+        @Header(value = KafkaHeaders.DLT_ORIGINAL_CONSUMER_GROUP, required = false) consumerGroup: String?
     ) {
         try {
             val eventId = extractEventId(consumerRecord.value())

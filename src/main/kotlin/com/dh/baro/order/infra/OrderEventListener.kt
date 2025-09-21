@@ -67,7 +67,9 @@ class OrderEventListener(
 
             val rollbackSuccess = inventoryService.rollbackStocks(inventoryItems)
             if (!rollbackSuccess) {
-                log.error(ErrorMessage.INVENTORY_RESTORE_ERROR.format(inventoryInsufficientEvent.orderId))
+                val errorMessage = ErrorMessage.INVENTORY_RESTORE_ERROR.format(inventoryInsufficientEvent.orderId)
+                log.error(errorMessage)
+                throw RuntimeException(errorMessage)
             }
 
             idempotencyService.markProcessingAsCompleted(inventoryInsufficientEvent.eventId)
