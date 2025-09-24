@@ -1,6 +1,6 @@
 package com.dh.baro.look.presentation.dto
 
-import com.dh.baro.look.application.FittingSourceImageUploadInfo
+import com.dh.baro.look.application.dto.FittingSourceImageUploadInfo
 import java.time.Instant
 
 data class FittingSourceImageUploadUrlResponse(

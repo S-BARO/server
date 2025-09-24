@@ -1,5 +1,6 @@
 package com.dh.baro.look.application
 
+import com.dh.baro.look.application.dto.FittingSourceImageUploadInfo
 import com.dh.baro.look.domain.FittingSourceImage
 import com.dh.baro.look.domain.service.FittingSourceImageService
 import com.dh.baro.look.infra.s3.S3ImageClient

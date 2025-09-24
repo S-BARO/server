@@ -1,7 +1,6 @@
 package com.dh.baro.look.presentation.dto
 
-import com.dh.baro.look.application.LookCreateCommand
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.dh.baro.look.application.dto.LookCreateCommand
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 

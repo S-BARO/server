@@ -1,7 +1,7 @@
 package com.dh.baro.look.domain.service
 
 import com.dh.baro.core.ErrorMessage
-import com.dh.baro.look.application.LookCreateCommand
+import com.dh.baro.look.application.dto.LookCreateCommand
 import com.dh.baro.look.domain.Look
 import com.dh.baro.look.domain.ReactionType
 import com.dh.baro.look.domain.repository.LookRepository

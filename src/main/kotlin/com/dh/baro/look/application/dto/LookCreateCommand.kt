@@ -1,4 +1,4 @@
-package com.dh.baro.look.application
+package com.dh.baro.look.application.dto
 
 data class LookCreateCommand(
     val creatorId: Long,

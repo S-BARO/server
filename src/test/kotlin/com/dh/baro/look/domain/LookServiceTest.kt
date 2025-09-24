@@ -1,7 +1,7 @@
 package com.dh.baro.look.domain
 
 import com.dh.baro.core.ErrorMessage
-import com.dh.baro.look.application.LookCreateCommand
+import com.dh.baro.look.application.dto.LookCreateCommand
 import com.dh.baro.look.domain.repository.LookImageRepository
 import com.dh.baro.look.domain.repository.LookProductRepository
 import com.dh.baro.look.domain.repository.LookRepository
@@ -10,13 +10,11 @@ import com.dh.baro.look.lookFixture
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.data.domain.Slice
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
