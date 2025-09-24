@@ -32,7 +32,7 @@ class FittingSourceImageFacade(
     @Transactional
     fun completeImageUpload(imageId: Long, userId: Long) {
         val image = fittingSourceImageService.getFittingSourceImage(imageId, userId)
-        val imageUrl = "https://${s3ImageClient.bucketName}.s3.${s3ImageClient.region}.amazonaws.com/${image.getS3Key()}"
+        val imageUrl = s3ImageClient.getImageUrl(image.getS3Key()!!)
         fittingSourceImageService.completeImageUpload(image, imageUrl)
     }
 

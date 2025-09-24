@@ -57,6 +57,10 @@ class S3ImageClient(
         return "fitting-source-images/$imageId/$timestamp-$uuid.jpg"
     }
 
+    fun getImageUrl(s3Key: String): String {
+        return "https://${bucketName}.s3.${region}.amazonaws.com/${s3Key}"
+    }
+
     companion object {
         const val MAX_FILE_SIZE_BYTES = 10485760L // 10MB
         const val UPLOAD_DURATION_MINUTES = 10L
@@ -65,7 +69,7 @@ class S3ImageClient(
             "image/jpeg",
             "image/jpg",
             "image/png",
-            "image/webp"
+            "image/webp",
         )
     }
 }
