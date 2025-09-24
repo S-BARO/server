@@ -5,7 +5,12 @@ import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "fitting_source_images")
+@Table(
+    name = "fitting_source_images",
+    indexes = [
+        Index(name = "idx_user_id", columnList = "user_id")
+    ]
+)
 class FittingSourceImage(
     @Id
     @Column(name = "id")
