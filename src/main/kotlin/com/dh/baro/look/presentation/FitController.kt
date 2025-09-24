@@ -15,7 +15,7 @@ class FitController(
 
     @PostMapping("/source-images/upload-url")
     @ResponseStatus(HttpStatus.OK)
-    override fun generateUploadUrl(
+    override fun createUploadUrl(
         @CurrentUser userId: Long,
     ): FittingSourceImageUploadUrlResponse =
         FittingSourceImageUploadUrlResponse.from(
