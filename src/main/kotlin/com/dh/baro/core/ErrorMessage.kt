@@ -51,6 +51,7 @@ enum class ErrorMessage(val message: String) {
 
     // Look
     LOOK_NOT_FOUND("룩을 찾을 수 없습니다: %d"),
+    FITTING_SOURCE_IMAGE_NOT_FOUND("피팅 소스 이미지를 찾을 수 없습니다: %d"),
 
     // Outbox
     OUTBOX_MESSAGE_DEAD("아웃박스 메시지가 재시도에 최종 실패했습니다: [eventType=%s, id=%d]"),
