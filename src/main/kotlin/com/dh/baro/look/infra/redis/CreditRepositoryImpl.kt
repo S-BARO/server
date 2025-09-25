@@ -62,7 +62,7 @@ class CreditRepositoryImpl(
 
     companion object {
         private const val KEY_PREFIX = "img:credit:"
-        private const val CREDIT_CHECK_SCRIPT_PATH = "scripts/credit_check.lua"
-        private const val CREDIT_DEDUCT_SCRIPT_PATH = "scripts/credit_deduct.lua"
+        private const val CREDIT_CHECK_SCRIPT_PATH = "lua/credit_check.lua"
+        private const val CREDIT_DEDUCT_SCRIPT_PATH = "lua/credit_deduct.lua"
     }
 }
