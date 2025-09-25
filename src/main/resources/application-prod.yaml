@@ -74,6 +74,11 @@ oauth2:
         url: ${KAKAO_AUTH_URL}
         client_id: ${KAKAO_CLIENT_ID} # REST API
 
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent
+
 management:
   endpoints:
     web:
