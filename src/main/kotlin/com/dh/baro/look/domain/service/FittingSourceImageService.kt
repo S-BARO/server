@@ -2,6 +2,7 @@ package com.dh.baro.look.domain.service
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.look.domain.FittingSourceImage
+import com.dh.baro.look.domain.FittingSourceImageStatus
 import com.dh.baro.look.domain.repository.FittingSourceImageRepository
 import org.springframework.stereotype.Service
 
@@ -29,5 +30,5 @@ class FittingSourceImageService(
     }
 
     fun getUserFittingSourceImages(userId: Long): List<FittingSourceImage> =
-        fittingSourceImageRepository.findByUserIdOrderByIdDesc(userId)
+        fittingSourceImageRepository.findByUserIdAndUploadStatusOrderByIdDesc(userId, FittingSourceImageStatus.COMPLETED)
 }
