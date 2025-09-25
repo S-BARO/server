@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.parameters.RequestBody
+import jakarta.validation.Valid
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -266,4 +268,142 @@ interface FitSwagger {
     fun getUserFittingSourceImages(
         @Parameter(hidden = true) userId: Long
     ): FittingSourceImageListResponse
+
+    /* ───────────────────────────── AI 피팅 이미지 생성 ───────────────────────────── */
+    @Operation(
+        summary = "AI 피팅 이미지 생성",
+        description = """
+            사용자가 업로드한 피팅 소스 이미지와 의류 이미지를 사용하여 AI 피팅 이미지를 생성합니다.
+            AI 피팅 기능은 크레딧 시스템을 통해 제한되며, 크레딧이 부족하면 요청이 거부됩니다.
+            생성된 이미지는 PNG 형식의 바이너리 데이터로 반환됩니다.
+        """,
+        requestBody = RequestBody(
+            description = "AI 피팅 요청 정보",
+            required = true,
+            content = [
+                Content(
+                    mediaType = APPLICATION_JSON_VALUE,
+                    schema = Schema(implementation = AiFittingRequest::class),
+                    examples = [
+                        ExampleObject(
+                            name = "aiFittingRequest",
+                            value = """
+                            {
+                              "sourceImageUrl": "https://baro-bucket.s3.ap-northeast-2.amazonaws.com/fitting-images/12345.jpg",
+                              "clothingImageUrl": "https://example.com/clothing/shirt-123.jpg"
+                            }
+                            """
+                        )
+                    ]
+                )
+            ]
+        ),
+        responses = [
+            /* 200 */
+            ApiResponse(
+                responseCode = "200",
+                description = "AI 피팅 이미지 생성 성공",
+                content = [
+                    Content(
+                        mediaType = "image/png",
+                        schema = Schema(type = "string", format = "binary"),
+                        examples = [
+                            ExampleObject(
+                                name = "fittingImage",
+                                description = "생성된 피팅 이미지 (PNG 형식의 바이너리 데이터)"
+                            )
+                        ]
+                    )
+                ]
+            ),
+            /* 400 */
+            ApiResponse(
+                responseCode = "400",
+                description = "잘못된 요청 (필수 필드 누락, 유효하지 않은 URL 등)",
+                content = [
+                    Content(
+                        mediaType = APPLICATION_JSON_VALUE,
+                        schema = Schema(implementation = ErrorResponse::class),
+                        examples = [
+                            ExampleObject(
+                                name = "invalidRequest",
+                                value = """
+                                {
+                                  "message": "요청 본문 필드 검증에 실패했습니다."
+                                }
+                                """
+                            )
+                        ]
+                    )
+                ]
+            ),
+            /* 401 */
+            ApiResponse(
+                responseCode = "401",
+                description = "미인증(세션/토큰 없음)",
+                content = [
+                    Content(
+                        mediaType = APPLICATION_JSON_VALUE,
+                        schema = Schema(implementation = ErrorResponse::class),
+                        examples = [
+                            ExampleObject(
+                                name = "unauthorized",
+                                value = """
+                                {
+                                  "message": "로그인이 필요합니다."
+                                }
+                                """
+                            )
+                        ]
+                    )
+                ]
+            ),
+            /* 429 */
+            ApiResponse(
+                responseCode = "429",
+                description = "AI 피팅 크레딧 부족 또는 사용량 제한 초과",
+                content = [
+                    Content(
+                        mediaType = APPLICATION_JSON_VALUE,
+                        schema = Schema(implementation = ErrorResponse::class),
+                        examples = [
+                            ExampleObject(
+                                name = "rateLimitExceeded",
+                                value = """
+                                {
+                                  "message": "AI 피팅 크레딧이 부족합니다. 잠시 후 다시 시도해주세요"
+                                }
+                                """
+                            )
+                        ]
+                    )
+                ]
+            ),
+            /* 500 */
+            ApiResponse(
+                responseCode = "500",
+                description = "AI 피팅 생성 실패 (Gemini API 오류, 이미지 처리 오류 등)",
+                content = [
+                    Content(
+                        mediaType = APPLICATION_JSON_VALUE,
+                        schema = Schema(implementation = ErrorResponse::class),
+                        examples = [
+                            ExampleObject(
+                                name = "aiFittingError",
+                                value = """
+                                {
+                                  "message": "AI 피팅 이미지 생성 중 오류가 발생했습니다."
+                                }
+                                """
+                            )
+                        ]
+                    )
+                ]
+            )
+        ]
+    )
+    fun generateAiFitting(
+        @Parameter(hidden = true) userId: Long,
+        @Valid request: AiFittingRequest
+    ): org.springframework.http.ResponseEntity<ByteArray>
 }

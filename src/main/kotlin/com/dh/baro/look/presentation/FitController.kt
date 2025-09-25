@@ -42,7 +42,7 @@ class FitController(
         )
 
     @PostMapping("/ai-fitting")
-    fun generateAiFitting(
+    override fun generateAiFitting(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: AiFittingRequest,
     ): ResponseEntity<ByteArray> {
