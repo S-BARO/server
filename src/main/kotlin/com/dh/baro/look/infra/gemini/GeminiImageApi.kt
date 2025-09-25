@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient
 import java.util.*
 
 @Component
-class GeminiImageClient(
+class GeminiImageApi(
     @Value("\${gemini.api.key}") private val geminiApiKey: String,
     @Value("\${gemini.api.url}") private val geminiApiUrl: String,
 ) {

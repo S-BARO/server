@@ -1,8 +1,7 @@
 package com.dh.baro.look.presentation
 
 import com.dh.baro.core.annotation.CurrentUser
-import com.dh.baro.look.application.FittingSourceImageFacade
-import com.dh.baro.look.application.AiFittingFacade
+import com.dh.baro.look.application.FitFacade
 import com.dh.baro.look.presentation.dto.*
 import com.dh.baro.look.presentation.swagger.FitSwagger
 import jakarta.validation.Valid
@@ -14,8 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/fit")
 class FitController(
-    private val fittingSourceImageFacade: FittingSourceImageFacade,
-    private val aiFittingFacade: AiFittingFacade,
+    private val fitFacade: FitFacade,
 ) : FitSwagger {
 
     @PostMapping("/source-images/upload-url")
@@ -24,7 +22,7 @@ class FitController(
         @CurrentUser userId: Long,
     ): FittingSourceImageUploadUrlResponse =
         FittingSourceImageUploadUrlResponse.from(
-            fittingSourceImageFacade.generateUploadUrl(userId)
+            fitFacade.generateUploadUrl(userId)
         )
 
     @PutMapping("/source-images/{imageId}")
@@ -32,7 +30,7 @@ class FitController(
     override fun completeImageUpload(
         @CurrentUser userId: Long,
         @PathVariable imageId: Long,
-    ) = fittingSourceImageFacade.completeImageUpload(imageId, userId)
+    ) = fitFacade.completeImageUpload(imageId, userId)
 
     @GetMapping("/source-images")
     @ResponseStatus(HttpStatus.OK)
@@ -40,7 +38,7 @@ class FitController(
         @CurrentUser userId: Long,
     ): FittingSourceImageListResponse =
         FittingSourceImageListResponse.from(
-            fittingSourceImageFacade.getUserFittingSourceImages(userId)
+            fitFacade.getUserFittingSourceImages(userId)
         )
 
     @PostMapping("/ai-fitting")
@@ -48,7 +46,7 @@ class FitController(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: AiFittingRequest,
     ): ResponseEntity<ByteArray> {
-        val fittingResult = aiFittingFacade.generateAiFitting(
+        val fittingResult = fitFacade.generateAiFitting(
             request.sourceImageUrl,
             request.clothingImageUrl
         )

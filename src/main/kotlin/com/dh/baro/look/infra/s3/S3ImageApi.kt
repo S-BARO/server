@@ -11,7 +11,7 @@ import java.time.Instant
 import java.util.*
 
 @Component
-class S3ImageClient(
+class S3ImageApi(
     @Value("\${cloud.aws.s3.bucket}")
     val bucketName: String,
     @Value("\${cloud.aws.region.static}")
