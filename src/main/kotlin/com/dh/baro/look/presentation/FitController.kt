@@ -22,7 +22,7 @@ class FitController(
         @CurrentUser userId: Long,
     ): FittingSourceImageUploadUrlResponse =
         FittingSourceImageUploadUrlResponse.from(
-            fitFacade.generateUploadUrl(userId)
+            fitFacade.createUploadUrl(userId)
         )
 
     @PutMapping("/source-images/{imageId}")
@@ -47,6 +47,7 @@ class FitController(
         @Valid @RequestBody request: AiFittingRequest,
     ): ResponseEntity<ByteArray> {
         val fittingResult = fitFacade.generateAiFitting(
+            userId,
             request.sourceImageUrl,
             request.clothingImageUrl
         )

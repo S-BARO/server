@@ -3,6 +3,7 @@ package com.dh.baro.look.application
 import com.dh.baro.look.application.dto.AiFittingInfo
 import com.dh.baro.look.application.dto.FittingSourceImageUploadInfo
 import com.dh.baro.look.domain.FittingSourceImage
+import com.dh.baro.look.domain.service.CreditService
 import com.dh.baro.look.domain.service.FittingSourceImageService
 import com.dh.baro.look.infra.gemini.GeminiImageApi
 import com.dh.baro.look.infra.s3.S3ImageApi
@@ -14,10 +15,11 @@ class FitFacade(
     private val fittingSourceImageService: FittingSourceImageService,
     private val s3ImageApi: S3ImageApi,
     private val geminiImageApi: GeminiImageApi,
+    private val creditService: CreditService,
 ) {
 
     @Transactional
-    fun generateUploadUrl(userId: Long): FittingSourceImageUploadInfo {
+    fun createUploadUrl(userId: Long): FittingSourceImageUploadInfo {
         val pendingImage = fittingSourceImageService.createPendingImage(userId)
         val s3Info = s3ImageApi.generatePresignedUrl(pendingImage.id)
 
@@ -44,13 +46,17 @@ class FitFacade(
         return fittingSourceImageService.getUserFittingSourceImages(userId)
     }
 
-    fun generateAiFitting(sourceImageUrl: String, clothingImageUrl: String): AiFittingInfo {
-        val generatedImageData = geminiImageApi.generateAiFitting(sourceImageUrl, clothingImageUrl)
+    fun generateAiFitting(userId: Long, sourceImageUrl: String, clothingImageUrl: String): AiFittingInfo {
+        var generatedImageData: ByteArray? = null
+
+        creditService.executeWithCreditCheck(userId) {
+            generatedImageData = geminiImageApi.generateAiFitting(sourceImageUrl, clothingImageUrl)
+        }
 
         return AiFittingInfo(
             sourceImageUrl = sourceImageUrl,
             clothingImageUrl = clothingImageUrl,
-            generatedImageData = generatedImageData,
+            generatedImageData = generatedImageData!!,
         )
     }
 }
