@@ -60,7 +60,7 @@ src/
 
 # 🗺️ System Architecture
 
-<img width="1372" height="1070" alt="image" src="https://github.com/user-attachments/assets/4039d51b-b1e4-487d-ab9b-9e7b66616ba2" />
+<img width="1356" height="1024" alt="스크린샷 2025-09-18 오후 11 29 42" src="https://github.com/user-attachments/assets/ea287da6-bbef-4869-ba23-d1ae17e0d084" />
 
 
 <br>
@@ -91,10 +91,12 @@ MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
 
 [**[Part 4] 반복되는 인증,인가 처리 없애버리기(Ft. AOP & ArgumentResolver)**](https://chobo-backend.tistory.com/53)
 
-[**[Part 5] 단일 주문 기능 개선 삽질기 (Ft. TPS 54.9% 개선)**](https://chobo-backend.tistory.com/54)
+[**[Part 5] 단일 주문 성능 개선 삽질기 (Ft. JPA save, FK)**](https://chobo-backend.tistory.com/54)
 
 [**[Part 6] DeadLock 범인 찾기 (Ft. 위험한 FK?)**](https://chobo-backend.tistory.com/55)
 
-[**[Part 7] 일괄 주문 기능 74.6% 개선 (Ft. Eventual Consistency)**](https://chobo-backend.tistory.com/56)
+[**[Part 7] 일괄 주문 기능 개선 Vol.1 (Ft. Eventual Consistency, Lua Script)**](https://chobo-backend.tistory.com/56)
 
-[**[Part 8] Redis의 Lua Script는 Atomic 하지 않다..?**](https://chobo-backend.tistory.com/57)
+[**[Part 8] 일괄 주문 기능 개선 Vol.2 (Ft. Kafka, Transactional Outbox)**](https://chobo-backend.tistory.com/61)
+
+[**[Part 9] Redis의 Lua Script는 Atomic 하지 않다..?**](https://chobo-backend.tistory.com/57)
