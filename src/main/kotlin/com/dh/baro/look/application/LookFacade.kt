@@ -10,6 +10,7 @@ import com.dh.baro.look.domain.service.SwipeService
 import com.dh.baro.product.domain.service.ProductQueryService
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class LookFacade(
@@ -20,17 +21,20 @@ class LookFacade(
     private val swipingService: SwipeService,
 ) {
 
+    @Transactional
     fun createLook(cmd: LookCreateCommand): Look {
         userService.checkUserExists(cmd.creatorId)
         productQueryService.checkProductsExists(cmd.productIds)
         return lookService.createLook(cmd)
     }
 
+    @Transactional(readOnly = true)
     fun getSwipeLooks(userId: Long, cursorId: Long?, size: Int): Slice<Look> {
         val lookIds = swipingService.getLookIdsByUserId(userId)
         return lookService.getLooksForSwipe(lookIds, cursorId, size)
     }
 
+    @Transactional(readOnly = true)
     fun getLookDetail(lookId: Long): LookDetailBundle {
         val look = lookService.getLookDetail(lookId)
 

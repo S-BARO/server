@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(readOnly = true)
 class LookService(
     private val lookRepository: LookRepository,
 ) {
@@ -22,7 +21,6 @@ class LookService(
         }
     }
 
-    @Transactional
     fun createLook(cmd: LookCreateCommand): Look {
         val look = Look.newLook(
             creatorId = cmd.creatorId,
@@ -48,7 +46,6 @@ class LookService(
         lookRepository.findWithImagesAndProductsById(lookId)
             ?: throw IllegalArgumentException(ErrorMessage.LOOK_NOT_FOUND.format(lookId))
 
-    @Transactional
     fun incrementLikeCountIfNeeded(type: ReactionType, lookId: Long) {
         if (type == ReactionType.LIKE) {
             lookRepository.incrementLike(lookId)

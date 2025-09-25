@@ -18,11 +18,13 @@ class ProductFacade(
     private val categoryService: CategoryService,
 ) {
 
+    @Transactional
     fun createProduct(cmd: ProductCreateCommand): Product {
         val categories = categoryService.getCategoriesByIds(cmd.categoryIds)
         return productService.createProduct(cmd, categories)
     }
 
+    @Transactional(readOnly = true)
     fun getProductDetail(productId: Long): ProductDetailBundle {
         val product = productQueryService.getProductDetail(productId)
         val store = storeService.getStoreById(product.storeId)
