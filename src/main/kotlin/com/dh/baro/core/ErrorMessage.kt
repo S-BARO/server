@@ -59,8 +59,9 @@ enum class ErrorMessage(val message: String) {
     GEMINI_API_NO_IMAGE_DATA("Gemini API 응답에 이미지 데이터가 없습니다"),
     IMAGE_DOWNLOAD_FAILED("이미지 다운로드에 실패했습니다: %s"),
     IMAGE_DOWNLOAD_NO_DATA("이미지 다운로드 응답에 데이터가 없습니다"),
-    AI_FITTING_RATE_LIMIT_EXCEEDED("AI 피팅 사용량 한도를 초과했습니다. 잠시 후 다시 시도해주세요"),
-    AI_FITTING_TOKEN_BUCKET_ERROR("AI 피팅 토큰 버킷 처리 중 오류가 발생했습니다"),
+    AI_FITTING_RATE_LIMIT_EXCEEDED("AI 피팅 크레딧이 부족합니다. 잠시 후 다시 시도해주세요"),
+    AI_FITTING_TOKEN_BUCKET_ERROR("AI 피팅 크레딧 처리 중 오류가 발생했습니다"),
+    REDIS_OPERATION_ERROR("Redis 연산 중 오류가 발생했습니다"),
 
     // Outbox
     OUTBOX_MESSAGE_DEAD("아웃박스 메시지가 재시도에 최종 실패했습니다: [eventType=%s, id=%d]"),
