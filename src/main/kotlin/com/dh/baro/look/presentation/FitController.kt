@@ -2,15 +2,20 @@ package com.dh.baro.look.presentation
 
 import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.look.application.FittingSourceImageFacade
+import com.dh.baro.look.application.AiFittingFacade
 import com.dh.baro.look.presentation.dto.*
 import com.dh.baro.look.presentation.swagger.FitSwagger
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/fit")
 class FitController(
     private val fittingSourceImageFacade: FittingSourceImageFacade,
+    private val aiFittingFacade: AiFittingFacade,
 ) : FitSwagger {
 
     @PostMapping("/source-images/upload-url")
@@ -37,4 +42,19 @@ class FitController(
         FittingSourceImageListResponse.from(
             fittingSourceImageFacade.getUserFittingSourceImages(userId)
         )
+
+    @PostMapping("/ai-fitting")
+    fun generateAiFitting(
+        @CurrentUser userId: Long,
+        @Valid @RequestBody request: AiFittingRequest,
+    ): ResponseEntity<ByteArray> {
+        val fittingResult = aiFittingFacade.generateAiFitting(
+            request.sourceImageUrl,
+            request.clothingImageUrl
+        )
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.IMAGE_PNG)
+            .body(fittingResult.generatedImageData)
+    }
 }
