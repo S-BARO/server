@@ -53,6 +53,13 @@ enum class ErrorMessage(val message: String) {
     LOOK_NOT_FOUND("룩을 찾을 수 없습니다: %d"),
     FITTING_SOURCE_IMAGE_NOT_FOUND("피팅 소스 이미지를 찾을 수 없습니다: %d"),
 
+    // AI Fitting
+    GEMINI_API_REQUEST_FAILED("Gemini API 요청에 실패했습니다: %s"),
+    GEMINI_API_NO_CANDIDATES("Gemini API 응답에 후보가 없습니다"),
+    GEMINI_API_NO_IMAGE_DATA("Gemini API 응답에 이미지 데이터가 없습니다"),
+    IMAGE_DOWNLOAD_FAILED("이미지 다운로드에 실패했습니다: %s"),
+    IMAGE_DOWNLOAD_NO_DATA("이미지 다운로드 응답에 데이터가 없습니다"),
+
     // Outbox
     OUTBOX_MESSAGE_DEAD("아웃박스 메시지가 재시도에 최종 실패했습니다: [eventType=%s, id=%d]"),
     UNKNOWN_EVENT_TYPE("알 수 없는 이벤트 타입입니다: %s"),
