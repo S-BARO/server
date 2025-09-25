@@ -20,7 +20,6 @@ class FittingSourceImageService(
         val image = fittingSourceImageRepository.findById(imageId).orElse(null)
             ?: throw IllegalArgumentException(ErrorMessage.FITTING_SOURCE_IMAGE_NOT_FOUND.format(imageId))
         require(image.userId == userId) { "이미지 소유자가 아닙니다." }
-        requireNotNull(image.getS3Key()) { "S3 키가 설정되지 않았습니다." }
 
         return image
     }

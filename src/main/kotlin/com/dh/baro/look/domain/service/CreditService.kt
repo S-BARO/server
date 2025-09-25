@@ -17,7 +17,7 @@ class CreditService(
         val lock = redissonClient.getLock(lockKey)
 
         val acquired = try {
-            lock.tryLock(LOCK_WAIT_TIME, LOCK_LEASE_TIME, TimeUnit.SECONDS)
+            lock.tryLock(LOCK_WAIT_TIME, TimeUnit.SECONDS)
         } catch (e: InterruptedException) {
             throw IllegalStateException(ErrorMessage.AI_FITTING_TOKEN_BUCKET_ERROR.message)
         }
@@ -38,13 +38,14 @@ class CreditService(
             }
 
         } finally {
-            lock.unlock()
+            if (lock.isHeldByCurrentThread) {
+                lock.unlock()
+            }
         }
     }
 
     companion object {
         private const val LOCK_KEY_PREFIX = "credit:lock:"
         private const val LOCK_WAIT_TIME = 3L
-        private const val LOCK_LEASE_TIME = 10L
     }
 }

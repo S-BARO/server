@@ -81,6 +81,6 @@ class GeminiImageApi(
         val imagePart = candidate.content?.parts?.filterIsInstance<GeminiImagePart>()?.firstOrNull()
             ?: throw IllegalStateException(ErrorMessage.GEMINI_API_NO_IMAGE_DATA.message)
 
-        return Base64.getDecoder().decode(imagePart.inline_data.data)
+        return Base64.getDecoder().decode(imagePart.inlineData.data)
     }
 }

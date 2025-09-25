@@ -8,7 +8,6 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest
 import java.time.Duration
 import java.time.Instant
-import java.util.*
 
 @Component
 class S3ImageApi(
@@ -18,8 +17,7 @@ class S3ImageApi(
     val region: String,
 ) {
 
-    fun generatePresignedUrl(imageId: Long): S3PresignedUrlInfo {
-        val s3Key = generateS3Key(imageId)
+    fun generatePresignedUrl(s3Key: String): S3PresignedUrlInfo {
         val duration = Duration.ofMinutes(UPLOAD_DURATION_MINUTES)
         val expiresAt = Instant.now().plus(duration)
 
@@ -49,12 +47,6 @@ class S3ImageApi(
             maxFileSize = MAX_FILE_SIZE_BYTES,
             allowedTypes = ALLOWED_CONTENT_TYPES,
         )
-    }
-
-    private fun generateS3Key(imageId: Long): String {
-        val timestamp = System.currentTimeMillis()
-        val uuid = UUID.randomUUID().toString().substring(0, 8)
-        return "fitting-source-images/$imageId/$timestamp-$uuid.jpg"
     }
 
     fun getImageUrl(s3Key: String): String {

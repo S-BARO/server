@@ -27,7 +27,8 @@ local tokens_to_add = math.floor(elapsed_time / refill_interval)
 
 if tokens_to_add > 0 then
     tokens = math.min(tokens + tokens_to_add, max_capacity)
-    last_refill_time = current_time
+    -- 누적 리필: 사용된 리필만큼 기준 시점을 앞으로 이동(나머지 시간 보존)
+    last_refill_time = last_refill_time + (tokens_to_add * refill_interval)
 end
 
 -- 크레딧 가용성 검증 및 상태 저장

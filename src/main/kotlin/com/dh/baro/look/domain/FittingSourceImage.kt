@@ -3,6 +3,7 @@ package com.dh.baro.look.domain
 import com.dh.baro.core.BaseTimeEntity
 import com.dh.baro.core.IdGenerator
 import jakarta.persistence.*
+import java.util.*
 
 @Entity
 @Table(
@@ -20,7 +21,7 @@ class FittingSourceImage(
     val userId: Long,
 
     @Column(name = "s3_key", nullable = false, length = 500)
-    private var s3Key: String? = null,
+    val s3Key: String,
 
     @Column(name = "image_url", nullable = true, length = 500)
     private var imageUrl: String? = null,
@@ -32,8 +33,6 @@ class FittingSourceImage(
 
     override fun getId(): Long = id
 
-    fun getS3Key() = s3Key
-
     fun getImageUrl() = imageUrl
 
     fun getUploadStatus() = uploadStatus
@@ -43,15 +42,20 @@ class FittingSourceImage(
         this.uploadStatus = FittingSourceImageStatus.COMPLETED
     }
 
-    fun setS3Key(s3Key: String) {
-        this.s3Key = s3Key
-    }
-
     companion object {
-        fun newPendingImage(userId: Long): FittingSourceImage =
-            FittingSourceImage(
-                id = IdGenerator.generate(),
+        fun newPendingImage(userId: Long): FittingSourceImage {
+            val newId = IdGenerator.generate()
+            return FittingSourceImage(
+                id = newId,
                 userId = userId,
+                s3Key = generateS3Key(newId),
             )
+        }
+
+        private fun generateS3Key(imageId: Long): String {
+            val timestamp = System.currentTimeMillis()
+            val uuid = UUID.randomUUID().toString().substring(0, 8)
+            return "fitting-source-images/$imageId/$timestamp-$uuid.jpg"
+        }
     }
 }

@@ -21,9 +21,7 @@ class FitFacade(
     @Transactional
     fun createUploadUrl(userId: Long): FittingSourceImageUploadInfo {
         val pendingImage = fittingSourceImageService.createPendingImage(userId)
-        val s3Info = s3ImageApi.generatePresignedUrl(pendingImage.id)
-
-        pendingImage.setS3Key(s3Info.s3Key)
+        val s3Info = s3ImageApi.generatePresignedUrl(pendingImage.s3Key)
 
         return FittingSourceImageUploadInfo(
             imageId = pendingImage.id,
@@ -37,7 +35,7 @@ class FitFacade(
     @Transactional
     fun completeImageUpload(imageId: Long, userId: Long) {
         val image = fittingSourceImageService.getFittingSourceImage(imageId, userId)
-        val imageUrl = s3ImageApi.getImageUrl(image.getS3Key()!!)
+        val imageUrl = s3ImageApi.getImageUrl(image.s3Key)
         fittingSourceImageService.completeImageUpload(image, imageUrl)
     }
 
