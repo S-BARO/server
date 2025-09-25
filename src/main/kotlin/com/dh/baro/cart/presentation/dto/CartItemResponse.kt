@@ -1,7 +1,7 @@
 package com.dh.baro.cart.presentation.dto
 
 import com.dh.baro.cart.application.CartItemBundle
-import com.dh.baro.core.LongToStringSerializer
+import com.dh.baro.core.serialization.LongToStringSerializer
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.math.BigDecimal
 import java.math.RoundingMode

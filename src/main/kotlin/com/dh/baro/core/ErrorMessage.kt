@@ -51,6 +51,17 @@ enum class ErrorMessage(val message: String) {
 
     // Look
     LOOK_NOT_FOUND("룩을 찾을 수 없습니다: %d"),
+    FITTING_SOURCE_IMAGE_NOT_FOUND("피팅 소스 이미지를 찾을 수 없습니다: %d"),
+
+    // AI Fitting
+    GEMINI_API_REQUEST_FAILED("Gemini API 요청에 실패했습니다: %s"),
+    GEMINI_API_NO_CANDIDATES("Gemini API 응답에 후보가 없습니다"),
+    GEMINI_API_NO_IMAGE_DATA("Gemini API 응답에 이미지 데이터가 없습니다"),
+    IMAGE_DOWNLOAD_FAILED("이미지 다운로드에 실패했습니다: %s"),
+    IMAGE_DOWNLOAD_NO_DATA("이미지 다운로드 응답에 데이터가 없습니다"),
+    AI_FITTING_RATE_LIMIT_EXCEEDED("AI 피팅 크레딧이 부족합니다. 잠시 후 다시 시도해주세요"),
+    AI_FITTING_TOKEN_BUCKET_ERROR("AI 피팅 크레딧 처리 중 오류가 발생했습니다"),
+    REDIS_OPERATION_ERROR("Redis 연산 중 오류가 발생했습니다"),
 
     // Outbox
     OUTBOX_MESSAGE_DEAD("아웃박스 메시지가 재시도에 최종 실패했습니다: [eventType=%s, id=%d]"),

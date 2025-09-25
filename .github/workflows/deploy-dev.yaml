@@ -114,6 +114,11 @@ jobs:
               -e MONGODB_DATABASE=${{ secrets.MONGODB_DATABASE }} \
               -e MONGODB_AUTH_SOURCE=${{ secrets.MONGODB_AUTH_SOURCE }} \
               -e KAFKA_HOST=${{ secrets.KAFKA_HOST }} \
+              -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+              -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+              -e CLOUD_AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }} \
+              -e CLOUD_AWS_REGION_STATIC=${{ secrets.AWS_REGION }} \
+              -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
               --name ${{ secrets.DOCKER_REPOSITORY }} \
               ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             

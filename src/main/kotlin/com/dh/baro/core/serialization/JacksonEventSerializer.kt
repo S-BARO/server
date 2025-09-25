@@ -1,4 +1,4 @@
-package com.dh.baro.core.event
+package com.dh.baro.core.serialization
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper

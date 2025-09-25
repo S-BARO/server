@@ -1,4 +1,4 @@
-package com.dh.baro.core.event
+package com.dh.baro.core.serialization
 
 interface EventSerializer {
     fun serialize(event: Any): String
