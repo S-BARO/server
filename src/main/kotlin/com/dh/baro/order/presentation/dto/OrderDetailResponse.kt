@@ -1,6 +1,6 @@
 package com.dh.baro.order.presentation.dto
 
-import com.dh.baro.core.LongToStringSerializer
+import com.dh.baro.core.serialization.LongToStringSerializer
 import com.dh.baro.order.domain.Order
 import com.dh.baro.order.domain.OrderStatus
 import com.fasterxml.jackson.databind.annotation.JsonSerialize

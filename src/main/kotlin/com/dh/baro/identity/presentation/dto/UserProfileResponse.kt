@@ -1,6 +1,6 @@
 package com.dh.baro.identity.presentation.dto
 
-import com.dh.baro.core.LongToStringSerializer
+import com.dh.baro.core.serialization.LongToStringSerializer
 import com.dh.baro.identity.domain.User
 import com.dh.baro.identity.domain.UserRole
 import com.fasterxml.jackson.databind.annotation.JsonSerialize

@@ -1,7 +1,5 @@
-package com.dh.baro.core.advice
+package com.dh.baro.core
 
-import com.dh.baro.core.ErrorMessage
-import com.dh.baro.core.ErrorResponse
 import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.core.exception.ForbiddenException
 import com.dh.baro.core.exception.UnauthorizedException

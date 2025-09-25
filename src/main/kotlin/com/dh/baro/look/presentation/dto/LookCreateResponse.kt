@@ -1,6 +1,6 @@
 package com.dh.baro.look.presentation.dto
 
-import com.dh.baro.core.LongToStringSerializer
+import com.dh.baro.core.serialization.LongToStringSerializer
 import com.dh.baro.look.domain.Look
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
