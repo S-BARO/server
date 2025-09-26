@@ -10,8 +10,8 @@ server:
         same-site: none
   tomcat:
     threads:
-      max: 400          # 최대 쓰레드 수 (기본: 200)
-      min-spare: 400      # 최소 유지 쓰레드 수 (기본: 10)
+      max: 500          # 최대 쓰레드 수 (기본: 200)
+      min-spare: 500      # 최소 유지 쓰레드 수 (기본: 10)
     mbeanregistry:
       enabled: true
   url: ${DEV_SERVER_URL}
