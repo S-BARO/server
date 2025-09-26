@@ -38,6 +38,18 @@ class LookController(
         reactionType = request.reactionType,
     )
 
+    @PutMapping("/{lookId}/swipe2")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun recordSwipe2(
+        @RequestParam userId: Long,
+        @PathVariable lookId: Long,
+        @Valid @RequestBody request: SwipeRequest,
+    ) = swipeFacade.recordSwipe(
+        userId = userId,
+        lookId = lookId,
+        reactionType = request.reactionType,
+    )
+
     @DeleteMapping("/{lookId}/swipe")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     override fun cancelSwipe(
