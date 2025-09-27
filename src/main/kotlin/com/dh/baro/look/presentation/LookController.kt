@@ -4,8 +4,10 @@ import com.dh.baro.core.Cursor
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.look.application.LookFacade
+import com.dh.baro.look.application.LookReactionFacade
 import com.dh.baro.look.application.SwipeFacade
 import com.dh.baro.look.presentation.dto.*
+import com.dh.baro.look.presentation.dto.LookReactionRequest
 import com.dh.baro.look.presentation.swagger.LookSwagger
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 class LookController(
     private val lookFacade: LookFacade,
     private val swipeFacade: SwipeFacade,
+    private val lookReactionFacade: LookReactionFacade,
 ) : LookSwagger {
 
     @PostMapping
@@ -45,6 +48,18 @@ class LookController(
         @PathVariable lookId: Long,
         @Valid @RequestBody request: SwipeRequest,
     ) = swipeFacade.recordSwipe(
+        userId = userId,
+        lookId = lookId,
+        reactionType = request.reactionType,
+    )
+
+    @PutMapping("/{lookId}/reaction")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun recordLookReaction(
+        @RequestParam userId: Long,
+        @PathVariable lookId: Long,
+        @Valid @RequestBody request: LookReactionRequest,
+    ) = lookReactionFacade.recordLookReaction(
         userId = userId,
         lookId = lookId,
         reactionType = request.reactionType,

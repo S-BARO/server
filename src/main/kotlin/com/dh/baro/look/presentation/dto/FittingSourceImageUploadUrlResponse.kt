@@ -1,9 +1,12 @@
 package com.dh.baro.look.presentation.dto
 
+import com.dh.baro.core.serialization.LongToStringSerializer
 import com.dh.baro.look.application.dto.FittingSourceImageUploadInfo
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.time.Instant
 
 data class FittingSourceImageUploadUrlResponse(
+    @JsonSerialize(using = LongToStringSerializer::class)
     val imageId: Long,
     val presignedUrl: String,
     val expiresAt: Instant,
