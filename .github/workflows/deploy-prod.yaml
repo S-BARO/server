@@ -107,6 +107,12 @@ jobs:
               -e KAKAO_AUTH_URL=${{ secrets.KAKAO_AUTH_URL }} \
               -e KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} \
               -e SERVER_URL=${{ secrets.PROD_SERVER_URL }} \
+              -e MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }} \
+              -e MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }} \
+              -e MONGODB_HOST=${{ secrets.MONGODB_HOST }} \
+              -e MONGODB_PORT=${{ secrets.MONGODB_PORT }} \
+              -e MONGODB_DATABASE=${{ secrets.MONGODB_DATABASE }} \
+              -e MONGODB_AUTH_SOURCE=${{ secrets.MONGODB_AUTH_SOURCE }} \
               -e KAFKA_HOST=${{ secrets.KAFKA_HOST }} \
               -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
               -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
