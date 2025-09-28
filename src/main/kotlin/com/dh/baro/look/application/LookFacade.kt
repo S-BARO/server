@@ -7,6 +7,8 @@ import com.dh.baro.look.application.dto.LookDetailBundle
 import com.dh.baro.look.domain.*
 import com.dh.baro.look.domain.service.LookService
 import com.dh.baro.look.domain.service.SwipeService
+import com.dh.baro.look.infra.cache.LookCacheService
+import com.dh.baro.look.presentation.dto.LookDetailResponse
 import com.dh.baro.product.domain.service.ProductQueryService
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
@@ -19,6 +21,7 @@ class LookFacade(
     private val productQueryService: ProductQueryService,
     private val lookService: LookService,
     private val swipingService: SwipeService,
+    private val lookCacheService: LookCacheService,
 ) {
 
     @Transactional
@@ -35,20 +38,34 @@ class LookFacade(
     }
 
     @Transactional(readOnly = true)
-    fun getLookDetail(lookId: Long): LookDetailBundle {
-        val look = lookService.getLookDetail(lookId)
+    fun getLookDetail(lookId: Long): LookDetailResponse {
+        val cachedResponse = lookCacheService.getCachedLookDetail(lookId)
+        if (cachedResponse != null) {
+            return cachedResponse
+        }
 
-        val orderedProductIds = look.getOrderedProductIds()
-        val products = productQueryService.getAllByIds(orderedProductIds)
+        return try {
+            val look = lookService.getLookDetail(lookId)
 
-        val storeIds = products.map { it.storeId }.toSet()
-        val stores = storeService.getStoresByIds(storeIds)
+            val orderedProductIds = look.getOrderedProductIds()
+            val products = productQueryService.getAllByIds(orderedProductIds)
 
-        return LookDetailBundle(
-            look = look,
-            orderedProductIds = orderedProductIds,
-            products = products,
-            stores = stores,
-        )
+            val storeIds = products.map { it.storeId }.toSet()
+            val stores = storeService.getStoresByIds(storeIds)
+
+            val lookDetailBundle = LookDetailBundle(
+                look = look,
+                orderedProductIds = orderedProductIds,
+                products = products,
+                stores = stores,
+            )
+
+            val response = LookDetailResponse.from(lookDetailBundle)
+            lookCacheService.cacheLookDetail(lookId, response)
+            response
+        } catch (e: Exception) {
+            lookCacheService.cacheEmptyLookDetail(lookId)
+            throw e
+        }
     }
 }

@@ -26,8 +26,8 @@ spring:
     password: ${DB_PASSWORD}
     hikari:
       auto-commit: false
-      minimum-idle: 80
-      maximum-pool-size: 80
+      minimum-idle: 20
+      maximum-pool-size: 20
 
   data:
     redis:

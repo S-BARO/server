@@ -46,8 +46,6 @@ enum class ErrorMessage(val message: String) {
     ORDER_CONFIRM_NO_ITEMS("주문 항목이 없어 주문을 확정할 수 없습니다."),
     ORDER_ALREADY_CANCELLED("주문(orderId = %d)는 이미 취소되었습니다."),
     ORDER_CANCEL_INVALID_STATUS("%s 상태일 때는 주문(orderId = %d)을 취소할 수 없습니다."),
-    ORDER_COMPENSATION_USER_NOT_AVAILABLE("보상 트랜잭션 실행 시 사용자 정보를 찾을 수 없습니다."),
-    ORDER_COMPENSATION_INVENTORY_CONFLICT("재고 부족으로 인한 주문 취소: 상품 %d"),
 
     // Look
     LOOK_NOT_FOUND("룩을 찾을 수 없습니다: %d"),
@@ -62,6 +60,9 @@ enum class ErrorMessage(val message: String) {
     AI_FITTING_RATE_LIMIT_EXCEEDED("AI 피팅 크레딧이 부족합니다. 잠시 후 다시 시도해주세요"),
     AI_FITTING_TOKEN_BUCKET_ERROR("AI 피팅 크레딧 처리 중 오류가 발생했습니다"),
     REDIS_OPERATION_ERROR("Redis 연산 중 오류가 발생했습니다"),
+
+    // Cache
+    CACHE_NOT_FOUND("캐시를 찾을 수 없습니다: %s"),
 
     // Outbox
     OUTBOX_MESSAGE_DEAD("아웃박스 메시지가 재시도에 최종 실패했습니다: [eventType=%s, id=%d]"),

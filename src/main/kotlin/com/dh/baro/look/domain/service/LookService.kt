@@ -5,14 +5,15 @@ import com.dh.baro.look.application.dto.LookCreateCommand
 import com.dh.baro.look.domain.Look
 import com.dh.baro.look.domain.ReactionType
 import com.dh.baro.look.domain.repository.LookRepository
+import com.dh.baro.look.infra.cache.LookCacheService
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class LookService(
     private val lookRepository: LookRepository,
+    private val lookCacheService: LookCacheService,
 ) {
 
     fun checkLookExists(lookId: Long) {
@@ -49,6 +50,7 @@ class LookService(
     fun incrementLikeCountIfNeeded(type: ReactionType, lookId: Long) {
         if (type == ReactionType.LIKE) {
             lookRepository.incrementLike(lookId)
+            lookCacheService.evictLookDetail(lookId)
         }
     }
 }

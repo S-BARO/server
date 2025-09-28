@@ -2,9 +2,11 @@ package com.dh.baro.look.presentation.dto
 
 import com.dh.baro.core.serialization.LongToStringSerializer
 import com.dh.baro.look.application.dto.LookDetailBundle
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.math.BigDecimal
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class LookDetailResponse(
     @JsonSerialize(using = LongToStringSerializer::class)
     val lookId: Long,
@@ -16,6 +18,7 @@ data class LookDetailResponse(
     val products: List<ProductItemDto>,
 ) {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class ProductItemDto(
         @JsonSerialize(using = LongToStringSerializer::class)
         val productId: Long,
@@ -26,6 +29,16 @@ data class LookDetailResponse(
     )
 
     companion object {
+
+        val EMPTY = LookDetailResponse(
+            lookId = -1L,
+            title = "",
+            description = null,
+            thumbnailUrl = "",
+            likesCount = 0,
+            lookImageUrls = emptyList(),
+            products = emptyList()
+        )
 
         fun from(bundle: LookDetailBundle): LookDetailResponse {
             val look = bundle.look

@@ -90,7 +90,6 @@ class LookController(
     @GetMapping("/{lookId}")
     @ResponseStatus(HttpStatus.OK)
     override fun getLookDetail(@PathVariable lookId: Long): LookDetailResponse {
-        val lookDetailBundle = lookFacade.getLookDetail(lookId)
-        return LookDetailResponse.from(lookDetailBundle)
+        return lookFacade.getLookDetail(lookId)
     }
 }
