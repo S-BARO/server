@@ -2,29 +2,41 @@ package com.dh.baro.look.presentation.dto
 
 import com.dh.baro.core.serialization.LongToStringSerializer
 import com.dh.baro.look.application.dto.LookDetailBundle
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.math.BigDecimal
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class LookDetailResponse(
-    @JsonSerialize(using = LongToStringSerializer::class)
+data class LookDetailResponse @JsonCreator constructor(
+    @JsonProperty("lookId") @JsonSerialize(using = LongToStringSerializer::class)
     val lookId: Long,
+    @JsonProperty("title")
     val title: String,
+    @JsonProperty("description")
     val description: String?,
+    @JsonProperty("thumbnailUrl")
     val thumbnailUrl: String,
+    @JsonProperty("likesCount")
     val likesCount: Int,
+    @JsonProperty("lookImageUrls")
     val lookImageUrls: List<String>,
+    @JsonProperty("products")
     val products: List<ProductItemDto>,
 ) {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    data class ProductItemDto(
-        @JsonSerialize(using = LongToStringSerializer::class)
+    data class ProductItemDto @JsonCreator constructor(
+        @JsonProperty("productId") @JsonSerialize(using = LongToStringSerializer::class)
         val productId: Long,
+        @JsonProperty("storeName")
         val storeName: String,
+        @JsonProperty("productName")
         val productName: String,
+        @JsonProperty("price")
         val price: BigDecimal,
+        @JsonProperty("thumbnailUrl")
         val thumbnailUrl: String,
     )
 

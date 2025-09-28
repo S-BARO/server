@@ -10,6 +10,7 @@ import com.dh.baro.look.domain.service.SwipeService
 import com.dh.baro.look.infra.redis.LookCacheService
 import com.dh.baro.look.presentation.dto.LookDetailResponse
 import com.dh.baro.product.domain.service.ProductQueryService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Slice
@@ -25,6 +26,7 @@ class LookFacade(
     private val swipingService: SwipeService,
     private val lookCacheService: LookCacheService,
 ) {
+    private val logger = LoggerFactory.getLogger(LookFacade::class.java)
 
     @Autowired
     @Lazy
@@ -45,11 +47,7 @@ class LookFacade(
 
     fun getLookDetail(lookId: Long): LookDetailResponse {
         val cachedResponse = lookCacheService.getCachedLookDetail(lookId)
-        if (cachedResponse != null) {
-            return cachedResponse
-        }
-
-        return self.getLookDetailFromDatabase(lookId)
+        return cachedResponse ?: self.getLookDetailFromDatabase(lookId)
     }
 
     @Transactional(readOnly = true)
@@ -72,8 +70,10 @@ class LookFacade(
 
             val response = LookDetailResponse.from(lookDetailBundle)
             lookCacheService.cacheLookDetail(lookId, response)
+            logger.info("Look 상세 데이터 조회 및 캐시 저장 완료 - lookId: {}", lookId)
             response
         } catch (e: Exception) {
+            logger.error("Look 상세 데이터 조회 실패 - lookId: {}", lookId, e)
             lookCacheService.cacheEmptyLookDetail(lookId)
             throw e
         }
