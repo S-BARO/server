@@ -36,13 +36,13 @@ class UserService(
             ?.run { return RegistrationResult(user.id, user.role, false) }
 
         val user = User.newUser(socialUserInfo.nickname, socialUserInfo.email)
-            .let { newUser -> userRepository.save(newUser) }
+        val newUser = userRepository.save(user)
         SocialAccount.of(user, provider, socialUserInfo.providerId)
             .let { socialAccount -> socialAccountRepository.save(socialAccount) }
 
         return RegistrationResult(
-            userId = user.id,
-            userRole = user.role,
+            userId = newUser.id,
+            userRole = newUser.role,
             isNew = true,
         )
     }
