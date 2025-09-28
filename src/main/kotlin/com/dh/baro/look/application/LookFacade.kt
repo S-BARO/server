@@ -7,9 +7,11 @@ import com.dh.baro.look.application.dto.LookDetailBundle
 import com.dh.baro.look.domain.*
 import com.dh.baro.look.domain.service.LookService
 import com.dh.baro.look.domain.service.SwipeService
-import com.dh.baro.look.infra.cache.LookCacheService
+import com.dh.baro.look.infra.redis.LookCacheService
 import com.dh.baro.look.presentation.dto.LookDetailResponse
 import com.dh.baro.product.domain.service.ProductQueryService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,6 +26,10 @@ class LookFacade(
     private val lookCacheService: LookCacheService,
 ) {
 
+    @Autowired
+    @Lazy
+    private lateinit var self: LookFacade
+
     @Transactional
     fun createLook(cmd: LookCreateCommand): Look {
         userService.checkUserExists(cmd.creatorId)
@@ -37,13 +43,17 @@ class LookFacade(
         return lookService.getLooksForSwipe(lookIds, cursorId, size)
     }
 
-    @Transactional(readOnly = true)
     fun getLookDetail(lookId: Long): LookDetailResponse {
         val cachedResponse = lookCacheService.getCachedLookDetail(lookId)
         if (cachedResponse != null) {
             return cachedResponse
         }
 
+        return self.getLookDetailFromDatabase(lookId)
+    }
+
+    @Transactional(readOnly = true)
+    fun getLookDetailFromDatabase(lookId: Long): LookDetailResponse {
         return try {
             val look = lookService.getLookDetail(lookId)
 

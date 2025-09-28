@@ -1,4 +1,4 @@
-package com.dh.baro.look.infra.cache
+package com.dh.baro.look.infra.redis
 
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
@@ -19,14 +19,14 @@ class LookCacheConfig {
     @Bean(name = ["lookCacheManager"])
     fun lookCacheManager(redisConnectionFactory: RedisConnectionFactory): RedisCacheManager {
         val normalConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(15))
+            .entryTtl(Duration.ofMinutes(1440))
             .disableCachingNullValues()
             .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(StringRedisSerializer()))
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJackson2JsonRedisSerializer()))
             .prefixCacheNameWith("look:")
 
         val emptyConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(5))
+            .entryTtl(Duration.ofMinutes(60))
             .disableCachingNullValues()
             .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(StringRedisSerializer()))
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJackson2JsonRedisSerializer()))

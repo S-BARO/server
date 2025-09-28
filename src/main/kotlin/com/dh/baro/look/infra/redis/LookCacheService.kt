@@ -1,4 +1,4 @@
-package com.dh.baro.look.infra.cache
+package com.dh.baro.look.infra.redis
 
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.look.presentation.dto.LookDetailResponse
@@ -65,7 +65,7 @@ class LookCacheService(
     }
 
     private fun generateCacheKey(lookId: Long): String {
-        return "${CACHE_KEY_PREFIX}:${lookId}"
+        return "$CACHE_KEY_PREFIX:${lookId}"
     }
 
     companion object {
