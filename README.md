@@ -60,7 +60,7 @@ src/
 
 # 🗺️ System Architecture
 
-<img width="1356" height="1024" alt="스크린샷 2025-09-18 오후 11 29 42" src="https://github.com/user-attachments/assets/ea287da6-bbef-4869-ba23-d1ae17e0d084" />
+<img width="3404" height="2250" alt="image" src="https://github.com/user-attachments/assets/e2069291-e90a-45a2-b19d-2a8c071dde67" />
 
 
 <br>
