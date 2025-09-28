@@ -26,8 +26,8 @@ class OrderFacade(
     private val eventPublisher: ApplicationEventPublisher,
 ) {
 
+    @Transactional
     fun placeOrder(userId: Long, request: OrderCreateRequest): Order {
-        userService.checkUserExists(userId)
         val productList = productQueryService.getProductsExists(request.orderItems.map { orderItem -> orderItem.productId })
         val cmd = OrderCreateCommand.toCommand(userId, productList, request)
         val order = orderService.createOrder(cmd)

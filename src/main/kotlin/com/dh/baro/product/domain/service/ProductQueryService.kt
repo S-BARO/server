@@ -7,12 +7,10 @@ import com.dh.baro.product.domain.repository.ProductRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @Service
-@Transactional(readOnly = true)
 class ProductQueryService(
     private val productRepository: ProductRepository,
 ) {

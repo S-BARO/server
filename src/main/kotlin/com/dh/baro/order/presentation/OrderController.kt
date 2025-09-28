@@ -21,7 +21,7 @@ class OrderController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     override fun placeOrder(
-        @CurrentUser userId: Long,
+        @RequestParam userId: Long,
         @Valid @RequestBody request: OrderCreateRequest,
     ): OrderDetailResponse {
         val order = orderFacade.placeOrder(userId, request)
