@@ -100,3 +100,9 @@ MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
 [**[Part 8] 일괄 주문 기능 개선 Vol.2 (Ft. Kafka, Transactional Outbox)**](https://chobo-backend.tistory.com/61)
 
 [**[Part 9] Redis의 Lua Script는 Atomic 하지 않다..?**](https://chobo-backend.tistory.com/57)
+
+[**[Part 10] 인기상품조회 기능 개선 (Ft. DB Connection Pool)**](https://chobo-backend.tistory.com/58)
+
+[**[Part 11] AI 피팅 기능 사용량 제한하기 (Ft. Token Bucket)**](https://chobo-backend.tistory.com/63)
+
+[**[Part 12] 룩 상세 조회 기능 개선 (Ft. Redis 캐싱)**](https://chobo-backend.tistory.com/64)
