@@ -32,17 +32,19 @@ class UserService(
         provider: AuthProvider,
         socialUserInfo: OauthApi.SocialUserInfo
     ): RegistrationResult {
-        socialAccountRepository.findByProviderAndProviderId(provider, socialUserInfo.providerId)
-            ?.run { return RegistrationResult(user.id, user.role, false) }
+        val existingSocialAccount = socialAccountRepository.findByProviderAndProviderId(provider, socialUserInfo.providerId)
+        if(existingSocialAccount != null) {
+            return RegistrationResult(existingSocialAccount.user.id, existingSocialAccount.user.role, false)
+        }
 
         val user = User.newUser(socialUserInfo.nickname, socialUserInfo.email)
-        val newUser = userRepository.save(user)
+            .let { newUser -> userRepository.save(newUser) }
         SocialAccount.of(user, provider, socialUserInfo.providerId)
             .let { socialAccount -> socialAccountRepository.save(socialAccount) }
 
         return RegistrationResult(
-            userId = newUser.id,
-            userRole = newUser.role,
+            userId = user.id,
+            userRole = user.role,
             isNew = true,
         )
     }
