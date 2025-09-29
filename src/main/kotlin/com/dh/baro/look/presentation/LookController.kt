@@ -41,18 +41,6 @@ class LookController(
         reactionType = request.reactionType,
     )
 
-    @PutMapping("/{lookId}/swipe2")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun recordSwipe2(
-        @RequestParam userId: Long,
-        @PathVariable lookId: Long,
-        @Valid @RequestBody request: SwipeRequest,
-    ) = swipeFacade.recordSwipe(
-        userId = userId,
-        lookId = lookId,
-        reactionType = request.reactionType,
-    )
-
     @PutMapping("/{lookId}/reaction")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun recordLookReaction(

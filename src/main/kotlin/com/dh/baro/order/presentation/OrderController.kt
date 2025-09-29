@@ -21,30 +21,10 @@ class OrderController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     override fun placeOrder(
-        @RequestParam userId: Long,
-        @Valid @RequestBody request: OrderCreateRequest,
-    ): OrderDetailResponse {
-        val order = orderFacade.placeOrder(userId, request)
-        return OrderDetailResponse.from(order)
-    }
-
-    @PostMapping("/V2")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun placeOrderV2(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: OrderCreateRequest,
     ): OrderDetailResponse {
-        val order = orderFacade.placeOrderV2(userId, request)
-        return OrderDetailResponse.from(order)
-    }
-
-    @PostMapping("/V3")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun placeOrderV3(
-        @RequestParam userId: Long,
-        @Valid @RequestBody request: OrderCreateRequest,
-    ): OrderDetailResponse {
-        val order = orderFacade.placeOrderV3(userId, request)
+        val order = orderFacade.placeOrder(userId, request)
         return OrderDetailResponse.from(order)
     }
 

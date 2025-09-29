@@ -1,67 +1,44 @@
 package com.dh.baro.order.domain.service
 
 import com.dh.baro.core.ErrorMessage
-import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.order.application.OrderCreateCommand
 import com.dh.baro.order.domain.Order
 import com.dh.baro.order.domain.OrderItem
 import com.dh.baro.order.domain.OrderRepository
-import com.dh.baro.product.domain.repository.ProductRepository
-import org.springframework.data.repository.findByIdOrNull
+import com.dh.baro.order.domain.OrderStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class OrderService(
-    private val productRepository: ProductRepository,
     private val orderRepository: OrderRepository,
 ) {
 
+    @Transactional
     fun createOrder(cmd: OrderCreateCommand): Order {
         val order = Order.newOrder(cmd.userId, cmd.shippingAddress)
-
-        val mergedItems = mergeDuplicateItems(cmd.orderItems)
-        mergedItems.forEach { addItemsToOrder(it, order) }
+        
+        cmd.orderItems.forEach { orderItem ->
+            val item = OrderItem.newOrderItem(
+                order = order,
+                productId = orderItem.product.id,
+                name = orderItem.product.getName(),
+                thumbnailUrl = orderItem.product.getThumbnailUrl(),
+                quantity = orderItem.quantity,
+                priceAtPurchase = orderItem.product.getPrice(),
+            )
+            order.addItem(item)
+        }
+        
         order.updateTotalPrice()
-
         return orderRepository.save(order)
     }
 
-    private fun mergeDuplicateItems(
-        items: List<OrderCreateCommand.OrderItem>
-    ): List<OrderCreateCommand.OrderItem> =
-        items
-            .groupBy { it.product.id }
-            .map { (_, group) ->
-                val firstItem = group.first()
-                val totalQty = group.sumOf { it.quantity }
-                OrderCreateCommand.OrderItem(firstItem.product, totalQty)
-            }
-
-    private fun addItemsToOrder(item: OrderCreateCommand.OrderItem, order: Order) {
-        val product = item.product
-
-        val updated = productRepository.deductStock(item.product.id, item.quantity)
-
-        if (updated == 0) {
-            throw ConflictException(ErrorMessage.OUT_OF_STOCK.format(item.product.id))
-        }
-
-        val orderItem = OrderItem.newOrderItem(
-            order = order,
-            productId = item.product.id,
-            name = product.getName(),
-            thumbnailUrl = product.getThumbnailUrl(),
-            quantity = item.quantity,
-            priceAtPurchase = product.getPrice(),
-        )
-        order.addItem(orderItem)
-    }
-
-    fun confirmOrder(orderId: Long) {
-        val order = orderRepository.findByIdOrNull(orderId)
-            ?: throw IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(orderId))
-        order.confirmOrder()
+    @Transactional
+    fun changeOrderStatus(orderId: Long, status: OrderStatus): Order {
+        val order = orderRepository.findById(orderId)
+            .orElseThrow { IllegalArgumentException(ErrorMessage.ORDER_NOT_FOUND.format(orderId)) }
+        order.changeStatus(status)
+        return orderRepository.save(order)
     }
 }

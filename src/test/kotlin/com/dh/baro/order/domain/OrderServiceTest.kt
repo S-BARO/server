@@ -1,13 +1,10 @@
 package com.dh.baro.order.domain
 
-import com.dh.baro.core.ErrorMessage
-import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.order.application.OrderCreateCommand
 import com.dh.baro.order.domain.service.OrderService
 import com.dh.baro.order.productFixture
 import com.dh.baro.product.domain.Product
 import com.dh.baro.product.domain.repository.ProductRepository
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldHaveSize
@@ -101,63 +98,8 @@ internal class OrderServiceTest(
                 order.items.first { it.productId == p1.id }.quantity shouldBe 2
             }
 
-            it("상품 재고를 차감한다") {
-                productRepository.findById(p1.id).get().getQuantity() shouldBe 3
-            }
-
             it("초기 상태는 ORDERED 이다") {
                 order.status shouldBe OrderStatus.ORDERED
-            }
-        }
-
-        context("재고가 부족하면") {
-
-            it("ConflictException를 던지고 롤백한다") {
-                val cmd = OrderCreateCommand(
-                    userId = USER_ID,
-                    shippingAddress = "Seoul",
-                    orderItems = listOf(OrderCreateCommand.OrderItem(p1, 99))
-                )
-
-                shouldThrow<ConflictException> {
-                    orderService.createOrder(cmd)
-                }.message shouldBe ErrorMessage.OUT_OF_STOCK.format(p1.id)
-
-                // 롤백 확인
-                orderRepository.count() shouldBe 0
-                productRepository.findById(p1.id).get().getQuantity() shouldBe 5
-            }
-        }
-
-        context("동일 상품이 두 번 전달되면") {
-            val cmd = OrderCreateCommand(
-                userId = USER_ID,
-                shippingAddress = "Seoul",
-                orderItems = listOf(
-                    OrderCreateCommand.OrderItem(p1, 1),
-                    OrderCreateCommand.OrderItem(p1, 2),
-                )
-            )
-
-            it("각 항목을 그대로 저장하고 합산하여 재고를 차감한다") {
-                val order = orderService.createOrder(cmd)
-
-                order.items.shouldHaveSize(1) // p1 하나만
-                productRepository.findById(p1.id).get().getQuantity() shouldBe 2 // 5-(1+2)
-            }
-        }
-
-        context("재고가 0인 상품이 포함되면") {
-            val cmd = OrderCreateCommand(
-                userId = USER_ID,
-                shippingAddress = "addr",
-                orderItems = listOf(OrderCreateCommand.OrderItem(p3, 1))
-            )
-
-            it("OUT_OF_STOCK 예외가 발생한다") {
-                shouldThrow<ConflictException> {
-                    orderService.createOrder(cmd)
-                }.message shouldBe ErrorMessage.OUT_OF_STOCK.format(p3.id)
             }
         }
     }
