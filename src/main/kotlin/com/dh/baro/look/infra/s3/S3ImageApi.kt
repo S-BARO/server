@@ -2,6 +2,8 @@ package com.dh.baro.look.infra.s3
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import software.amazon.awssdk.services.s3.presigner.S3Presigner
@@ -15,14 +17,21 @@ class S3ImageApi(
     val bucketName: String,
     @Value("\${cloud.aws.region.static}")
     val region: String,
+    @Value("\${cloud.aws.credentials.access-key}")
+    val accessKey: String,
+    @Value("\${cloud.aws.credentials.secret-key}")
+    val secretKey: String,
 ) {
 
     fun generatePresignedUrl(s3Key: String): S3PresignedUrlInfo {
         val duration = Duration.ofMinutes(UPLOAD_DURATION_MINUTES)
         val expiresAt = Instant.now().plus(duration)
 
+        val credentials = AwsBasicCredentials.create(accessKey, secretKey)
+
         val s3Presigner = S3Presigner.builder()
             .region(Region.of(region))
+            .credentialsProvider(StaticCredentialsProvider.create(credentials))
             .build()
 
         val putObjectRequest = PutObjectRequest.builder()
