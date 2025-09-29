@@ -26,29 +26,8 @@ interface FitSwagger {
         description = """
             사용자가 피팅 소스 이미지를 S3에 직접 업로드할 수 있는 presigned URL을 생성합니다.
             생성된 URL은 제한된 시간 동안만 유효하며, 지정된 파일 크기와 타입 제한이 적용됩니다.
-            업로드할 파일의 Content-Type을 명시하여 presigned URL에 적절한 타입 제한을 설정합니다.
             업로드 후에는 completeImageUpload API를 호출하여 업로드 완료를 처리해야 합니다.
         """,
-        requestBody = RequestBody(
-            description = "업로드 URL 생성 요청 정보",
-            required = true,
-            content = [
-                Content(
-                    mediaType = APPLICATION_JSON_VALUE,
-                    schema = Schema(implementation = CreateUploadUrlRequest::class),
-                    examples = [
-                        ExampleObject(
-                            name = "createUploadUrlRequest",
-                            value = """
-                            {
-                              "contentType": "image/jpeg"
-                            }
-                            """
-                        )
-                    ]
-                )
-            ]
-        ),
         responses = [
             /* 200 */
             ApiResponse(
@@ -121,7 +100,6 @@ interface FitSwagger {
     )
     fun createUploadUrl(
         @Parameter(hidden = true) userId: Long,
-        @Valid request: CreateUploadUrlRequest
     ): FittingSourceImageUploadUrlResponse
 
     /* ───────────────────────────── 피팅 소스 이미지 업로드 완료 ───────────────────────────── */
