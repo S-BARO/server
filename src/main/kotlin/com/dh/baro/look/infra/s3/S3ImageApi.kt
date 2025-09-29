@@ -23,7 +23,7 @@ class S3ImageApi(
     val secretKey: String,
 ) {
 
-    fun generatePresignedUrl(s3Key: String): S3PresignedUrlInfo {
+    fun generatePresignedUrl(s3Key: String, contentType: String): S3PresignedUrlInfo {
         val duration = Duration.ofMinutes(UPLOAD_DURATION_MINUTES)
         val expiresAt = Instant.now().plus(duration)
 
@@ -37,6 +37,7 @@ class S3ImageApi(
         val putObjectRequest = PutObjectRequest.builder()
             .bucket(bucketName)
             .key(s3Key)
+            .contentType(contentType)
             .build()
 
         val presignRequest = PutObjectPresignRequest.builder()

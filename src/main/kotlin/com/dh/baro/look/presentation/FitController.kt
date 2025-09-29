@@ -20,9 +20,10 @@ class FitController(
     @ResponseStatus(HttpStatus.OK)
     override fun createUploadUrl(
         @CurrentUser userId: Long,
+        @Valid @RequestBody request: CreateUploadUrlRequest,
     ): FittingSourceImageUploadUrlResponse =
         FittingSourceImageUploadUrlResponse.from(
-            fitFacade.createUploadUrl(userId)
+            fitFacade.createUploadUrl(userId, request.contentType)
         )
 
     @PutMapping("/source-images/{imageId}")

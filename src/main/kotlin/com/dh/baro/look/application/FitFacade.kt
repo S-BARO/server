@@ -19,9 +19,9 @@ class FitFacade(
 ) {
 
     @Transactional
-    fun createUploadUrl(userId: Long): FittingSourceImageUploadInfo {
+    fun createUploadUrl(userId: Long, contentType: String): FittingSourceImageUploadInfo {
         val pendingImage = fittingSourceImageService.createPendingImage(userId)
-        val s3Info = s3ImageApi.generatePresignedUrl(pendingImage.s3Key)
+        val s3Info = s3ImageApi.generatePresignedUrl(pendingImage.s3Key, contentType)
 
         return FittingSourceImageUploadInfo(
             imageId = pendingImage.id,
