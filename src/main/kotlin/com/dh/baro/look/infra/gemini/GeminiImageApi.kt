@@ -4,8 +4,10 @@ import com.dh.baro.core.ErrorMessage
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
+import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
+import java.net.HttpURLConnection.setFollowRedirects
 import java.util.*
 import kotlin.math.min
 
@@ -42,7 +44,16 @@ class GeminiImageApi(
                 else -> imageUrl.substringBefore("?").substringBeforeLast("/") + "/"
             }
 
-            val imageBytes = RestClient.create()
+            // RestClient에 리다이렉트 설정 추가
+            val restClient = RestClient.builder()
+                .requestFactory(SimpleClientHttpRequestFactory().apply {
+                    setFollowRedirects(true)  // 리다이렉트 자동 추적
+                    setConnectTimeout(10000)   // 연결 타임아웃 10초
+                    setReadTimeout(30000)      // 읽기 타임아웃 30초
+                })
+                .build()
+
+            val imageBytes = restClient
                 .get()
                 .uri(imageUrl)
                 .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
@@ -50,6 +61,9 @@ class GeminiImageApi(
                 .header("Accept", "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8")
                 .header("Accept-Language", "en-US,en;q=0.9")
                 .retrieve()
+                .onStatus({ status -> status.is3xxRedirection }) { _, response ->
+                    logger.warn("Received redirect: ${response.statusCode}")
+                }
                 .body(ByteArray::class.java)
                 ?: throw IllegalStateException(ErrorMessage.IMAGE_DOWNLOAD_NO_DATA.message)
 
