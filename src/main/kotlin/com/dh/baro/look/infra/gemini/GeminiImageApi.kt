@@ -37,7 +37,7 @@ class GeminiImageApi(
 
             // ibb.co 같은 호스팅 서비스를 위한 Referer 설정
             val referer = when {
-                imageUrl.contains("ibb.co") -> "https://ibb.co/"
+                imageUrl.contains("ibb.co") -> "https://i.ibb.co"
                 imageUrl.contains("imgbb.com") -> "https://imgbb.com/"
                 else -> imageUrl.substringBefore("?").substringBeforeLast("/") + "/"
             }
