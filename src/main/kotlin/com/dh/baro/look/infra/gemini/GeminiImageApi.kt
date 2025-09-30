@@ -84,8 +84,7 @@ class GeminiImageApi(
         clothingMimeType: String
     ): GeminiApiRequest {
         val prompt = """
-            Create a new image by combining the elements from the provided images. 
-            Take the [element from image 1] and place it with/on the [element from image 2].
+            Generate a banana image and return it as your response.
         """.trimIndent()
 
         return GeminiApiRequest(
