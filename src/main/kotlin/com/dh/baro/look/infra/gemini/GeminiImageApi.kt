@@ -37,6 +37,8 @@ class GeminiImageApi(
             val imageBytes = RestClient.create()
                 .get()
                 .uri(imageUrl)
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+                .header("Referer", "https://ibb.co/")
                 .retrieve()
                 .body(ByteArray::class.java)
                 ?: throw IllegalStateException(ErrorMessage.IMAGE_DOWNLOAD_NO_DATA.message)
