@@ -84,10 +84,8 @@ class GeminiImageApi(
         clothingMimeType: String
     ): GeminiApiRequest {
         val prompt = """
-            Using Gemini 2.5 Flash Image (nano banana) model, create a photo.
-            First, analyze the clothing item in the first image to identify what type of garment it is (top, bottom, dress, outerwear, shoes, etc.).
-            Then, take that clothing item and dress the person from the second image with it in the appropriate position for that type of garment.
-            Create a realistic, full-body image of the person wearing the identified clothing item, with proper fit and positioning, and return this image as your response.
+            Create a new image by combining the elements from the provided images. 
+            Take the [element from image 1] and place it with/on the [element from image 2].
         """.trimIndent()
 
         return GeminiApiRequest(
