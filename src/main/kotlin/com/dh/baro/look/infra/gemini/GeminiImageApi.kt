@@ -7,6 +7,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import java.util.*
+import kotlin.math.min
 
 @Component
 class GeminiImageApi(
@@ -34,17 +35,32 @@ class GeminiImageApi(
         return try {
             logger.info("Downloading image from: $imageUrl")
 
+            // ibb.co 같은 호스팅 서비스를 위한 Referer 설정
+            val referer = when {
+                imageUrl.contains("ibb.co") -> "https://ibb.co/"
+                imageUrl.contains("imgbb.com") -> "https://imgbb.com/"
+                else -> imageUrl.substringBefore("?").substringBeforeLast("/") + "/"
+            }
+
             val imageBytes = RestClient.create()
                 .get()
                 .uri(imageUrl)
-                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                .header("Referer", "https://ibb.co/")
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+                .header("Referer", referer)
+                .header("Accept", "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8")
+                .header("Accept-Language", "en-US,en;q=0.9")
                 .retrieve()
                 .body(ByteArray::class.java)
                 ?: throw IllegalStateException(ErrorMessage.IMAGE_DOWNLOAD_NO_DATA.message)
 
             val sizeInMB = imageBytes.size / 1024.0 / 1024.0
             logger.info("Downloaded image size: ${"%.2f".format(sizeInMB)}MB (${imageBytes.size} bytes)")
+
+            if (imageBytes.size < 1000) {
+                val preview = String(imageBytes.take(min(200, imageBytes.size)).toByteArray())
+                logger.error("Downloaded data too small. Preview: $preview")
+                throw IllegalArgumentException("이미지 다운로드 실패 (${imageBytes.size} bytes). Hotlink protection이 활성화되어 있을 수 있습니다.")
+            }
 
             val base64 = Base64.getEncoder().encodeToString(imageBytes)
             logger.info("Base64 encoded size: ${base64.length} chars")
