@@ -133,7 +133,7 @@ class GeminiImageApi(
         val candidate = response.candidates?.firstOrNull()
             ?: throw IllegalStateException(ErrorMessage.GEMINI_API_NO_CANDIDATES.message)
 
-        val imagePart = candidate.content?.parts?.filterIsInstance<GeminiImagePart>()?.firstOrNull()
+        val imagePart = candidate.content?.parts?.firstOrNull()
             ?: throw IllegalStateException(ErrorMessage.GEMINI_API_NO_IMAGE_DATA.message)
 
         logger.info("Extracting image data from response")
