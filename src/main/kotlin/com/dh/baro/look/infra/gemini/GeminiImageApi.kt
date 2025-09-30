@@ -4,10 +4,8 @@ import com.dh.baro.core.ErrorMessage
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
-import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
-import java.net.HttpURLConnection.setFollowRedirects
 import java.util.*
 import kotlin.math.min
 
@@ -35,35 +33,11 @@ class GeminiImageApi(
 
     private fun downloadAndEncode(imageUrl: String): Pair<String, String> {
         return try {
-            logger.info("Downloading image from: $imageUrl")
-
-            // ibb.co 같은 호스팅 서비스를 위한 Referer 설정
-            val referer = when {
-                imageUrl.contains("ibb.co") -> "https://i.ibb.co"
-                imageUrl.contains("imgbb.com") -> "https://imgbb.com/"
-                else -> imageUrl.substringBefore("?").substringBeforeLast("/") + "/"
-            }
-
-            // RestClient에 리다이렉트 설정 추가
-            val restClient = RestClient.builder()
-                .requestFactory(SimpleClientHttpRequestFactory().apply {
-                    setFollowRedirects(true)  // 리다이렉트 자동 추적
-                    setConnectTimeout(10000)   // 연결 타임아웃 10초
-                    setReadTimeout(30000)      // 읽기 타임아웃 30초
-                })
-                .build()
 
             val imageBytes = restClient
                 .get()
                 .uri(imageUrl)
-                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-                .header("Referer", referer)
-                .header("Accept", "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8")
-                .header("Accept-Language", "en-US,en;q=0.9")
                 .retrieve()
-                .onStatus({ status -> status.is3xxRedirection }) { _, response ->
-                    logger.warn("Received redirect: ${response.statusCode}")
-                }
                 .body(ByteArray::class.java)
                 ?: throw IllegalStateException(ErrorMessage.IMAGE_DOWNLOAD_NO_DATA.message)
 
@@ -110,9 +84,10 @@ class GeminiImageApi(
         clothingMimeType: String
     ): GeminiApiRequest {
         val prompt = """
-            Create a professional e-commerce fashion photo.
-            Take the clothing item from the first image and let the person from the second image wear it.
-            Generate a realistic, full-body shot of the person wearing the clothing, with the lighting and shadows adjusted to match the environment.
+            Using Gemini 2.5 Flash Image (nano banana) model, create a photo.
+            First, analyze the clothing item in the first image to identify what type of garment it is (top, bottom, dress, outerwear, shoes, etc.).
+            Then, take that clothing item and dress the person from the second image with it in the appropriate position for that type of garment.
+            Create a realistic, full-body image of the person wearing the identified clothing item, with proper fit and positioning, and return this image as your response.
         """.trimIndent()
 
         return GeminiApiRequest(
@@ -132,13 +107,6 @@ class GeminiImageApi(
         return try {
             logger.info("Calling Gemini API...")
 
-            // 요청 본문 로깅
-            val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
-            val requestJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(request)
-            logger.info("=== Request Body ===")
-            logger.info(requestJson)
-            logger.info("====================")
-
             // 먼저 String으로 받아서 로깅
             val responseString = restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -153,6 +121,7 @@ class GeminiImageApi(
             logger.info("================================")
 
             // 다시 파싱
+            val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
             val response = objectMapper.readValue(responseString, GeminiApiResponse::class.java)
 
             logger.info("Gemini API call successful")
