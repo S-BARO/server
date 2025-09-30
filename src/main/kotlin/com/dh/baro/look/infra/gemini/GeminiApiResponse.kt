@@ -10,8 +10,19 @@ data class GeminiApiResponse(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiCandidate(
-    val content: GeminiContent?,
+    val content: GeminiResponseContent?,
     val finishReason: String?,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class GeminiResponseContent(
+    val parts: List<GeminiResponsePart>?,
+    val role: String?
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class GeminiResponsePart(
+    val text: String?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

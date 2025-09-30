@@ -80,22 +80,7 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
             
             sudo docker run -d -p 8080:8080 \
-              -v /opt/pinpoint/agent:/opt/pinpoint:ro \
-              -v /opt/pinpoint/logs:/opt/pinpoint/logs \
               -e SPRING_PROFILES_ACTIVE=prod \
-              -e PINPOINT_AGENT_ID=prod-BARO \
-              -e PINPOINT_APPLICATION_NAME=prod-BARO \
-              -e PINPOINT_COLLECTOR=${{ secrets.PINPOINT_COLLECTOR }} \
-              -e JAVA_TOOL_OPTIONS="-javaagent:/opt/pinpoint/pinpoint-bootstrap-3.0.3.jar \
-                -Dpinpoint.agentId=prod-BARO \
-                -Dpinpoint.applicationName=prod-BARO \
-                -Dpinpoint.profiler.transport.grpc.collector.ip=${{ secrets.PINPOINT_COLLECTOR }} \
-                -Dpinpoint.profiler.transport.grpc.agent.port=9991 \
-                -Dpinpoint.profiler.transport.grpc.stat.port=9992 \
-                -Dpinpoint.profiler.transport.grpc.span.port=9993 \
-                -Dprofiler.sampling.enable=true \
-                -Dprofiler.sampling.rate=1 \
-                -Dpinpoint.config=/opt/pinpoint/pinpoint-root.config" \
               -e DB_HOST=${{ secrets.DB_HOST }} \
               -e DB_NAME=${{ secrets.DB_NAME }} \
               -e DB_PORT=${{ secrets.DB_PORT }} \
