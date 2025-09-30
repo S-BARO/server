@@ -132,6 +132,13 @@ class GeminiImageApi(
         return try {
             logger.info("Calling Gemini API...")
 
+            // 요청 본문 로깅
+            val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+            val requestJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(request)
+            logger.info("=== Request Body ===")
+            logger.info(requestJson)
+            logger.info("====================")
+
             // 먼저 String으로 받아서 로깅
             val responseString = restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -146,7 +153,6 @@ class GeminiImageApi(
             logger.info("================================")
 
             // 다시 파싱
-            val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
             val response = objectMapper.readValue(responseString, GeminiApiResponse::class.java)
 
             logger.info("Gemini API call successful")
