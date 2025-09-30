@@ -80,7 +80,7 @@ oauth2:
 gemini:
   api:
     key: ${GEMINI_API_KEY}
-    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview:generateContent
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent
 
 management:
   endpoints:
