@@ -132,13 +132,22 @@ class GeminiImageApi(
         return try {
             logger.info("Calling Gemini API...")
 
-            val response = restClient.post()
+            // 먼저 String으로 받아서 로깅
+            val responseString = restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("x-goog-api-key", geminiApiKey)
                 .body(request)
                 .retrieve()
-                .body(GeminiApiResponse::class.java)
+                .body(String::class.java)
                 ?: throw IllegalStateException(ErrorMessage.GEMINI_API_REQUEST_FAILED.format("No response body"))
+
+            logger.info("=== Raw Gemini API Response ===")
+            logger.info(responseString)
+            logger.info("================================")
+
+            // 다시 파싱
+            val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+            val response = objectMapper.readValue(responseString, GeminiApiResponse::class.java)
 
             logger.info("Gemini API call successful")
             response
