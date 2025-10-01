@@ -1,7 +1,6 @@
 package com.dh.baro.look.infra.gemini
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiApiResponse(
@@ -30,14 +29,12 @@ data class GeminiResponseContent(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiResponsePart(
-    @JsonProperty("inline_data")
     val inlineData: GeminiResponseInlineData?,
     val text: String?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiResponseInlineData(
-    @JsonProperty("mime_type")
     val mimeType: String?,
     val data: String,
 )
