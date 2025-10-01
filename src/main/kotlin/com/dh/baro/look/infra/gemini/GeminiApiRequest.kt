@@ -7,6 +7,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiApiRequest(
     val contents: List<GeminiContent>,
+    val generationConfig: GeminiGenerationConfig? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class GeminiGenerationConfig(
+    val responseModalities: List<String>? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

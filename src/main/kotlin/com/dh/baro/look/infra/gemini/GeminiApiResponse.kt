@@ -6,7 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiApiResponse(
     val candidates: List<GeminiCandidate>?,
+    val promptFeedback: GeminiPromptFeedback?,
     val usageMetadata: GeminiUsageMetadata?,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class GeminiPromptFeedback(
+    val blockReason: String?,
+    val blockReasonMessage: String?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,11 +31,14 @@ data class GeminiResponseContent(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiResponsePart(
     @JsonProperty("inline_data")
-    val inlineData: GeminiResponseInlineData,
+    val inlineData: GeminiResponseInlineData?,
+    val text: String?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GeminiResponseInlineData(
+    @JsonProperty("mime_type")
+    val mimeType: String?,
     val data: String,
 )
 

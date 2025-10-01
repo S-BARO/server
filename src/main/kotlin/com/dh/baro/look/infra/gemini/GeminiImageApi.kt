@@ -84,18 +84,28 @@ class GeminiImageApi(
         clothingMimeType: String
     ): GeminiApiRequest {
         val prompt = """
-            Generate a banana image and return it as your response.
+            You are an expert virtual try-on AI. You will be given a 'model image' and a 'garment image'. Your task is to create a new photorealistic image where the person from the 'model image' is wearing the clothing from the 'garment image'.
+
+            **Crucial Rules:**
+            1.  **Complete Garment Replacement:** You MUST completely REMOVE and REPLACE the clothing item worn by the person in the 'model image' with the new garment. No part of the original clothing (e.g., collars, sleeves, patterns) should be visible in the final image.
+            2.  **Preserve the Model:** The person's face, hair, body shape, and pose from the 'model image' MUST remain unchanged.
+            3.  **Preserve the Background:** The entire background from the 'model image' MUST be preserved perfectly.
+            4.  **Apply the Garment:** Realistically fit the new garment onto the person. It should adapt to their pose with natural folds, shadows, and lighting consistent with the original scene.
+            5.  **Output:** Return ONLY the final, edited image. Do not include any text.
         """.trimIndent()
 
         return GeminiApiRequest(
             contents = listOf(
                 GeminiContent(
                     parts = listOf(
-                        GeminiImagePart(GeminiInlineData(clothingMimeType, clothingImageData)),
                         GeminiImagePart(GeminiInlineData(sourceMimeType, sourceImageData)),
+                        GeminiImagePart(GeminiInlineData(clothingMimeType, clothingImageData)),
                         GeminiTextPart(prompt)
                     )
                 )
+            ),
+            generationConfig = GeminiGenerationConfig(
+                responseModalities = listOf("IMAGE", "TEXT")
             )
         )
     }
@@ -130,13 +140,46 @@ class GeminiImageApi(
     }
 
     private fun extractImageData(response: GeminiApiResponse): ByteArray {
-        val candidate = response.candidates?.firstOrNull()
-            ?: throw IllegalStateException(ErrorMessage.GEMINI_API_NO_CANDIDATES.message)
+        // 1. promptFeedback에서 blockReason 체크
+        response.promptFeedback?.blockReason?.let { blockReason ->
+            val blockReasonMessage = response.promptFeedback.blockReasonMessage ?: ""
+            val errorMessage = "Request was blocked. Reason: $blockReason. $blockReasonMessage"
+            logger.error(errorMessage)
+            throw IllegalStateException(errorMessage)
+        }
 
-        val imagePart = candidate.content?.parts?.firstOrNull()
-            ?: throw IllegalStateException(ErrorMessage.GEMINI_API_NO_IMAGE_DATA.message)
+        // 2. 모든 candidate를 순회하며 이미지 파트 찾기
+        response.candidates?.forEach { candidate ->
+            candidate.content?.parts?.forEach { part ->
+                part.inlineData?.let { inlineData ->
+                    logger.info("Image found in candidate. MIME type: ${inlineData.mimeType}")
+                    return Base64.getDecoder().decode(inlineData.data)
+                }
+            }
+        }
 
-        logger.info("Extracting image data from response")
-        return Base64.getDecoder().decode(imagePart.inlineData.data)
+        // 3. finishReason 체크
+        val finishReason = response.candidates?.firstOrNull()?.finishReason
+        if (finishReason != null && finishReason != "STOP") {
+            val errorMessage = "Image generation stopped unexpectedly. Reason: $finishReason. This often relates to safety settings."
+            logger.error(errorMessage)
+            throw IllegalStateException(errorMessage)
+        }
+
+        // 4. 텍스트 응답이 있는지 확인
+        val textFeedback = response.candidates
+            ?.flatMap { it.content?.parts ?: emptyList() }
+            ?.mapNotNull { it.text }
+            ?.firstOrNull()
+            ?.trim()
+
+        val errorMessage = if (textFeedback != null) {
+            "The AI model did not return an image. The model responded with text: \"$textFeedback\""
+        } else {
+            "The AI model did not return an image. This can happen due to safety filters or if the request is too complex. Please try a different image."
+        }
+        
+        logger.error(errorMessage)
+        throw IllegalStateException(errorMessage)
     }
 }
