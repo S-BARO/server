@@ -16,6 +16,9 @@ data class CartItemResponse(
     val price: BigDecimal,
     val quantity: Int,
     val subtotal: BigDecimal,
+    @JsonSerialize(using = LongToStringSerializer::class)
+    val storeId: Long,
+    val storeName: String,
 ) {
 
     companion object {
@@ -24,6 +27,7 @@ data class CartItemResponse(
         fun from(bundle: CartItemBundle): CartItemResponse {
             val cartItem = bundle.cartItem
             val product = bundle.product
+            val store = bundle.store
 
             return CartItemResponse(
                 itemId = cartItem.id,
@@ -34,7 +38,9 @@ data class CartItemResponse(
                 quantity = cartItem.quantity,
                 subtotal = product.getPrice()
                     .multiply(BigDecimal(cartItem.quantity))
-                    .setScale(SCALE_NONE, RoundingMode.HALF_UP)
+                    .setScale(SCALE_NONE, RoundingMode.HALF_UP),
+                storeId = store.id,
+                storeName = store.getName(),
             )
         }
     }
