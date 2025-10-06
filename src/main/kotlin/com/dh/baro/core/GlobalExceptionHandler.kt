@@ -2,6 +2,7 @@ package com.dh.baro.core
 
 import com.dh.baro.core.exception.ConflictException
 import com.dh.baro.core.exception.ForbiddenException
+import com.dh.baro.core.exception.TooManyRequestsException
 import com.dh.baro.core.exception.UnauthorizedException
 import jakarta.validation.ConstraintViolationException
 import org.apache.catalina.connector.ClientAbortException
@@ -129,6 +130,13 @@ class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException::class)
     @ResponseStatus(HttpStatus.CONFLICT)
     fun handleConflict(e: ConflictException): ErrorResponse {
+        logger.warn(e.message)
+        return ErrorResponse.from(e)
+    }
+
+    @ExceptionHandler(TooManyRequestsException::class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    fun handleTooManyRequests(e: TooManyRequestsException): ErrorResponse {
         logger.warn(e.message)
         return ErrorResponse.from(e)
     }

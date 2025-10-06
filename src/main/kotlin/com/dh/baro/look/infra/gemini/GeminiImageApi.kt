@@ -41,9 +41,6 @@ class GeminiImageApi(
                 .body(ByteArray::class.java)
                 ?: throw IllegalStateException(ErrorMessage.IMAGE_DOWNLOAD_NO_DATA.message)
 
-            val sizeInMB = imageBytes.size / 1024.0 / 1024.0
-            logger.info("Downloaded image size: ${"%.2f".format(sizeInMB)}MB (${imageBytes.size} bytes)")
-
             if (imageBytes.size < 1000) {
                 val preview = String(imageBytes.take(min(200, imageBytes.size)).toByteArray())
                 logger.error("Downloaded data too small. Preview: $preview")
@@ -51,10 +48,7 @@ class GeminiImageApi(
             }
 
             val base64 = Base64.getEncoder().encodeToString(imageBytes)
-            logger.info("Base64 encoded size: ${base64.length} chars")
-
             val mimeType = getMimeTypeFromUrl(imageUrl)
-            logger.info("Detected MIME type: $mimeType")
 
             Pair(base64, mimeType)
         } catch (e: Exception) {
@@ -112,27 +106,13 @@ class GeminiImageApi(
 
     private fun callGeminiApi(request: GeminiApiRequest): GeminiApiResponse {
         return try {
-            logger.info("Calling Gemini API...")
-
-            // 먼저 String으로 받아서 로깅
-            val responseString = restClient.post()
+            restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("x-goog-api-key", geminiApiKey)
                 .body(request)
                 .retrieve()
-                .body(String::class.java)
+                .body(GeminiApiResponse::class.java)
                 ?: throw IllegalStateException(ErrorMessage.GEMINI_API_REQUEST_FAILED.format("No response body"))
-
-            logger.info("=== Raw Gemini API Response ===")
-            logger.info(responseString)
-            logger.info("================================")
-
-            // 다시 파싱
-            val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
-            val response = objectMapper.readValue(responseString, GeminiApiResponse::class.java)
-
-            logger.info("Gemini API call successful")
-            response
         } catch (e: Exception) {
             logger.error("Gemini API call failed", e)
             throw IllegalArgumentException(ErrorMessage.GEMINI_API_REQUEST_FAILED.format(e.message ?: "Unknown error"))
@@ -152,7 +132,6 @@ class GeminiImageApi(
         response.candidates?.forEach { candidate ->
             candidate.content?.parts?.forEach { part ->
                 part.inlineData?.let { inlineData ->
-                    logger.info("Image found in candidate. MIME type: ${inlineData.mimeType}")
                     return Base64.getDecoder().decode(inlineData.data)
                 }
             }
