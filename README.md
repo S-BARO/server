@@ -1,5 +1,7 @@
 # 👕 스와이프로 찾는 내 스타일, 바로(BARO)
+<!-- 
 [**🔗 바로(BARO) 서비스 링크**](https://www.s-baro.shop/)
+-->
 
 [**[Part 0] 스와이프로 찾는 내 스타일, ‘바로’를 기획하며..(Ft. 기술적 목표)**](https://chobo-backend.tistory.com/49)
 
