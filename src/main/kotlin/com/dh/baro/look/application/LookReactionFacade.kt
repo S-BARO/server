@@ -10,7 +10,7 @@ class LookReactionFacade(
 ) {
 
     fun recordLookReaction(userId: Long, lookId: Long, reactionType: ReactionType) {
-        lookReactionService.upsertLookReaction(
+        lookReactionService.saveLookReaction(
             userId = userId,
             lookId = lookId,
             reactionType = reactionType,

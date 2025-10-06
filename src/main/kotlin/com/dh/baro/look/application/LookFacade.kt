@@ -5,12 +5,11 @@ import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.look.application.dto.LookCreateCommand
 import com.dh.baro.look.application.dto.LookDetailBundle
 import com.dh.baro.look.domain.*
+import com.dh.baro.look.domain.service.LookReactionService
 import com.dh.baro.look.domain.service.LookService
-import com.dh.baro.look.domain.service.SwipeService
 import com.dh.baro.look.infra.redis.LookCacheService
 import com.dh.baro.look.presentation.dto.LookDetailResponse
 import com.dh.baro.product.domain.service.ProductQueryService
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Slice
@@ -23,10 +22,9 @@ class LookFacade(
     private val storeService: StoreService,
     private val productQueryService: ProductQueryService,
     private val lookService: LookService,
-    private val swipingService: SwipeService,
+    private val lookReactionService: LookReactionService,
     private val lookCacheService: LookCacheService,
 ) {
-    private val logger = LoggerFactory.getLogger(LookFacade::class.java)
 
     @Autowired
     @Lazy
@@ -41,7 +39,7 @@ class LookFacade(
 
     @Transactional(readOnly = true)
     fun getSwipeLooks(userId: Long, cursorId: Long?, size: Int): Slice<Look> {
-        val lookIds = swipingService.getLookIdsByUserId(userId)
+        val lookIds = lookReactionService.getLookIdsByUserId(userId)
         return lookService.getLooksForSwipe(lookIds, cursorId, size)
     }
 
@@ -70,10 +68,8 @@ class LookFacade(
 
             val response = LookDetailResponse.from(lookDetailBundle)
             lookCacheService.cacheLookDetail(lookId, response)
-            logger.info("Look 상세 데이터 조회 및 캐시 저장 완료 - lookId: {}", lookId)
             response
         } catch (e: Exception) {
-            logger.error("Look 상세 데이터 조회 실패 - lookId: {}", lookId, e)
             lookCacheService.cacheEmptyLookDetail(lookId)
             throw e
         }

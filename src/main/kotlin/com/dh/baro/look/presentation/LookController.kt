@@ -7,7 +7,6 @@ import com.dh.baro.look.application.LookFacade
 import com.dh.baro.look.application.LookReactionFacade
 import com.dh.baro.look.application.SwipeFacade
 import com.dh.baro.look.presentation.dto.*
-import com.dh.baro.look.presentation.dto.LookReactionRequest
 import com.dh.baro.look.presentation.swagger.LookSwagger
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -35,18 +34,6 @@ class LookController(
         @CurrentUser userId: Long,
         @PathVariable lookId: Long,
         @Valid @RequestBody request: SwipeRequest,
-    ) = swipeFacade.recordSwipe(
-        userId = userId,
-        lookId = lookId,
-        reactionType = request.reactionType,
-    )
-
-    @PutMapping("/{lookId}/reaction")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun recordLookReaction(
-        @RequestParam userId: Long,
-        @PathVariable lookId: Long,
-        @Valid @RequestBody request: LookReactionRequest,
     ) = lookReactionFacade.recordLookReaction(
         userId = userId,
         lookId = lookId,

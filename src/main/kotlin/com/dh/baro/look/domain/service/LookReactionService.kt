@@ -3,7 +3,6 @@ package com.dh.baro.look.domain.service
 import com.dh.baro.look.domain.LookReaction
 import com.dh.baro.look.domain.ReactionType
 import com.dh.baro.look.domain.repository.LookReactionRepository
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,7 +17,7 @@ class LookReactionService(
     }
 
     @Transactional
-    fun upsertLookReaction(userId: Long, lookId: Long, reactionType: ReactionType) {
+    fun saveLookReaction(userId: Long, lookId: Long, reactionType: ReactionType) {
         val lookReaction = LookReaction.of(
             userId = userId,
             lookId = lookId,
