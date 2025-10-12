@@ -7,12 +7,15 @@ import com.dh.baro.core.outbox.OutboxMessageRouter
 import com.dh.baro.order.application.event.OrderPlacedEvent
 import com.dh.baro.order.infra.IdempotencyService
 import com.dh.baro.product.application.event.InventoryInsufficientEvent
+import com.dh.baro.product.application.event.RedisStockDeductionEvent
 import com.dh.baro.product.domain.service.InventoryService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.transaction.event.TransactionPhase
+import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class ProductEventListener(
@@ -23,6 +26,11 @@ class ProductEventListener(
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    fun deductRedisStock(event: RedisStockDeductionEvent) {
+        inventoryService.deductStocksFromRedis(event.items)
+    }
 
     @KafkaListener(topics = ["order-events"], groupId = "product-service")
     @Transactional

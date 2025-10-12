@@ -5,8 +5,8 @@ import com.dh.baro.order.domain.service.OrderQueryService
 import com.dh.baro.order.domain.service.OrderService
 import com.dh.baro.order.presentation.dto.OrderCreateRequest
 import com.dh.baro.order.application.event.OrderPlacedEvent
+import com.dh.baro.product.application.event.RedisStockDeductionEvent
 import com.dh.baro.product.domain.InventoryItem
-import com.dh.baro.product.domain.service.InventoryService
 import com.dh.baro.product.domain.service.ProductQueryService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.Slice
@@ -18,7 +18,6 @@ class OrderFacade(
     private val productQueryService: ProductQueryService,
     private val orderService: OrderService,
     private val orderQueryService: OrderQueryService,
-    private val inventoryService: InventoryService,
     private val eventPublisher: ApplicationEventPublisher,
 ) {
 
@@ -49,7 +48,6 @@ class OrderFacade(
         val inventoryItems = cmd.orderItems.map { item ->
             InventoryItem(item.product.id, item.quantity)
         }
-        inventoryService.deductStocksFromRedis(inventoryItems)
 
         val orderPlacedEvent = OrderPlacedEvent(
             orderId = order.id,
@@ -57,6 +55,13 @@ class OrderFacade(
             items = inventoryItems,
         )
         eventPublisher.publishEvent(orderPlacedEvent)
+
+        val redisStockDeductionEvent = RedisStockDeductionEvent(
+            orderId = order.id,
+            items = inventoryItems,
+        )
+        eventPublisher.publishEvent(redisStockDeductionEvent)
+
         return order
     }
 }

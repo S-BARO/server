@@ -50,4 +50,17 @@ class CartService(
             ?: throw IllegalArgumentException(ErrorMessage.CART_ITEM_NOT_FOUND.format(itemId))
         cartItemRepository.delete(item)
     }
+
+    @Transactional
+    fun removeItems(userId: Long, orderItems: Map<Long, Int>) {
+        orderItems.forEach { (productId, orderedQuantity) ->
+            val cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId) ?: return@forEach
+
+            if (cartItem.quantity <= orderedQuantity) {
+                cartItemRepository.delete(cartItem)
+            } else {
+                cartItem.deductQuantity(orderedQuantity)
+            }
+        }
+    }
 }

@@ -34,6 +34,11 @@ class CartItem(
         this.quantity = quantity
     }
 
+    fun deductQuantity(quantity: Int) {
+        require(this.quantity >= quantity) { "Cannot deduct more than available quantity" }
+        this.quantity -= quantity
+    }
+
     companion object {
         fun newCartItem(userId: Long, productId: Long, quantity: Int): CartItem {
             return CartItem(
