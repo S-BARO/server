@@ -56,7 +56,7 @@ interface ProductRepository : JpaRepository<Product, Long> {
 
     @Query("""
         select p from Product p
-        where p.createdAt >= :cutoff
+        where (:cutoff is null or p.createdAt >= :cutoff)
           and (:categoryId is null or exists (
                  select 1 from ProductCategory pc
                  where pc.product = p and pc.category.id = :categoryId ))
@@ -64,7 +64,7 @@ interface ProductRepository : JpaRepository<Product, Long> {
         order by p.id desc
     """)
     fun findNewestProductsByCursor(
-        @Param("cutoff") cutoff: Instant,
+        @Param("cutoff") cutoff: Instant?,
         @Param("categoryId") categoryId: Long?,
         @Param("cursorId") cursorId: Long?,
         pageable: Pageable,
