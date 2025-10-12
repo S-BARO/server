@@ -5,6 +5,7 @@ import com.dh.baro.product.application.dto.ProductDetailBundle
 import com.dh.baro.product.application.dto.ProductSliceBundle
 import com.dh.baro.product.domain.service.CategoryService
 import com.dh.baro.product.domain.Product
+import com.dh.baro.product.domain.service.ProductLikeService
 import com.dh.baro.product.domain.service.ProductQueryService
 import com.dh.baro.product.domain.service.ProductService
 import org.springframework.stereotype.Service
@@ -16,6 +17,7 @@ class ProductFacade(
     private val productService: ProductService,
     private val productQueryService: ProductQueryService,
     private val categoryService: CategoryService,
+    private val productLikeService: ProductLikeService,
 ) {
 
     @Transactional
@@ -51,5 +53,15 @@ class ProductFacade(
         val productSlice = productQueryService.getNewestProducts(categoryId, cursorId, size)
         val stores = storeService.getStoresByIds(productSlice.content.map { it.storeId }.toSet())
         return ProductSliceBundle(productSlice, stores)
+    }
+
+    @Transactional
+    fun likeProduct(userId: Long, productId: Long) {
+        productLikeService.likeProduct(userId, productId)
+    }
+
+    @Transactional
+    fun cancelProductLike(userId: Long, productId: Long) {
+        productLikeService.cancelProductLike(userId, productId)
     }
 }

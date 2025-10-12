@@ -69,4 +69,20 @@ interface ProductRepository : JpaRepository<Product, Long> {
         @Param("cursorId") cursorId: Long?,
         pageable: Pageable,
     ): Slice<Product>
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+        UPDATE Product p
+        SET p.likesCount = p.likesCount + 1
+        WHERE p.id = :id
+    """)
+    fun incrementLikesCount(@Param("id") id: Long): Int
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+        UPDATE Product p
+        SET p.likesCount = p.likesCount - 1
+        WHERE p.id = :id AND p.likesCount > 0
+    """)
+    fun decrementLikesCount(@Param("id") id: Long): Int
 }

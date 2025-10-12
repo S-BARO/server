@@ -159,6 +159,48 @@ interface ProductSwagger {
         @RequestParam(defaultValue = "21") size: Int
     ): SliceResponse<ProductListItem>
 
+    /* ───────────────────────────── 상품 좋아요 ───────────────────────────── */
+    @Operation(
+        summary = "상품 좋아요",
+        description = """
+            상품에 좋아요를 추가합니다.
+            이미 좋아요한 상품의 경우 중복 요청이 무시됩니다 (멱등성 보장).
+            인증된 사용자만 사용 가능합니다.
+        """,
+        parameters = [
+            Parameter(`in` = ParameterIn.PATH, name = "productId", description = "상품 PK", example = "11", required = true)
+        ],
+        responses = [
+            ApiResponse(responseCode = "204", description = "좋아요 성공")
+        ]
+    )
+    @PostMapping("/{productId}/likes")
+    fun likeProduct(
+        userId: Long,
+        @PathVariable productId: String,
+    )
+
+    /* ───────────────────────────── 상품 좋아요 취소 ───────────────────────────── */
+    @Operation(
+        summary = "상품 좋아요 취소",
+        description = """
+            상품 좋아요를 취소합니다.
+            좋아요하지 않은 상품의 경우 요청이 무시됩니다 (멱등성 보장).
+            인증된 사용자만 사용 가능합니다.
+        """,
+        parameters = [
+            Parameter(`in` = ParameterIn.PATH, name = "productId", description = "상품 PK", example = "11", required = true)
+        ],
+        responses = [
+            ApiResponse(responseCode = "204", description = "좋아요 취소 성공")
+        ]
+    )
+    @DeleteMapping("/{productId}/likes")
+    fun cancelProductLike(
+        userId: Long,
+        @PathVariable productId: String,
+    )
+
     /* ──────────────── 예시 DTO (Swagger 문서 전용) ──────────────── */
     @Schema(hidden = true)
     private class SlicePopularExample(

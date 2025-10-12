@@ -4,6 +4,7 @@ import com.dh.baro.core.Cursor
 import com.dh.baro.core.ErrorMessage
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.annotation.CheckAuth
+import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.presentation.dto.*
@@ -68,6 +69,24 @@ class ProductController(
             mapper = { p -> ProductListItem.ofOrNull(p, storeMap) },
             cursorExtractor = { Cursor(it.id) },
         )
+    }
+
+    @PostMapping("/{productId}/likes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    override fun likeProduct(
+        @CurrentUser userId: Long,
+        @PathVariable productId: String,
+    ) {
+        productFacade.likeProduct(userId, productId.toLong())
+    }
+
+    @DeleteMapping("/{productId}/likes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    override fun cancelProductLike(
+        @CurrentUser userId: Long,
+        @PathVariable productId: String,
+    ) {
+        productFacade.cancelProductLike(userId, productId.toLong())
     }
 
     companion object {
