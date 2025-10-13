@@ -4,7 +4,6 @@ import com.dh.baro.core.Cursor
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.look.application.LookFacade
-import com.dh.baro.look.application.LookReactionFacade
 import com.dh.baro.look.application.SwipeFacade
 import com.dh.baro.look.presentation.dto.*
 import com.dh.baro.look.presentation.swagger.LookSwagger
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*
 class LookController(
     private val lookFacade: LookFacade,
     private val swipeFacade: SwipeFacade,
-    private val lookReactionFacade: LookReactionFacade,
 ) : LookSwagger {
 
     @PostMapping
@@ -34,7 +32,7 @@ class LookController(
         @CurrentUser userId: Long,
         @PathVariable lookId: Long,
         @Valid @RequestBody request: SwipeRequest,
-    ) = lookReactionFacade.recordLookReaction(
+    ) = swipeFacade.recordSwipe(
         userId = userId,
         lookId = lookId,
         reactionType = request.reactionType,

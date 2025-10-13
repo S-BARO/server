@@ -1,16 +1,16 @@
 package com.dh.baro.look.application
 
 import com.dh.baro.look.domain.ReactionType
-import com.dh.baro.look.domain.service.SwipeService
+import com.dh.baro.look.domain.service.LookReactionService
 import org.springframework.stereotype.Service
 
 @Service
 class SwipeFacade(
-    private val swipeService: SwipeService,
+    private val lookReactionService: LookReactionService,
 ) {
 
     fun recordSwipe(userId: Long, lookId: Long, reactionType: ReactionType) {
-        swipeService.upsertSwipe(
+        lookReactionService.saveLookReaction(
             userId = userId,
             lookId = lookId,
             reactionType = reactionType,
@@ -18,5 +18,5 @@ class SwipeFacade(
     }
 
     fun cancelSwipe(userId: Long, lookId: Long) =
-        swipeService.deleteSwipe(userId, lookId)
+        lookReactionService.deleteLookReaction(userId, lookId)
 }
