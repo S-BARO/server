@@ -1,9 +1,8 @@
 # 👕 스와이프로 찾는 내 스타일, 바로(BARO)
-<!-- 
-[**🔗 바로(BARO) 서비스 링크**](https://www.s-baro.shop/)
--->
 
-[**[Part 0] 스와이프로 찾는 내 스타일, ‘바로’를 기획하며..(Ft. 기술적 목표)**](https://chobo-backend.tistory.com/49)
+[**🔗 바로(BARO) 서비스 링크**](https://ai.s-baro.shop/)
+
+[**[Part 0] 스와이프로 찾는 내 스타일, ‘바로’를 기획하며(Ft. 기술적 목표)**](https://chobo-backend.tistory.com/49)
 
 - 무신사, 에이블리, 퀸잇과 같은 패션 E-Commerce 플랫폼입니다
 - 유튜브, 인스타를 통해 여러 코디들을 살펴보는 과정에서 옷을 구매하기 위해 여러 플랫폼을 오가며 찾는 과정이 번거로웠습니다
@@ -89,24 +88,22 @@ MAU 5만명, DAU 5,000명(DAU/MAU 비율 10%) 기준
 # 🤔 Technical Issue
 [**[Part 1] JWT는 정말 괜찮은 방법일까? (Ft. 세션저장소 선택 이유)**](https://chobo-backend.tistory.com/50)
 
-[**[Part 2] 확장성과 성능을 고려한 ERD 설계하기**](https://chobo-backend.tistory.com/51)
+[**[Part 2] 분산 시스템에서 ID가 유일하려면?(Ft. Snowflake VS TSID 성능테스트)**](https://chobo-backend.tistory.com/52)
 
-[**[Part 3] 분산 시스템에서 ID가 유일하려면?(Ft. Snowflake VS TSID 성능테스트)**](https://chobo-backend.tistory.com/52)
+[**[Part 3] 반복되는 인증,인가 처리 없애버리기(Ft. AOP & ArgumentResolver)**](https://chobo-backend.tistory.com/53)
 
-[**[Part 4] 반복되는 인증,인가 처리 없애버리기(Ft. AOP & ArgumentResolver)**](https://chobo-backend.tistory.com/53)
+[**[Part 4] 단일 주문 성능 개선 삽질기 (Ft. JPA save, FK)**](https://chobo-backend.tistory.com/54)
 
-[**[Part 5] 단일 주문 성능 개선 삽질기 (Ft. JPA save, FK)**](https://chobo-backend.tistory.com/54)
+[**[Part 5] DeadLock 범인 찾기 (Ft. 위험한 FK?)**](https://chobo-backend.tistory.com/55)
 
-[**[Part 6] DeadLock 범인 찾기 (Ft. 위험한 FK?)**](https://chobo-backend.tistory.com/55)
+[**[Part 6] 일괄 주문 기능 개선 Vol.1 (Ft. Eventual Consistency, Lua Script)**](https://chobo-backend.tistory.com/56)
 
-[**[Part 7] 일괄 주문 기능 개선 Vol.1 (Ft. Eventual Consistency, Lua Script)**](https://chobo-backend.tistory.com/56)
+[**[Part 7] 일괄 주문 기능 개선 Vol.2 (Ft. Kafka, Transactional Outbox)**](https://chobo-backend.tistory.com/61)
 
-[**[Part 8] 일괄 주문 기능 개선 Vol.2 (Ft. Kafka, Transactional Outbox)**](https://chobo-backend.tistory.com/61)
+[**[Part 8] Redis의 Lua Script는 Atomic 하지 않다..?**](https://chobo-backend.tistory.com/57)
 
-[**[Part 9] Redis의 Lua Script는 Atomic 하지 않다..?**](https://chobo-backend.tistory.com/57)
+[**[Part 9] 인기상품조회 기능 개선 (Ft. DB Connection Pool)**](https://chobo-backend.tistory.com/58)
 
-[**[Part 10] 인기상품조회 기능 개선 (Ft. DB Connection Pool)**](https://chobo-backend.tistory.com/58)
+[**[Part 10] AI 피팅 기능 사용량 제한하기 (Ft. Token Bucket)**](https://chobo-backend.tistory.com/63)
 
-[**[Part 11] AI 피팅 기능 사용량 제한하기 (Ft. Token Bucket)**](https://chobo-backend.tistory.com/63)
-
-[**[Part 12] 룩 상세 조회 기능 개선 (Ft. Redis 캐싱)**](https://chobo-backend.tistory.com/64)
+[**[Part 11] 룩 상세 조회 기능 개선 (Ft. Redis 캐싱)**](https://chobo-backend.tistory.com/64)
