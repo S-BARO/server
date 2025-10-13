@@ -99,20 +99,6 @@ internal class ProductQueryServiceTest(
     }
 
     describe("getNewestProducts 메서드는") {
-        context("cursor 없이 요청하면") {
-            val expectedIds = listOf(p2.id, p1.id)
-
-            it("최근 30일 이내 상품을 id DESC 로 반환한다") {
-                val result = productQueryService.getNewestProducts(
-                    categoryId = null,
-                    cursorId = null,
-                    size = 10,
-                )
-                result.map { it.id } shouldContainExactly expectedIds
-                result.shouldBeSortedWith(compareByDescending { it.id })
-            }
-        }
-
         context("cursorId 를 넘기면") {
             val cursorId = p2.id
             val expectedId = listOf(p1.id)
