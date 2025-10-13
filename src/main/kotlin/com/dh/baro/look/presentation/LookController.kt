@@ -60,9 +60,73 @@ class LookController(
         )
     }
 
+    @GetMapping("/liked")
+    @ResponseStatus(HttpStatus.OK)
+    override fun getLikedLooks(
+        @CurrentUser userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
+    ): SliceResponse<LookDto> {
+        val slice = lookFacade.getLikedLooks(userId, cursorId, size)
+        return SliceResponse.from(
+            slice,
+            mapper = LookDto::from,
+            cursorExtractor = { Cursor(it.id) }
+        )
+    }
+
+    @GetMapping("/liked1")
+    @ResponseStatus(HttpStatus.OK)
+    override fun getLikedLooks1(
+        @RequestParam userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
+    ): SliceResponse<LookDto> {
+        val slice = lookFacade.getLikedLooks1(userId, cursorId, size)
+        return SliceResponse.from(
+            slice,
+            mapper = LookDto::from,
+            cursorExtractor = { Cursor(it.id) }
+        )
+    }
+
+    @GetMapping("/liked2")
+    @ResponseStatus(HttpStatus.OK)
+    override fun getLikedLooks2(
+        @RequestParam userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
+    ): SliceResponse<LookDto> {
+        val slice = lookFacade.getLikedLooks2(userId, cursorId, size)
+        return SliceResponse.from(
+            slice,
+            mapper = LookDto::from,
+            cursorExtractor = { Cursor(it.id) }
+        )
+    }
+
+    @GetMapping("/liked3")
+    @ResponseStatus(HttpStatus.OK)
+    override fun getLikedLooks3(
+        @RequestParam userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
+    ): SliceResponse<LookDto> {
+        val slice = lookFacade.getLikedLooks3(userId, cursorId, size)
+        return SliceResponse.from(
+            slice,
+            mapper = LookDto::from,
+            cursorExtractor = { Cursor(it.id) }
+        )
+    }
+
     @GetMapping("/{lookId}")
     @ResponseStatus(HttpStatus.OK)
     override fun getLookDetail(@PathVariable lookId: Long): LookDetailResponse {
         return lookFacade.getLookDetail(lookId)
+    }
+
+    companion object {
+        private const val DEFAULT_PAGE_SIZE = "21"
     }
 }

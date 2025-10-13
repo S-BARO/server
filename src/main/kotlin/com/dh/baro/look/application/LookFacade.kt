@@ -43,6 +43,22 @@ class LookFacade(
         return lookService.getLooksForSwipe(lookIds, cursorId, size)
     }
 
+    @Transactional(readOnly = true)
+    fun getLikedLooks(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
+        lookService.getLikedLooks(userId, cursorId, size)
+
+    @Transactional(readOnly = true)
+    fun getLikedLooks1(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
+        lookService.getLikedLooks1(userId, cursorId, size)
+
+    @Transactional(readOnly = true)
+    fun getLikedLooks2(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
+        lookService.getLikedLooks2(userId, cursorId, size)
+
+    @Transactional(readOnly = true)
+    fun getLikedLooks3(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
+        lookService.getLikedLooks3(userId, cursorId, size)
+
     fun getLookDetail(lookId: Long): LookDetailResponse {
         val cachedResponse = lookCacheService.getCachedLookDetail(lookId)
         return cachedResponse ?: self.getLookDetailFromDatabase(lookId)

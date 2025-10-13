@@ -164,6 +164,135 @@ interface LookSwagger {
         @RequestParam(defaultValue = "10") size: Int,
     ): SliceResponse<LookDto>
 
+    /* ──────────────────── 사용자가 좋아요한 룩 목록(무한 스크롤) ──────────────────── */
+    @Operation(
+        summary = "좋아요한 룩 목록(무한 스크롤)",
+        description = """
+            로그인 사용자가 좋아요(LIKE)를 누른 룩을 최신 좋아요 순서대로 반환합니다.
+            커서 기반 페이지네이션:
+            cursorId: 이전 페이지의 마지막 룩 ID
+            size: 페이지 크기(기본 10)
+        """,
+        parameters = [
+            Parameter(
+                `in` = ParameterIn.QUERY,
+                name = "cursorId",
+                description = "마지막 룩 ID",
+                required = false,
+                example = "1234"
+            ),
+            Parameter(`in` = ParameterIn.QUERY, name = "size", description = "페이지 크기", required = false, example = "10")
+        ],
+        responses = [
+            ApiResponse(
+                responseCode = "200", description = "조회 성공",
+                content = [Content(
+                    schema = Schema(implementation = SwipeSliceExample::class),
+                    examples = [ExampleObject(
+                        name = "likedLooksResponse",
+                        value = """
+                        {
+                          "content": [
+                            { "lookId": 2003, "title": "가을 캠퍼스룩", "thumbnailUrl": "https://..." },
+                            { "lookId": 2002, "title": "주말 데이트룩", "thumbnailUrl": "https://..." }
+                          ],
+                          "hasNext": true,
+                          "nextCursor": { "id": 2002 }
+                        }
+                        """
+                    )]
+                )]
+            )
+        ]
+    )
+    @GetMapping("/liked")
+    fun getLikedLooks(
+        @Parameter(hidden = true) userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = "10") size: Int,
+    ): SliceResponse<LookDto>
+
+    /* ───────── 성능 테스트용: 좋아요한 룩 목록 (서브쿼리 방식) ───────── */
+    @Operation(
+        summary = "[성능테스트] 좋아요한 룩 목록 - 서브쿼리 방식",
+        description = """
+            성능 테스트를 위한 엔드포인트입니다.
+            EXISTS 서브쿼리와 ORDER BY 서브쿼리를 사용하는 방식입니다.
+            userId를 쿼리 파라미터로 받습니다.
+        """,
+        parameters = [
+            Parameter(`in` = ParameterIn.QUERY, name = "userId", description = "사용자 ID", required = true, example = "123"),
+            Parameter(`in` = ParameterIn.QUERY, name = "cursorId", description = "마지막 룩 ID", required = false, example = "1234"),
+            Parameter(`in` = ParameterIn.QUERY, name = "size", description = "페이지 크기", required = false, example = "21")
+        ],
+        responses = [
+            ApiResponse(
+                responseCode = "200", description = "조회 성공",
+                content = [Content(schema = Schema(implementation = SwipeSliceExample::class))]
+            )
+        ]
+    )
+    @GetMapping("/liked1")
+    fun getLikedLooks1(
+        @RequestParam userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = "21") size: Int,
+    ): SliceResponse<LookDto>
+
+    /* ───────── 성능 테스트용: 좋아요한 룩 목록 (JOIN 방식) ───────── */
+    @Operation(
+        summary = "[성능테스트] 좋아요한 룩 목록 - JOIN 방식",
+        description = """
+            성능 테스트를 위한 엔드포인트입니다.
+            INNER JOIN을 사용하는 방식입니다.
+            userId를 쿼리 파라미터로 받습니다.
+        """,
+        parameters = [
+            Parameter(`in` = ParameterIn.QUERY, name = "userId", description = "사용자 ID", required = true, example = "123"),
+            Parameter(`in` = ParameterIn.QUERY, name = "cursorId", description = "마지막 룩 ID", required = false, example = "1234"),
+            Parameter(`in` = ParameterIn.QUERY, name = "size", description = "페이지 크기", required = false, example = "21")
+        ],
+        responses = [
+            ApiResponse(
+                responseCode = "200", description = "조회 성공",
+                content = [Content(schema = Schema(implementation = SwipeSliceExample::class))]
+            )
+        ]
+    )
+    @GetMapping("/liked2")
+    fun getLikedLooks2(
+        @RequestParam userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = "21") size: Int,
+    ): SliceResponse<LookDto>
+
+    /* ───────── 성능 테스트용: 좋아요한 룩 목록 (쿼리 분리 방식) ───────── */
+    @Operation(
+        summary = "[성능테스트] 좋아요한 룩 목록 - 쿼리 분리 방식",
+        description = """
+            성능 테스트를 위한 엔드포인트입니다.
+            LookReaction 조회와 Look 조회를 분리하는 방식입니다.
+            userId를 쿼리 파라미터로 받습니다.
+        """,
+        parameters = [
+            Parameter(`in` = ParameterIn.QUERY, name = "userId", description = "사용자 ID", required = true, example = "123"),
+            Parameter(`in` = ParameterIn.QUERY, name = "cursorId", description = "마지막 룩 ID", required = false, example = "1234"),
+            Parameter(`in` = ParameterIn.QUERY, name = "size", description = "페이지 크기", required = false, example = "21")
+        ],
+        responses = [
+            ApiResponse(
+                responseCode = "200", description = "조회 성공",
+                content = [Content(schema = Schema(implementation = SwipeSliceExample::class))]
+            )
+        ]
+    )
+    @GetMapping("/liked3")
+    fun getLikedLooks3(
+        @RequestParam userId: Long,
+        @RequestParam(required = false) cursorId: Long?,
+        @RequestParam(defaultValue = "21") size: Int,
+    ): SliceResponse<LookDto>
+
     /* ───────────────────────────── 룩 상세 ───────────────────────────── */
     @Operation(
         summary = "룩 상세 조회",
