@@ -8,8 +8,18 @@ import jakarta.persistence.*
 @Table(
     name = "look_reactions",
     uniqueConstraints = [
-        UniqueConstraint(name = "UKmpvap1oy05x9bhc7u4hoe23ui", columnNames = ["user_id", "look_id"])
-    ]
+        UniqueConstraint(columnNames = ["user_id", "look_id"])
+    ],
+    indexes = [
+        Index(
+            name = "idx_look_reaction_user_type_id",
+            columnList = "user_id, reaction_type, id DESC"
+        ),
+        Index(
+            name = "idx_look_reaction_look_id",
+            columnList = "look_id"
+        )
+    ],
 )
 class LookReaction(
     @Id

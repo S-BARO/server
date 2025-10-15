@@ -43,61 +43,15 @@ interface LookRepository : JpaRepository<Look, Long> {
 
     @Query("""
         select l from Look l
-        where exists (
-            select 1 from LookReaction lr
-            where lr.lookId = l.id
-            and lr.userId = :userId
-            and lr.reactionType = 'LIKE'
-            and (:cursorId is null or lr.id < :cursorId)
-        )
-        order by (
-            select lr.id from LookReaction lr
-            where lr.lookId = l.id and lr.userId = :userId and lr.reactionType = 'LIKE'
-        ) desc
+        join LookReaction lr on lr.lookId = l.id
+        where lr.userId = :userId
+        and lr.reactionType = 'LIKE'
+        and (:cursorId is null or lr.id < :cursorId)
+        order by lr.id desc
     """)
     fun findLikedLooksByUserId(
         @Param("userId") userId: Long,
         @Param("cursorId") cursorId: Long?,
         pageable: Pageable,
     ): Slice<Look>
-
-    @Query("""
-        select l from Look l
-        where exists (
-            select 1 from LookReaction lr
-            where lr.lookId = l.id
-            and lr.userId = :userId
-            and lr.reactionType = 'LIKE'
-            and (:cursorId is null or lr.id < :cursorId)
-        )
-        order by (
-            select lr.id from LookReaction lr
-            where lr.lookId = l.id and lr.userId = :userId and lr.reactionType = 'LIKE'
-        ) desc
-    """)
-    fun findLikedLooksByUserId1(
-        @Param("userId") userId: Long,
-        @Param("cursorId") cursorId: Long?,
-        pageable: Pageable,
-    ): Slice<Look>
-
-    @Query("""
-        select distinct l from Look l
-        inner join LookReaction lr on lr.lookId = l.id
-        where lr.userId = :userId
-        and lr.reactionType = 'LIKE'
-        and (:cursorId is null or lr.id < :cursorId)
-        order by lr.id desc
-    """)
-    fun findLikedLooksByUserId2(
-        @Param("userId") userId: Long,
-        @Param("cursorId") cursorId: Long?,
-        pageable: Pageable,
-    ): Slice<Look>
-
-    @Query("""
-        select l from Look l
-        where l.id in :lookIds
-    """)
-    fun findAllByIdIn(@Param("lookIds") lookIds: List<Long>): List<Look>
 }
