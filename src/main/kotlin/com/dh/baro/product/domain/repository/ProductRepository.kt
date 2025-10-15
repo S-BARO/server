@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
-import java.time.Instant
 
 interface ProductRepository : JpaRepository<Product, Long> {
 
@@ -56,15 +55,13 @@ interface ProductRepository : JpaRepository<Product, Long> {
 
     @Query("""
         select p from Product p
-        where (:cutoff is null or p.createdAt >= :cutoff)
-          and (:categoryId is null or exists (
+        where (:categoryId is null or exists (
                  select 1 from ProductCategory pc
                  where pc.product = p and pc.category.id = :categoryId ))
           and (:cursorId is null or p.id < :cursorId)
         order by p.id desc
     """)
     fun findNewestProductsByCursor(
-        @Param("cutoff") cutoff: Instant?,
         @Param("categoryId") categoryId: Long?,
         @Param("cursorId") cursorId: Long?,
         pageable: Pageable,

@@ -56,7 +56,6 @@ class ProductQueryService(
         size: Int
     ): Slice<Product> {
         return productRepository.findNewestProductsByCursor(
-            cutoff = null,
             categoryId = categoryId,
             cursorId = cursorId,
             pageable = PageRequest.of(0, size),
