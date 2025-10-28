@@ -22,5 +22,12 @@ class CurrentUserArgumentResolver(
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
-    ): Any = sessionManager.getCurrentUserId()
+    ): Any? {
+        val isNullable = parameter.parameterType == Long::class.javaObjectType
+        return if (isNullable) {
+            sessionManager.getCurrentUserIdOrNull()
+        } else {
+            sessionManager.getCurrentUserId()
+        }
+    }
 }

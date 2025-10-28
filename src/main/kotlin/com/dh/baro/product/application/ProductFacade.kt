@@ -39,20 +39,34 @@ class ProductFacade(
         cursorLikes: Int?,
         cursorId: Long?,
         size: Int,
+        userId: Long? = null,
     ): ProductSliceBundle {
         val productSlice = productQueryService.getPopularProducts(categoryId, cursorLikes, cursorId, size)
         val stores = storeService.getStoresByIds(productSlice.content.map { it.storeId }.toSet())
-        return ProductSliceBundle(productSlice, stores)
+
+        val likedProductIds = userId?.let { uid ->
+            val productIds = productSlice.content.map { it.id }
+            productLikeService.getLikedProductIds(uid, productIds)
+        } ?: emptySet()
+
+        return ProductSliceBundle(productSlice, stores, likedProductIds)
     }
 
     fun getNewestProducts(
         categoryId: Long?,
         cursorId: Long?,
         size: Int,
+        userId: Long? = null,
     ): ProductSliceBundle {
         val productSlice = productQueryService.getNewestProducts(categoryId, cursorId, size)
         val stores = storeService.getStoresByIds(productSlice.content.map { it.storeId }.toSet())
-        return ProductSliceBundle(productSlice, stores)
+
+        val likedProductIds = userId?.let { uid ->
+            val productIds = productSlice.content.map { it.id }
+            productLikeService.getLikedProductIds(uid, productIds)
+        } ?: emptySet()
+
+        return ProductSliceBundle(productSlice, stores, likedProductIds)
     }
 
     @Transactional

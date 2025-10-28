@@ -36,6 +36,7 @@ class ProductController(
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
     override fun getPopularProducts(
+        @CurrentUser userId: Long?,
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false) cursorLikes: Int?,
@@ -44,12 +45,12 @@ class ProductController(
         if ((cursorId == null) xor (cursorLikes == null))
             throw IllegalArgumentException(ErrorMessage.INVALID_POPULAR_PRODUCT_CURSOR.message)
 
-        val productSliceBundle = productFacade.getPopularProducts(categoryId, cursorLikes, cursorId, size)
+        val productSliceBundle = productFacade.getPopularProducts(categoryId, cursorLikes, cursorId, size, userId)
         val storeMap = productSliceBundle.storeList.associateBy { it.id }
 
         return SliceResponse.fromNullable(
             slice = productSliceBundle.productSlice,
-            mapper = { p -> ProductListItem.ofOrNull(p, storeMap) },
+            mapper = { p -> ProductListItem.ofOrNull(p, storeMap, productSliceBundle.likedProductIds) },
             cursorExtractor = { PopularCursor(it.id, it.getLikesCount()) },
         )
     }
@@ -57,16 +58,17 @@ class ProductController(
     @GetMapping("/newest")
     @ResponseStatus(HttpStatus.OK)
     override fun getNewestProducts(
+        @CurrentUser userId: Long?,
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
     ): SliceResponse<ProductListItem> {
-        val productSliceBundle = productFacade.getNewestProducts(categoryId, cursorId, size)
+        val productSliceBundle = productFacade.getNewestProducts(categoryId, cursorId, size, userId)
         val storeMap = productSliceBundle.storeList.associateBy { it.id }
 
         return SliceResponse.fromNullable(
             slice = productSliceBundle.productSlice,
-            mapper = { p -> ProductListItem.ofOrNull(p, storeMap) },
+            mapper = { p -> ProductListItem.ofOrNull(p, storeMap, productSliceBundle.likedProductIds) },
             cursorExtractor = { Cursor(it.id) },
         )
     }

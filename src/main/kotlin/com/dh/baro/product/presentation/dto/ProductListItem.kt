@@ -13,9 +13,14 @@ data class ProductListItem(
     val productName: String,
     val price: BigDecimal,
     val thumbnailUrl: String,
+    val isLiked: Boolean? = null,
 ) {
     companion object {
-        fun ofOrNull(product: Product, storeMap: Map<Long, Store>): ProductListItem? {
+        fun ofOrNull(
+            product: Product,
+            storeMap: Map<Long, Store>,
+            likedProductIds: Set<Long> = emptySet(),
+        ): ProductListItem? {
             val store = storeMap[product.storeId]?: return null
             return ProductListItem(
                 id = product.id,
@@ -23,6 +28,7 @@ data class ProductListItem(
                 productName = product.getName(),
                 price = product.getPrice(),
                 thumbnailUrl = product.getThumbnailUrl(),
+                isLiked = if (likedProductIds.isNotEmpty()) likedProductIds.contains(product.id) else null,
             )
         }
     }

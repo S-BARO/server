@@ -7,4 +7,5 @@ import org.springframework.data.domain.Slice
 data class ProductSliceBundle(
     val productSlice: Slice<Product>,
     val storeList: List<Store>,
+    val likedProductIds: Set<Long> = emptySet(),
 )
