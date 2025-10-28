@@ -30,4 +30,12 @@ class ProductLikeService(
             productRepository.decrementLikesCount(productId)
         }
     }
+
+    @Transactional(readOnly = true)
+    fun getLikedProductIds(userId: Long, productIds: Collection<Long>): Set<Long> {
+        return productLikeRepository
+            .findAllByUserIdAndProductIdIn(userId, productIds)
+            .map { it.productId }
+            .toSet()
+    }
 }
