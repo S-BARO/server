@@ -19,6 +19,11 @@ class SessionManager(
             ?: throw UnauthorizedException(ErrorMessage.UNAUTHORIZED.message)
     }
 
+    fun getCurrentUserIdOrNull(): Long? {
+        val session = request.getSession(false) ?: return null
+        return session.getAttribute(SessionKeys.USER_ID) as? Long
+    }
+
     fun getCurrentUserRole(): UserRole =
         request.getSession(false)
             ?.getAttribute(SessionKeys.USER_ROLE) as? UserRole
