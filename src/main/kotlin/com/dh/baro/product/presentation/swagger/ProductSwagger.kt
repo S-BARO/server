@@ -78,6 +78,9 @@ interface ProductSwagger {
         summary = "인기 상품 목록(무한 스크롤)",
         description = """
             좋아요(likesCount) DESC → id DESC 로 정렬된 상품을 무한스크롤 방식으로 반환합니다.
+            로그인한 사용자의 경우 각 상품에 대한 좋아요 여부(isLiked)가 포함됩니다.
+            비로그인 사용자의 경우 isLiked 필드는 null입니다.
+
             categoryId : 카테고리 필터 (필수아님)
             cursorLikes, cursorId : 이전 페이지의 마지막 요소에서 받은 커서 값 (필수 아님 / 단, 둘 다 넣거나 둘 다 제외하거나)
             size : 페이지 크기(기본값 21)
@@ -98,7 +101,7 @@ interface ProductSwagger {
                         value = """
                         {
                           "content": [
-                            { "id": 21, "storeName": "무신사", "productName": "Sneakers", "price": 99000, "thumbnailUrl": "..." }
+                            { "id": 21, "storeName": "무신사", "productName": "Sneakers", "price": 99000, "thumbnailUrl": "...", "isLiked": true }
                           ],
                           "hasNext": true,
                           "nextCursor": { "id": 21, "likes": 500 }
@@ -111,6 +114,7 @@ interface ProductSwagger {
     )
     @GetMapping("/popular")
     fun getPopularProducts(
+        userId: Long?,
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(required = false) cursorLikes: Int?,
@@ -122,6 +126,9 @@ interface ProductSwagger {
         summary = "최신 상품(최근 30일) 목록",
         description = """
             최근 30일 이내 상품을 최신순으로 반환합니다.
+            로그인한 사용자의 경우 각 상품에 대한 좋아요 여부(isLiked)가 포함됩니다.
+            비로그인 사용자의 경우 isLiked 필드는 null입니다.
+
             categoryId : 카테고리 필터 (필수아님)
             cursorId : 이전 페이지의 마지막 요소에서 받은 커서 값 (필수 아님)
             size : 페이지 크기(기본값 21)
@@ -141,7 +148,7 @@ interface ProductSwagger {
                         value = """
                         {
                           "content": [
-                            { "id": 12, "storeName": "무신사", "productName": "Hoodie", "price": 59000, "thumbnailUrl": "..." }
+                            { "id": 12, "storeName": "무신사", "productName": "Hoodie", "price": 59000, "thumbnailUrl": "...", "isLiked": false }
                           ],
                           "hasNext": false,
                           "nextCursor": { "id": 11 }
@@ -154,6 +161,7 @@ interface ProductSwagger {
     )
     @GetMapping("/newest")
     fun getNewestProducts(
+        userId: Long?,
         @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) cursorId: Long?,
         @RequestParam(defaultValue = "21") size: Int
