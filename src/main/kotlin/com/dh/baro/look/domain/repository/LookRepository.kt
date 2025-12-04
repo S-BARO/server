@@ -1,6 +1,7 @@
 package com.dh.baro.look.domain.repository
 
 import com.dh.baro.look.domain.Look
+import com.dh.baro.look.domain.dto.LikedLookDto
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.jpa.repository.*
@@ -42,7 +43,8 @@ interface LookRepository : JpaRepository<Look, Long> {
     fun decrementLike(lookId: Long): Int
 
     @Query("""
-        select l from Look l
+        select lr.id as lookReactionId, l.id as lookId, l.title as title, l.thumbnailUrl as thumbnailUrl
+        from Look l
         join LookReaction lr on lr.lookId = l.id
         where lr.userId = :userId
         and lr.reactionType = 'LIKE'
@@ -53,5 +55,5 @@ interface LookRepository : JpaRepository<Look, Long> {
         @Param("userId") userId: Long,
         @Param("cursorId") cursorId: Long?,
         pageable: Pageable,
-    ): Slice<Look>
+    ): Slice<LikedLookDto>
 }

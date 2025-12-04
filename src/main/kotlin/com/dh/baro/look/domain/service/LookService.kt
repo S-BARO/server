@@ -4,6 +4,7 @@ import com.dh.baro.core.ErrorMessage
 import com.dh.baro.look.application.dto.LookCreateCommand
 import com.dh.baro.look.domain.Look
 import com.dh.baro.look.domain.ReactionType
+import com.dh.baro.look.domain.dto.LikedLookDto
 import com.dh.baro.look.domain.repository.LookRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
@@ -41,7 +42,7 @@ class LookService(
             pageable = PageRequest.of(0, size)
         )
 
-    fun getLikedLooks(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
+    fun getLikedLooks(userId: Long, cursorId: Long?, size: Int): Slice<LikedLookDto> =
         lookRepository.findLikedLooksByUserId(
             userId = userId,
             cursorId = cursorId,

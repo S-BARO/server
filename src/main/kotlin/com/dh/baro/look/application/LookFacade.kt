@@ -5,6 +5,7 @@ import com.dh.baro.identity.domain.service.UserService
 import com.dh.baro.look.application.dto.LookCreateCommand
 import com.dh.baro.look.application.dto.LookDetailBundle
 import com.dh.baro.look.domain.*
+import com.dh.baro.look.domain.dto.LikedLookDto
 import com.dh.baro.look.domain.service.LookReactionService
 import com.dh.baro.look.domain.service.LookService
 import com.dh.baro.look.infra.redis.LookCacheService
@@ -44,7 +45,7 @@ class LookFacade(
     }
 
     @Transactional(readOnly = true)
-    fun getLikedLooks(userId: Long, cursorId: Long?, size: Int): Slice<Look> =
+    fun getLikedLooks(userId: Long, cursorId: Long?, size: Int): Slice<LikedLookDto> =
         lookService.getLikedLooks(userId, cursorId, size)
 
     fun getLookDetail(lookId: Long): LookDetailResponse {

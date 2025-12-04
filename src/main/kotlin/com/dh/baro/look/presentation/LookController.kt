@@ -70,8 +70,8 @@ class LookController(
         val slice = lookFacade.getLikedLooks(userId, cursorId, size)
         return SliceResponse.from(
             slice,
-            mapper = LookDto::from,
-            cursorExtractor = { Cursor(it.id) }
+            mapper = { LookDto(lookId = it.lookId, title = it.title, thumbnailUrl = it.thumbnailUrl) },
+            cursorExtractor = { Cursor(it.lookReactionId) }
         )
     }
 
