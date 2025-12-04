@@ -47,7 +47,7 @@ class ProductFacade(
         val likedProductIds = userId?.let { uid ->
             val productIds = productSlice.content.map { it.id }
             productLikeService.getLikedProductIds(uid, productIds)
-        } ?: emptySet()
+        }
 
         return ProductSliceBundle(productSlice, stores, likedProductIds)
     }
@@ -64,7 +64,7 @@ class ProductFacade(
         val likedProductIds = userId?.let { uid ->
             val productIds = productSlice.content.map { it.id }
             productLikeService.getLikedProductIds(uid, productIds)
-        } ?: emptySet()
+        }
 
         return ProductSliceBundle(productSlice, stores, likedProductIds)
     }

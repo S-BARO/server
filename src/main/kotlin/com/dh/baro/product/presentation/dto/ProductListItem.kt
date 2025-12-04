@@ -19,7 +19,7 @@ data class ProductListItem(
         fun ofOrNull(
             product: Product,
             storeMap: Map<Long, Store>,
-            likedProductIds: Set<Long> = emptySet(),
+            likedProductIds: Set<Long>?,
         ): ProductListItem? {
             val store = storeMap[product.storeId]?: return null
             return ProductListItem(
@@ -28,7 +28,7 @@ data class ProductListItem(
                 productName = product.getName(),
                 price = product.getPrice(),
                 thumbnailUrl = product.getThumbnailUrl(),
-                isLiked = if (likedProductIds.isNotEmpty()) likedProductIds.contains(product.id) else null,
+                isLiked = likedProductIds?.contains(product.id),
             )
         }
     }
