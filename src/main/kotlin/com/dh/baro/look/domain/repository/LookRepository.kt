@@ -43,7 +43,7 @@ interface LookRepository : JpaRepository<Look, Long> {
     fun decrementLike(lookId: Long): Int
 
     @Query("""
-        select lr.id as lookReactionId, l.id as lookId, l.title as title, l.thumbnailUrl as thumbnailUrl
+        select new com.dh.baro.look.domain.dto.LikedLookDto(lr.id, l.id, l.title, l.thumbnailUrl)
         from Look l
         join LookReaction lr on lr.lookId = l.id
         where lr.userId = :userId
