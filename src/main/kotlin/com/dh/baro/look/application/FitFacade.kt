@@ -47,7 +47,7 @@ class FitFacade(
     fun generateAiFitting(userId: Long, sourceImageUrl: String, clothingImageUrl: String): AiFittingInfo {
         var generatedImageData: ByteArray? = null
 
-        creditService.executeWithCreditCheck(userId) {
+        creditService.executeWithCreditReservation(userId) {
             generatedImageData = geminiImageApi.generateAiFitting(sourceImageUrl, clothingImageUrl)
         }
 

@@ -14,15 +14,15 @@ class CreditRepositoryImpl(
     private val redissonClient: RedissonClient,
 ) : CreditRepository {
 
-    private val creditCheckScript: String by lazy {
-        ClassPathResource(CREDIT_CHECK_SCRIPT_PATH).inputStream.bufferedReader().use { it.readText() }
+    private val creditReserveScript: String by lazy {
+        ClassPathResource(CREDIT_RESERVE_SCRIPT_PATH).inputStream.bufferedReader().use { it.readText() }
     }
 
-    private val creditDeductScript: String by lazy {
-        ClassPathResource(CREDIT_DEDUCT_SCRIPT_PATH).inputStream.bufferedReader().use { it.readText() }
+    private val creditRefundScript: String by lazy {
+        ClassPathResource(CREDIT_REFUND_SCRIPT_PATH).inputStream.bufferedReader().use { it.readText() }
     }
 
-    override fun checkCreditAvailability(userId: Long): Boolean {
+    override fun reserveCredit(userId: Long): Boolean {
         val key = "$KEY_PREFIX$userId"
         val currentTimestamp = Instant.now().epochSecond
 
@@ -30,7 +30,7 @@ class CreditRepositoryImpl(
             val script = redissonClient.getScript(StringCodec.INSTANCE)
             val result = script.eval<Long>(
                 RScript.Mode.READ_WRITE,
-                creditCheckScript,
+                creditReserveScript,
                 RScript.ReturnType.INTEGER,
                 listOf<Any>(key),
                 currentTimestamp
@@ -41,7 +41,7 @@ class CreditRepositoryImpl(
         }
     }
 
-    override fun deductCredit(userId: Long): Boolean {
+    override fun refundCredit(userId: Long): Boolean {
         val key = "$KEY_PREFIX$userId"
         val currentTimestamp = Instant.now().epochSecond
 
@@ -49,7 +49,7 @@ class CreditRepositoryImpl(
             val script = redissonClient.getScript(StringCodec.INSTANCE)
             val result = script.eval<Long>(
                 RScript.Mode.READ_WRITE,
-                creditDeductScript,
+                creditRefundScript,
                 RScript.ReturnType.INTEGER,
                 listOf<Any>(key),
                 currentTimestamp
@@ -62,7 +62,7 @@ class CreditRepositoryImpl(
 
     companion object {
         private const val KEY_PREFIX = "img:credit:"
-        private const val CREDIT_CHECK_SCRIPT_PATH = "lua/credit_check.lua"
-        private const val CREDIT_DEDUCT_SCRIPT_PATH = "lua/credit_deduct.lua"
+        private const val CREDIT_RESERVE_SCRIPT_PATH = "lua/credit_reserve.lua"
+        private const val CREDIT_REFUND_SCRIPT_PATH = "lua/credit_refund.lua"
     }
 }
