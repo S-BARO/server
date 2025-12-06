@@ -2,6 +2,7 @@ package com.dh.baro.product.presentation.swagger
 
 import com.dh.baro.core.SliceResponse
 import com.dh.baro.core.Cursor
+import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.product.presentation.dto.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -71,7 +72,10 @@ interface ProductSwagger {
         ]
     )
     @GetMapping("/{productId}")
-    fun getProductDetail(@PathVariable productId: String): ProductDetail
+    fun getProductDetail(
+        @CurrentUser userId: Long?,
+        @PathVariable productId: String,
+    ): ProductDetail
 
     /* ───────────────────────────── 인기 상품 ───────────────────────────── */
     @Operation(
