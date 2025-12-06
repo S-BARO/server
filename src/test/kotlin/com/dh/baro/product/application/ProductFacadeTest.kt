@@ -282,4 +282,83 @@ internal class ProductFacadeTest(
             }
         }
     }
+
+    describe("getProductDetail 메서드는") {
+
+        context("userId가 null인 경우") {
+            val productId = 99L
+
+            beforeTest {
+                val category = categoryRepository.save(categoryFixture(1L, "TOP"))
+                productRepository.save(productFixture(productId, "Test Product", category, likes = 10))
+            }
+
+            it("isLiked가 null이다") {
+                val bundle = productFacade.getProductDetail(productId, userId = null)
+
+                bundle.isLiked shouldBe null
+                bundle.product.id shouldBe productId
+                bundle.store.id shouldBe store.id
+            }
+        }
+
+        context("userId가 있고 좋아요하지 않은 경우") {
+            val productId = 88L
+            val userId = 777L
+
+            beforeTest {
+                val category = categoryRepository.save(categoryFixture(1L, "TOP"))
+                productRepository.save(productFixture(productId, "Test Product", category, likes = 10))
+            }
+
+            it("isLiked가 false이다") {
+                val bundle = productFacade.getProductDetail(productId, userId)
+
+                bundle.isLiked shouldBe false
+                bundle.product.id shouldBe productId
+            }
+        }
+
+        context("userId가 있고 좋아요한 경우") {
+            val productId = 77L
+            val userId = 888L
+
+            beforeTest {
+                val category = categoryRepository.save(categoryFixture(1L, "TOP"))
+                productRepository.save(productFixture(productId, "Test Product", category, likes = 10))
+                productLikeRepository.save(ProductLike.create(userId, productId))
+            }
+
+            it("isLiked가 true이다") {
+                val bundle = productFacade.getProductDetail(productId, userId)
+
+                bundle.isLiked shouldBe true
+                bundle.product.id shouldBe productId
+            }
+        }
+
+        context("다른 userId의 좋아요는 영향을 주지 않는 경우") {
+            val productId = 66L
+            val userA = 100L
+            val userB = 200L
+
+            beforeTest {
+                val category = categoryRepository.save(categoryFixture(1L, "TOP"))
+                productRepository.save(productFixture(productId, "Test Product", category, likes = 10))
+                productLikeRepository.save(ProductLike.create(userA, productId))
+            }
+
+            it("userB는 좋아요하지 않았으므로 isLiked=false") {
+                val bundle = productFacade.getProductDetail(productId, userB)
+
+                bundle.isLiked shouldBe false
+            }
+
+            it("userA는 좋아요했으므로 isLiked=true") {
+                val bundle = productFacade.getProductDetail(productId, userA)
+
+                bundle.isLiked shouldBe true
+            }
+        }
+    }
 })
