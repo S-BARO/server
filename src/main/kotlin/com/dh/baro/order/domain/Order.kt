@@ -10,7 +10,12 @@ import java.math.RoundingMode
 
 @AggregateRoot
 @Entity
-@Table(name = "orders")
+@Table(
+    name = "orders",
+    indexes = [
+        Index(name = "idx_order_user_id", columnList = "user_id")
+    ]
+)
 class Order(
     @Id
     @Column(name = "id")
