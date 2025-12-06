@@ -31,9 +31,16 @@ class ProductController(
         ProductCreateResponse.from(productFacade.createProduct(request.toCommand()))
 
     @GetMapping("/{productId}")
-    override fun getProductDetail(@PathVariable productId: String): ProductDetail {
-        val productDetailBundle = productFacade.getProductDetail(productId.toLong())
-        return ProductDetail.from(productDetailBundle.product, productDetailBundle.store)
+    override fun getProductDetail(
+        @CurrentUser userId: Long?,
+        @PathVariable productId: String,
+    ): ProductDetail {
+        val productDetailBundle = productFacade.getProductDetail(productId.toLong(), userId)
+        return ProductDetail.from(
+            productDetailBundle.product,
+            productDetailBundle.store,
+            productDetailBundle.isLiked
+        )
     }
 
     @GetMapping("/popular")

@@ -6,4 +6,5 @@ import com.dh.baro.product.domain.Product
 data class ProductDetailBundle (
     val product: Product,
     val store: Store,
+    val isLiked: Boolean? = null,
 )

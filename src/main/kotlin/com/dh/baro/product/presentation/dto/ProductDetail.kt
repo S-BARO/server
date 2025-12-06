@@ -15,10 +15,11 @@ data class ProductDetail(
     val description: String?,
     val images: List<String>,
     val categories: List<String>,
+    val isLiked: Boolean? = null,
 ) {
 
     companion object {
-        fun from(product: Product, store: Store) = ProductDetail(
+        fun from(product: Product, store: Store, isLiked: Boolean? = null) = ProductDetail(
             id = product.id,
             storeName = store.getName(),
             productName = product.getName(),
@@ -26,6 +27,7 @@ data class ProductDetail(
             description = product.getDescription(),
             images = product.getImages().map { it.imageUrl },
             categories = product.getProductCategories().map { it.category.name },
+            isLiked = isLiked,
         )
     }
 }

@@ -27,10 +27,16 @@ class ProductFacade(
     }
 
     @Transactional(readOnly = true)
-    fun getProductDetail(productId: Long): ProductDetailBundle {
+    fun getProductDetail(productId: Long, userId: Long? = null): ProductDetailBundle {
         val product = productQueryService.getProductDetail(productId)
         val store = storeService.getStoreById(product.storeId)
-        return ProductDetailBundle(product, store)
+
+        val isLiked = userId?.let { uid ->
+            val likedIds = productLikeService.getLikedProductIds(uid, listOf(productId))
+            likedIds.contains(productId)
+        }
+
+        return ProductDetailBundle(product, store, isLiked)
     }
 
     @Transactional(readOnly = true)
