@@ -4,6 +4,7 @@ import com.dh.baro.core.ErrorMessage
 import com.dh.baro.look.application.dto.LookCreateCommand
 import com.dh.baro.look.domain.repository.LookImageRepository
 import com.dh.baro.look.domain.repository.LookProductRepository
+import com.dh.baro.look.domain.repository.LookReactionRepository
 import com.dh.baro.look.domain.repository.LookRepository
 import com.dh.baro.look.domain.service.LookService
 import com.dh.baro.look.lookFixture
@@ -11,6 +12,7 @@ import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.springframework.boot.autoconfigure.domain.EntityScan
@@ -30,6 +32,7 @@ internal class LookServiceTest(
     private val lookRepository: LookRepository,
     private val lookImageRepository: LookImageRepository,
     private val lookProductRepository: LookProductRepository,
+    private val lookReactionRepository: LookReactionRepository,
 ) : DescribeSpec({
 
     lateinit var look11: Look
@@ -186,6 +189,134 @@ internal class LookServiceTest(
 
                 lookImages.map { it.imageUrl } shouldContainExactly listOf("u12-1", "extra-1", "extra-2")
                 lookImages.map { it.displayOrder } shouldContainExactly listOf(1, 2, 3)
+            }
+        }
+    }
+
+    describe("getLikedLooks 메서드는") {
+
+        afterEach {
+            lookReactionRepository.deleteAll()
+        }
+
+        context("좋아요한 Look이 있는 경우") {
+            val reaction1 = LookReaction.of(userId = 100L, lookId = 11L, reactionType = ReactionType.LIKE)
+            val reaction2 = LookReaction.of(userId = 100L, lookId = 12L, reactionType = ReactionType.LIKE)
+            val reaction3 = LookReaction.of(userId = 100L, lookId = 13L, reactionType = ReactionType.LIKE)
+
+            beforeTest {
+                lookReactionRepository.save(reaction1)
+                lookReactionRepository.save(reaction2)
+                lookReactionRepository.save(reaction3)
+            }
+
+            it("좋아요한 Look 목록을 반환한다") {
+                val result = lookService.getLikedLooks(userId = 100L, cursorId = null, size = 10)
+
+                result.content shouldHaveSize 3
+                result.content[0].lookReactionId shouldBe reaction3.id
+                result.content[0].lookId shouldBe 13L
+                result.content[0].title shouldBe "Look-13"
+                result.content[0].thumbnailUrl shouldBe "thumb://13"
+
+                result.content[1].lookReactionId shouldBe reaction2.id
+                result.content[1].lookId shouldBe 12L
+
+                result.content[2].lookReactionId shouldBe reaction1.id
+                result.content[2].lookId shouldBe 11L
+            }
+
+            it("lr.id DESC 순서로 정렬된다") {
+                val result = lookService.getLikedLooks(userId = 100L, cursorId = null, size = 10)
+
+                result.content.map { it.lookReactionId } shouldContainExactly listOf(
+                    reaction3.id, reaction2.id, reaction1.id
+                )
+            }
+        }
+
+        context("cursorId가 있는 경우") {
+            val reaction1 = LookReaction.of(userId = 200L, lookId = 11L, reactionType = ReactionType.LIKE)
+            val reaction2 = LookReaction.of(userId = 200L, lookId = 12L, reactionType = ReactionType.LIKE)
+            val reaction3 = LookReaction.of(userId = 200L, lookId = 13L, reactionType = ReactionType.LIKE)
+
+            beforeTest {
+                lookReactionRepository.save(reaction1)
+                lookReactionRepository.save(reaction2)
+                lookReactionRepository.save(reaction3)
+            }
+
+            it("cursorId보다 작은 id만 반환한다") {
+                val result = lookService.getLikedLooks(
+                    userId = 200L,
+                    cursorId = reaction3.id,
+                    size = 10
+                )
+
+                result.content shouldHaveSize 2
+                result.content.map { it.lookReactionId } shouldContainExactly listOf(
+                    reaction2.id, reaction1.id
+                )
+            }
+
+            it("size 파라미터가 동작한다") {
+                val result = lookService.getLikedLooks(
+                    userId = 200L,
+                    cursorId = reaction3.id,
+                    size = 1
+                )
+
+                result.content shouldHaveSize 1
+                result.content[0].lookReactionId shouldBe reaction2.id
+                result.hasNext() shouldBe true
+            }
+        }
+
+        context("LIKE만 있고 DISLIKE가 섞여 있는 경우") {
+            beforeTest {
+                lookReactionRepository.save(
+                    LookReaction.of(userId = 300L, lookId = 11L, reactionType = ReactionType.LIKE)
+                )
+                lookReactionRepository.save(
+                    LookReaction.of(userId = 300L, lookId = 12L, reactionType = ReactionType.DISLIKE)
+                )
+                lookReactionRepository.save(
+                    LookReaction.of(userId = 300L, lookId = 13L, reactionType = ReactionType.LIKE)
+                )
+            }
+
+            it("LIKE 타입만 반환하고 DISLIKE는 제외한다") {
+                val result = lookService.getLikedLooks(userId = 300L, cursorId = null, size = 10)
+
+                result.content shouldHaveSize 2
+                result.content.map { it.lookId } shouldContainExactly listOf(13L, 11L)
+            }
+        }
+
+        context("좋아요한 Look이 없는 경우") {
+            it("빈 Slice를 반환한다") {
+                val result = lookService.getLikedLooks(userId = 999L, cursorId = null, size = 10)
+
+                result.content shouldHaveSize 0
+                result.hasNext() shouldBe false
+            }
+        }
+
+        context("다른 userId의 좋아요가 있는 경우") {
+            beforeTest {
+                lookReactionRepository.save(
+                    LookReaction.of(userId = 400L, lookId = 11L, reactionType = ReactionType.LIKE)
+                )
+                lookReactionRepository.save(
+                    LookReaction.of(userId = 500L, lookId = 12L, reactionType = ReactionType.LIKE)
+                )
+            }
+
+            it("요청한 userId의 좋아요만 반환한다") {
+                val result = lookService.getLikedLooks(userId = 400L, cursorId = null, size = 10)
+
+                result.content shouldHaveSize 1
+                result.content[0].lookId shouldBe 11L
             }
         }
     }
