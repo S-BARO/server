@@ -12,23 +12,45 @@
 
 <br>
 
+# 👨‍👧‍👦 Team
+| <img src="https://avatars.githubusercontent.com/u/118061713?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/67588757?v=4" width="150" height="150"/> |
+| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
+|                             [Hee Sang](https://github.com/codrin2)                         |                            [howu](https://github.com/choihooo)                             |
+|                             PM / BackEnd                             |                            FrontEnd                             |
+
+
+<br>
+
 # 🎥 핵심 기능 시연 영상
-1️⃣ 스와이프 + 나의 룩 보기 | 2️⃣ AI 가상 피팅 기능
+1️⃣ 스와이프 + 나의 룩 보기 | 2️⃣ AI 가상 피팅
 -|-
 <video src="https://github.com/user-attachments/assets/a70ba50b-ee92-428d-99dd-b1c8c745fe4c" height="1000" /> | <video src="https://github.com/user-attachments/assets/9b8e3e9b-464f-4183-a925-f2929d40771d" height="1000" />
 
 <br>
 
+# 주요 기능 목록
 
+#### 1. Auth(인증)
+- 카카오 로그인
+- 세션 스토리지 기반 인증 처리
 
+#### 2. Product(상품)
+- 상품 생성 및 조회, 상품 좋아요/취소
+- 인기 상품 및 최신 상품 목록 조회(커서 기반 페이지네이션)
 
-# 👨‍👧‍👦 Team
+#### 3. Order(주문)
+- 주문 생성 및 조회, 목록 조회(커서 기반 페이지네이션)
 
-| <img src="https://avatars.githubusercontent.com/u/67588757?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/118061713?v=4" width="150" height="150"/> |
-| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
-|                            [howu](https://github.com/choihooo)                             |                             [Hee Sang](https://github.com/codrin2)                         |
-|                            FrontEnd                             |                             PM / BackEnd                             |
+#### 4. Cart(장바구니)
+- CRUD, 목록 조회(커서 기반 페이지네이션)
 
+#### 5. Fit(피팅)
+- Presigned URL 기반 S3 이미지 업로드
+- 구글 나노 바나나 기반 AI 가상 피팅 기능
+
+#### 6. Look(룩)
+- 룩 생성 및 조회, 룩 좋아요/싫어요
+- 스와이프 및 나의 룩 목록 조회(커서 기반 페이지네이션)
 
 <br>
 
