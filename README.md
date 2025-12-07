@@ -10,8 +10,17 @@
 - ‘바로(BARO)’는 이러한 불편함을 해결하기 위해 코디를 직관적이고 빠르게 탐색할 수 있는 스와이프(좌우로 사진을 넘기며 좋아요/싫어요)를 핵심 기능으로 두었습니다
 - 또한 AI 가상 피팅 기능(Google Nano Banana 활용)을 통해 옷을 직접 입어보지 못하는 E-Commerce의 단점을 보완하고 구매를 망설여하는 사용자들의 구매 전환율을 높일 수 있도록 했습니다
 
+<br>
+
+# 🎥 핵심 기능 시연 영상
+1️⃣ 스와이프 + 나의 룩 보기 | 2️⃣ AI 가상 피팅 기능
+-|-
+<video src="https://github.com/user-attachments/assets/a70ba50b-ee92-428d-99dd-b1c8c745fe4c" height="1000" /> | <video src="https://github.com/user-attachments/assets/9b8e3e9b-464f-4183-a925-f2929d40771d" height="1000" />
 
 <br>
+
+
+
 
 # 👨‍👧‍👦 Team
 
