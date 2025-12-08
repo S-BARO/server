@@ -28,6 +28,14 @@ class UserService(
             ?: throw IllegalArgumentException(ErrorMessage.USER_NOT_FOUND.format(userId))
 
     @Transactional
+    fun updateUserProfile(userId: Long, phoneNumber: String?, address: String?): User {
+        val user = getUserById(userId)
+        user.updatePhoneNumber(phoneNumber)
+        user.updateAddress(address)
+        return user
+    }
+
+    @Transactional
     fun findOrRegister(
         provider: AuthProvider,
         socialUserInfo: OauthApi.SocialUserInfo

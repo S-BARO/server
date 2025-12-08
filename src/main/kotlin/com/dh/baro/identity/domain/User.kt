@@ -19,7 +19,7 @@ class User(
     @Column(name = "email", nullable = false, unique = true)
     private var email: String,
 
-    @Column(name = "phone_number", unique = true, length = 30)
+    @Column(name = "phone_number", unique = true, length = 11)
     private var phoneNumber: String? = null,
 
     @Column(name = "address", length = 500)
@@ -47,6 +47,14 @@ class User(
     fun getPhoneNumber() = phoneNumber
 
     fun getAddress() = address
+
+    fun updatePhoneNumber(newPhoneNumber: String?) {
+        phoneNumber = newPhoneNumber
+    }
+
+    fun updateAddress(newAddress: String?) {
+        address = newAddress
+    }
 
     companion object {
         fun newUser(name: String, email: String): User {

@@ -10,4 +10,7 @@ class UserFacade (
 ){
     fun getUserById(userId: Long): User =
         userService.getUserById(userId)
+
+    fun updateUserProfile(userId: Long, phoneNumber: String?, address: String?): User =
+        userService.updateUserProfile(userId, phoneNumber, address)
 }

@@ -5,7 +5,9 @@ import com.dh.baro.core.annotation.CheckAuth
 import com.dh.baro.identity.application.UserFacade
 import com.dh.baro.identity.domain.UserRole
 import com.dh.baro.identity.presentation.dto.UserProfileResponse
+import com.dh.baro.identity.presentation.dto.UserProfileUpdateRequest
 import com.dh.baro.identity.presentation.swagger.UserSwagger
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -20,4 +22,14 @@ class UserController(
     @ResponseStatus(HttpStatus.OK)
     override fun getUserProfile(@CurrentUser userId: Long): UserProfileResponse =
         UserProfileResponse.from(userFacade.getUserById(userId))
+
+    @PatchMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    override fun updateUserProfile(
+        @CurrentUser userId: Long,
+        @Valid @RequestBody request: UserProfileUpdateRequest,
+    ): UserProfileResponse {
+        val updatedUser = userFacade.updateUserProfile(userId, request.phoneNumber, request.address)
+        return UserProfileResponse.from(updatedUser)
+    }
 }
