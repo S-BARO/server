@@ -10,7 +10,6 @@ import com.dh.baro.product.application.ProductFacade
 import com.dh.baro.product.presentation.dto.*
 import com.dh.baro.product.presentation.swagger.ProductSwagger
 import jakarta.validation.Valid
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.*
 class ProductController(
     private val productFacade: ProductFacade,
 ) : ProductSwagger {
-
-    private val log = LoggerFactory.getLogger(javaClass)
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -52,8 +49,6 @@ class ProductController(
         @RequestParam(required = false) cursorLikes: Int?,
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) size: Int,
     ): SliceResponse<ProductListItem> {
-        log.info("getPopularProducts - userId: {}", userId)
-
         if ((cursorId == null) xor (cursorLikes == null))
             throw IllegalArgumentException(ErrorMessage.INVALID_POPULAR_PRODUCT_CURSOR.message)
 
