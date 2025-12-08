@@ -230,18 +230,30 @@ interface LookSwagger {
                         name = "lookDetailResponse",
                         value = """
                         {
-                          "lookId": 1001,
+                          "lookId": "1001",
                           "title": "여름 바캉스룩",
                           "description": "린넨 셔츠 + 쇼츠 + 로퍼",
                           "thumbnailUrl": "https://example.com/look-thumb.jpg",
                           "likesCount": 42,
-                          "images": [
-                            { "imageUrl": "https://example.com/look-1.jpg", "displayOrder": 1 },
-                            { "imageUrl": "https://example.com/look-2.jpg", "displayOrder": 2 }
+                          "lookImageUrls": [
+                            "https://example.com/look-1.jpg",
+                            "https://example.com/look-2.jpg"
                           ],
                           "products": [
-                            { "productId": 101, "name": "린넨 셔츠", "price": 39000, "thumbnailUrl": "https://...", "displayOrder": 1 },
-                            { "productId": 102, "name": "베이지 쇼츠", "price": 29000, "thumbnailUrl": "https://...", "displayOrder": 2 }
+                            {
+                              "productId": "101",
+                              "storeName": "스타일 스토어",
+                              "productName": "린넨 셔츠",
+                              "price": 39000,
+                              "thumbnailUrl": "https://example.com/product-101.jpg"
+                            },
+                            {
+                              "productId": "102",
+                              "storeName": "스타일 스토어",
+                              "productName": "베이지 쇼츠",
+                              "price": 29000,
+                              "thumbnailUrl": "https://example.com/product-102.jpg"
+                            }
                           ]
                         }
                         """
