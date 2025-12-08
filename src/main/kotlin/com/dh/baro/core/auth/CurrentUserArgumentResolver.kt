@@ -15,7 +15,8 @@ class CurrentUserArgumentResolver(
 
     override fun supportsParameter(parameter: MethodParameter): Boolean =
         parameter.getParameterAnnotation(CurrentUser::class.java) != null
-                && parameter.parameterType == Long::class.java
+                && (parameter.parameterType == Long::class.java
+                    || parameter.parameterType == Long::class.javaObjectType)
 
     override fun resolveArgument(
         parameter: MethodParameter,
