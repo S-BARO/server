@@ -4,6 +4,8 @@ import com.dh.baro.core.annotation.CurrentUser
 import com.dh.baro.core.annotation.CheckAuth
 import com.dh.baro.identity.application.UserFacade
 import com.dh.baro.identity.domain.UserRole
+import com.dh.baro.identity.presentation.dto.AddressUpdateRequest
+import com.dh.baro.identity.presentation.dto.PhoneNumberUpdateRequest
 import com.dh.baro.identity.presentation.dto.UserProfileResponse
 import com.dh.baro.identity.presentation.dto.UserProfileUpdateRequest
 import com.dh.baro.identity.presentation.swagger.UserSwagger
@@ -30,6 +32,26 @@ class UserController(
         @Valid @RequestBody request: UserProfileUpdateRequest,
     ): UserProfileResponse {
         val updatedUser = userFacade.updateUserProfile(userId, request.phoneNumber, request.address)
+        return UserProfileResponse.from(updatedUser)
+    }
+
+    @PatchMapping("/me/phone-number")
+    @ResponseStatus(HttpStatus.OK)
+    override fun updatePhoneNumber(
+        @CurrentUser userId: Long,
+        @Valid @RequestBody request: PhoneNumberUpdateRequest,
+    ): UserProfileResponse {
+        val updatedUser = userFacade.updateUserProfile(userId, request.phoneNumber, null)
+        return UserProfileResponse.from(updatedUser)
+    }
+
+    @PatchMapping("/me/address")
+    @ResponseStatus(HttpStatus.OK)
+    override fun updateAddress(
+        @CurrentUser userId: Long,
+        @Valid @RequestBody request: AddressUpdateRequest,
+    ): UserProfileResponse {
+        val updatedUser = userFacade.updateUserProfile(userId, null, request.address)
         return UserProfileResponse.from(updatedUser)
     }
 }
