@@ -36,6 +36,20 @@ class UserService(
     }
 
     @Transactional
+    fun updatePhoneNumberOnly(userId: Long, phoneNumber: String): User {
+        val user = getUserById(userId)
+        user.updatePhoneNumber(phoneNumber)
+        return user
+    }
+
+    @Transactional
+    fun updateAddressOnly(userId: Long, address: String): User {
+        val user = getUserById(userId)
+        user.updateAddress(address)
+        return user
+    }
+
+    @Transactional
     fun findOrRegister(
         provider: AuthProvider,
         socialUserInfo: OauthApi.SocialUserInfo

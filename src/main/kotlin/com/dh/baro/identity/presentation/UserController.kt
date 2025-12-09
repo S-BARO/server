@@ -41,7 +41,7 @@ class UserController(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: PhoneNumberUpdateRequest,
     ): UserProfileResponse {
-        val updatedUser = userFacade.updateUserProfile(userId, request.phoneNumber, null)
+        val updatedUser = userFacade.updatePhoneNumberOnly(userId, request.phoneNumber)
         return UserProfileResponse.from(updatedUser)
     }
 
@@ -51,7 +51,7 @@ class UserController(
         @CurrentUser userId: Long,
         @Valid @RequestBody request: AddressUpdateRequest,
     ): UserProfileResponse {
-        val updatedUser = userFacade.updateUserProfile(userId, null, request.address)
+        val updatedUser = userFacade.updateAddressOnly(userId, request.address)
         return UserProfileResponse.from(updatedUser)
     }
 }

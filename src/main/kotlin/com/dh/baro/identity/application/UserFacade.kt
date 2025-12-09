@@ -13,4 +13,10 @@ class UserFacade (
 
     fun updateUserProfile(userId: Long, phoneNumber: String?, address: String?): User =
         userService.updateUserProfile(userId, phoneNumber, address)
+
+    fun updatePhoneNumberOnly(userId: Long, phoneNumber: String): User =
+        userService.updatePhoneNumberOnly(userId, phoneNumber)
+
+    fun updateAddressOnly(userId: Long, address: String): User =
+        userService.updateAddressOnly(userId, address)
 }
