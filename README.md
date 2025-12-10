@@ -24,7 +24,7 @@
 # 🎥 핵심 기능 시연 영상
 1️⃣ 스와이프 + 나의 룩 보기 | 2️⃣ AI 가상 피팅
 -|-
-<video src="https://github.com/user-attachments/assets/a70ba50b-ee92-428d-99dd-b1c8c745fe4c" height="1000" /> | <video src="https://github.com/user-attachments/assets/9b8e3e9b-464f-4183-a925-f2929d40771d" height="1000" />
+<video src="https://github.com/user-attachments/assets/8824dc36-4742-4c36-b3bf-6764a012fa27" height="1000" /> | <video src="https://github.com/user-attachments/assets/9b8e3e9b-464f-4183-a925-f2929d40771d" height="1000" />
 
 <br>
 
